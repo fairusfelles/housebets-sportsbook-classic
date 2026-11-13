@@ -1254,8 +1254,8 @@ function renderFootball(){
   var fbLeagues=LEAGUES.filter(function(l){return l.id!=="NBA"});
   var all=MATCHES.filter(function(m){return fbLeagues.some(function(l){return l.id===m.league})});
   var liveN=all.filter(function(m){return m.live}).length;
-  var html='<div class="fade"><div class="eyebrow" style="color:var(--cyan)">Football</div><h1 style="margin:6px 0 4px;color:var(--head);font-size:30px;font-weight:800;letter-spacing:-.02em">Football</h1><p style="color:var(--muted);margin:0">5 competitions \u00b7 '+all.length+' matches \u00b7 '+liveN+' live now. Follow a league and it pins to the top of this page.</p>';
-  html+='<div style="margin-top:12px">'+homeSearchHTML()+'</div>';
+  var html='<div class="fade">';
+  html+='<div style="margin-top:2px">'+homeSearchHTML()+'</div>';
   html+=fbTabsHTML(all.length);
   if(fbView==="liveup"){
     var lv=all.filter(function(m){return m.live}).sort(function(a,b){ var la=LEAGUES.findIndex(function(x){return x.id===a.league}), lb=LEAGUES.findIndex(function(x){return x.id===b.league}); if(la!==lb) return la-lb; return (b.minute||0)-(a.minute||0); });
