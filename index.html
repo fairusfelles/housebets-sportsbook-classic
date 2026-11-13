@@ -1090,10 +1090,10 @@ function favChipsHTML(){
   });
   return chips ? '<div class="favchips">'+chips+'</div>' : '';
 }
-function carouselHTML(list,id){
+function carouselHTML(list,id,auto){
   var cards=list.map(function(m){ return matchCard(m,true); }).join("");
   if(!cards) return '<div class="empty">No matches.</div>';
-  return '<div class="hscroll" id="'+id+'">'+cards+'</div>';
+  return '<div class="hscroll'+(auto?" autocar":"")+'" id="'+id+'">'+cards+'</div>';
 }
 function scrollCarousel(id,dir){ var el=document.getElementById(id); if(el) el.scrollBy({left:dir*330,behavior:"smooth"}); }
 function renderHome(){
@@ -1105,9 +1105,9 @@ function renderHome(){
   if(fc){ html+='<div class="sectionhead"><h2>Favourites</h2><p>Tap \u2715 to remove</p></div>'+fc; }
   var fm=followedMatches();
   if(fm.length){
-    html+='<div class="sectionhead"><h2>Your matches</h2><p>'+fm.length+' matches</p></div>'+carouselHTML(fm,"car-your");
+    html+='<div class="sectionhead"><h2>Your matches</h2><p>'+fm.length+' matches</p></div>'+carouselHTML(fm,"car-your",1);
   }
-  html+='<div class="sectionhead"><h2><span class="livedot"></span> Featured matches</h2><span class="carbtns"><button class="carbtn" onclick="scrollCarousel(\'car-feat\',-1)" aria-label="Previous matches">'+icon("arrowL","ic-sm")+'</button><button class="carbtn" onclick="scrollCarousel(\'car-feat\',1)" aria-label="Next matches">'+icon("arrowR","ic-sm")+'</button></span></div>'+carouselHTML(live,"car-feat");
+  html+='<div class="sectionhead"><h2><span class="livedot"></span> Featured matches</h2><span class="carbtns"><button class="carbtn" onclick="scrollCarousel(\'car-feat\',-1)" aria-label="Previous matches">'+icon("arrowL","ic-sm")+'</button><button class="carbtn" onclick="scrollCarousel(\'car-feat\',1)" aria-label="Next matches">'+icon("arrowR","ic-sm")+'</button></span></div>'+carouselHTML(live,"car-feat",1);
   html+='<div class="sectionhead"><h2>Starting soon</h2><p>Upcoming fixtures \u00b7 kick-off times shown \u00b7 1X2</p></div>'+matchesTable(soon,true);
   html+='<div class="sectionhead"><h2>Top competitions</h2><p>Tap a competition to go straight to its section</p></div><div class="compgrid">';
   LEAGUES.forEach(function(l){ html+='<div class="comp" onclick="compGo(\''+l.id+'\')"><button class="star compstar '+(follows["fav-lg-"+l.id]?"on":"")+'" onclick="toggleFollow(\'fav-lg-'+l.id+'\',event)" aria-label="Follow competition">'+icon("star", follows["fav-lg-"+l.id]?"fill ic-sm":"ic-sm")+'</button><b>'+icon(l.icon)+' '+esc(l.name)+'</b><span>'+esc(l.country)+' · View fixtures & odds '+icon("arrowR","ic-sm")+'</span></div>'; });
@@ -1656,6 +1656,8 @@ var PAGES=["home","live","football","match","slip","scope","detail"];
 function route(rerender){
   var keepScroll=(rerender===false);
   var sy=keepScroll?window.scrollY:0;
+  var carPos={};
+  if(keepScroll){ document.querySelectorAll(".hscroll[id]").forEach(function(el){ carPos[el.id]=el.scrollLeft; }); }
   if(!keepScroll){ document.body.classList.add("nav"); setTimeout(function(){ document.body.classList.remove("nav"); },450); }
   var h=(location.hash||"#/home").replace("#/","");
   if(PAGES.indexOf(h)===-1) h="home";
@@ -1669,7 +1671,7 @@ function route(rerender){
   if(h==="scope") renderScope(window._scopeName||"Casino");
   if(h==="detail") renderDetail();
   if(!keepScroll) closeDrawer();
-  if(keepScroll){ window.scrollTo(0,sy); } else { window.scrollTo({top:0,behavior:"smooth"}); }
+  if(keepScroll){ window.scrollTo(0,sy); Object.keys(carPos).forEach(function(id){ var el=document.getElementById(id); if(el) el.scrollLeft=carPos[id]; }); } else { window.scrollTo({top:0,behavior:"smooth"}); }
 }
 
 function buildNav(){
@@ -1684,6 +1686,26 @@ syncBalance();
 renderSlipAll(false);
 route();
 window.addEventListener("hashchange", function(){ var h=(location.hash||"").replace("#/",""); if(h!=="live") forceNoLive=false; route(); });
+var autoCarHold={};
+function autoCarouselTick(){
+  if(document.hidden) return;
+  if(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  var now=Date.now();
+  document.querySelectorAll(".hscroll.autocar").forEach(function(el){
+    if(!el.id) return;
+    if(autoCarHold[el.id]===undefined){ autoCarHold[el.id]=now+4200; return; }
+    if(now<autoCarHold[el.id]) return;
+    var kids=el.children.length; if(kids<2) return;
+    var maxScroll=el.scrollWidth-el.clientWidth; if(maxScroll<=4) return;
+    var step=el.children[0].offsetWidth+16; if(step<=16) return;
+    var cur=Math.round(el.scrollLeft/step);
+    var nxt=cur+1; if(nxt>kids-1 || el.scrollLeft>=maxScroll-4) nxt=0;
+    el.scrollTo({left:Math.min(nxt*step,maxScroll),behavior:"smooth"});
+    autoCarHold[el.id]=now+4200;
+  });
+}
+["pointerdown","touchstart","wheel"].forEach(function(ev){ document.addEventListener(ev,function(e){ var c=(e.target&&e.target.closest)?e.target.closest(".hscroll.autocar"):null; if(c&&c.id) autoCarHold[c.id]=Date.now()+10000; },{passive:true}); });
+setInterval(autoCarouselTick, 600);
 setInterval(updateCountdowns, 30000);
 setInterval(driftOdds, 9000);
 setInterval(tickClocks, 45000);
