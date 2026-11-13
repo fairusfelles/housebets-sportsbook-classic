@@ -568,6 +568,32 @@ body.menuopen .mobileslipbar{display:none}
 .ss-chat{text-align:center;padding:18px 6px 8px}
 .ss-chat-ic{color:var(--cyan);display:grid;place-items:center;margin-bottom:8px}
 #slipSheet{background:linear-gradient(180deg,#101623,#0A0D14);border-top:2px solid var(--cyan);box-shadow:0 -18px 44px rgba(0,0,0,.65)}
+.slipitem{display:flex;padding:0;overflow:hidden}
+.si-x{flex:none;width:40px;background:rgba(255,255,255,.04);border:none;border-right:1px solid var(--line2);color:var(--muted);display:grid;place-items:center;cursor:pointer}
+.si-x:active{background:rgba(255,255,255,.09)}
+.si-main{flex:1;min-width:0;padding:12px 14px}
+.si-pick{display:block;color:var(--head);font-size:16px}
+.si-fix{display:block;color:var(--muted);font-size:13px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.si-mkt{display:block;color:var(--muted);font-size:11.5px;margin-top:1px}
+.si-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px}
+.si-odds{font-size:22px;font-weight:900;color:var(--head)}
+.si-stake{display:flex;align-items:center;gap:7px;background:var(--panel2);border:1px solid var(--line2);border-radius:10px;padding:4px 5px 4px 8px}
+.si-stake input{width:58px;background:none;border:none;color:var(--head);font:inherit;font-size:15px;font-weight:800;text-align:right;outline:none}
+.si-cur{font-size:11px;font-weight:800;color:var(--muted)}
+.si-max{background:rgba(255,255,255,.08);border:1px solid var(--line2);color:var(--head);font:inherit;font-size:11px;font-weight:800;border-radius:7px;padding:5px 8px;cursor:pointer}
+.ss-quick{display:flex;align-items:center;justify-content:space-between;margin:-2px 0 12px}
+.ss-quick-lbl{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:900;letter-spacing:1.2px;color:var(--muted)}
+.ss-toggle{width:48px;height:27px;border-radius:99px;background:var(--panel2);border:1px solid var(--line2);position:relative;cursor:pointer;padding:0}
+.ss-knob{position:absolute;top:2px;left:2px;width:21px;height:21px;border-radius:50%;background:#5B6B7A;transition:.18s}
+.ss-toggle.on{background:rgba(2,247,253,.25);border-color:var(--cyan)}
+.ss-toggle.on .ss-knob{left:23px;background:var(--cyan)}
+.ss-foot{margin-top:14px;border-top:1px solid var(--line2);padding-top:12px}
+.ss-totrow{display:flex;justify-content:space-between;align-items:baseline;color:var(--muted);font-size:13.5px;margin-bottom:5px}
+.ss-totrow b{color:var(--head)}
+.ss-totrow.big{font-size:12px;font-weight:900;letter-spacing:.6px}
+.ss-totrow.big b{font-size:16px;color:var(--cyan)}
+.ss-place{margin-top:8px;font-size:15px;letter-spacing:.4px}
+.ss-share{width:100%;margin-top:9px;background:rgba(255,255,255,.05);border:1px solid var(--line2);color:var(--head);font:inherit;font-weight:800;font-size:13px;letter-spacing:1.2px;border-radius:12px;padding:12px;cursor:pointer}
 </style>
 </head>
 <body>
@@ -694,6 +720,7 @@ body.menuopen .mobileslipbar{display:none}
     </div>
     <button class="iconbtn" onclick="closeAllSheets()" aria-label="Close slip"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
   </div>
+  <div class="ss-quick" id="ssQuick" style="display:none"><span class="ss-quick-lbl"><svg class="ic ic-sm" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><path d="M13 2L4.5 13.5H11L9.5 22 19 9.5h-6.5L13 2z"/></svg> QUICK BET</span><button class="ss-toggle" id="ssQuickToggle" onclick="toggleQuickBet()" aria-label="Toggle quick bet"><span class="ss-knob"></span></button></div>
   <div id="slipSheetBody"></div>
 </div>
 
@@ -1645,7 +1672,7 @@ function addToSlip(key, matchId, label, market, pick, odds){
   var grp=key.split("-").slice(0,-1).join("-");
   slip=slip.filter(function(x){ return x.key.split("-").slice(0,-1).join("-")!==grp; });
   slip.push({key:key, matchId:matchId, label:label, market:market, pick:pick, odds:odds, stake:10, needsAccept:false, newOdds:null, suspended:false});
-  betMessage=""; renderSlipAll(); route(false);
+  betMessage=""; renderSlipAll(); route(false); if(quickBetOn){ placeBet(key); }
 }
 function addMatchToSlip(key, marketId, pickLabel, odds){
   var marketName=""; (matchCtx.book||MATCH_MARKETS).forEach(function(m){ if(m.id===marketId) marketName=m.name; }); if(!marketName){ MATCH_MARKETS.forEach(function(m){ if(m.id===marketId) marketName=m.name; }); }
@@ -1655,7 +1682,7 @@ function addMatchToSlip(key, marketId, pickLabel, odds){
   var grp2=key.split("-").slice(0,-1).join("-");
   slip=slip.filter(function(x){ return x.key.split("-").slice(0,-1).join("-")!==grp2; });
   slip.push({key:key, matchId:matchCtx.id, label:matchCtx.label, market:marketName, pick:pick, pickLabel:pickLabel, odds:odds, stake:10, needsAccept:false, newOdds:null, suspended:false});
-  betMessage=""; renderSlipAll(); route(false);
+  betMessage=""; renderSlipAll(); route(false); if(quickBetOn){ placeBet(key); }
 }
 function removeFromSlip(key){ slip=slip.filter(function(s){return s.key!==key}); renderSlipAll(); route(false); }
 function updateStake(key, val){ slip.forEach(function(s){ if(s.key===key) s.stake=parseFloat(val)||0; }); renderSlipAll(false); }
@@ -1675,18 +1702,18 @@ function slipHTML(containerId){
   if(betMessage){ html+='<div class="'+(betMessageType==="success"?"success":"fail")+'">'+esc(betMessage)+'</div>'; }
   slip.forEach(function(s){
     var potential=(s.stake||0)*Number(s.odds);
-    html+='<div class="slipitem '+(s.suspended?"susp":(s.needsAccept?"warn":""))+'"><button class="remove" onclick="removeFromSlip(\''+s.key+'\')">'+icon("close","ic-sm")+' Remove</button><b>'+esc(s.label)+'</b><p>'+esc(s.market)+' · <b>'+esc(s.pickLabel||s.pick)+'</b></p><p>Odds: <b style="font-size:16px;color:var(--head)">'+Number(s.odds).toFixed(2)+'</b> &nbsp;·&nbsp; Singles only</p>';
+    html+='<div class="slipitem '+(s.suspended?"susp":(s.needsAccept?"warn":""))+'"><button class="si-x" onclick="removeFromSlip(\''+s.key+'\')" aria-label="Remove selection">'+icon("close","ic")+'</button><div class="si-main"><b class="si-pick">'+esc(s.pickLabel||s.pick)+'</b><span class="si-fix">'+esc(s.label)+'</span><span class="si-mkt">'+esc(s.market)+' &middot; Singles only</span>';
     if(s.needsAccept){ html+='<div class="flag gold">'+icon("warn","ic-sm")+' Odds have changed to <b>'+Number(s.newOdds).toFixed(2)+'</b>. You must accept the new odds before placing this bet.</div><div style="display:flex;gap:8px"><button class="btn" style="flex:1" onclick="acceptOdds(\''+s.key+'\')">Accept '+Number(s.newOdds).toFixed(2)+'</button><button class="cashout" onclick="rejectOdds(\''+s.key+'\')">Remove</button></div>'; }
     if(s.suspended){ html+='<div class="flag">'+icon("lock","ic-sm")+' Suspended \u00b7 '+esc(suspendReason)+' \u2014 this market is currently suspended. It reopens shortly; you cannot place this bet until then \u2014 or remove the selection.</div>'; }
-    html+='<div class="netrow"><span>USDT settlement network</span><div class="netchips"><button class="netchip '+(settleNet==="TRON"?"on":"")+'" onclick="setNet(\'TRON\')">TRON</button><button class="netchip '+(settleNet==="Ethereum"?"on":"")+'" onclick="setNet(\'Ethereum\')">Ethereum</button><button class="netchip '+(settleNet==="Solana"?"on":"")+'" onclick="setNet(\'Solana\')">Solana</button></div></div>';
-    html+='<div class="stakeRow"><span style="align-self:center;font-weight:700">Stake USDT</span><input type="number" min="0" step="1" value="'+(s.stake||"")+'" oninput="updateStake(\''+s.key+'\',this.value)" onchange="renderSlipAll();route(false)"></div>';
+
+    html+='<div class="si-row"><span class="si-odds">'+Number(s.odds).toFixed(2)+'</span><div class="si-stake"><input type="number" min="0" step="1" value="'+(s.stake||"")+'" oninput="updateStake(\''+s.key+'\',this.value)" onchange="renderSlipAll();route(false)"><span class="si-cur">USDT</span><button class="si-max" onclick="quickStake(\''+s.key+'\',-1)">MAX</button></div></div>';
     html+='<div class="qchips"><button onclick="quickStake(\''+s.key+'\',10)">10</button><button onclick="quickStake(\''+s.key+'\',25)">25</button><button onclick="quickStake(\''+s.key+'\',50)">50</button><button onclick="quickStake(\''+s.key+'\',100)">100</button><button onclick="quickStake(\''+s.key+'\',-1)">Max</button></div>';
     html+='<p style="margin-top:8px">Potential return: <b>'+fmt(potential)+' USDT</b> &nbsp;·&nbsp; If it loses: <b style="color:var(--red)">−'+fmt(s.stake||0)+' USDT</b> &nbsp;·&nbsp; Balance after: '+fmt(balance-(s.stake||0))+' USDT</p>';
     var disabled = s.needsAccept || s.suspended;
     html+='<button class="btn-green" '+(disabled?"disabled":"")+' onclick="placeBet(\''+s.key+'\')">'+(s.needsAccept?"Accept odds to place bet":(s.suspended?"Market suspended":"Place Bet — "+fmt(s.stake||0)+" USDT"))+'</button>';
     html+='<p class="microcopy">Min 1 · Max 5,000 USDT per single · settles on-chain in seconds · no wagering on winnings</p>';
     if((s.stake||0) > balance){ html+='<div class="flag">Insufficient balance: you tried to stake '+fmt(s.stake)+' USDT but your balance is '+fmt(balance)+' USDT. Press Place Bet to see the failure state, or lower the stake.</div>'; }
-    html+='</div>';
+    html+='</div></div>';
   });
   if(slip.length>1){
     var totStake=slip.reduce(function(a,s){ return a+(s.stake||0); },0);
@@ -1765,8 +1792,15 @@ function renderSlipSheet(){
   if(slipSheetTab==="chat"){ body.innerHTML='<div class="ss-chat"><div class="ss-chat-ic">'+icon("headset","ic-xl")+'</div><b style="color:var(--head);font-size:17px">Live chat</b><p style="color:var(--muted);line-height:1.65;margin:8px auto 14px;max-width:420px">Chat with the Housebets team lives in the full product. In this prototype, support is wired through the profile menu and the Home support tile.</p><button class="btn" style="width:auto;padding:10px 18px" onclick="closeAllSheets();openProfile()">Open support</button></div>'; return; }
   var h=slipHTML();
   if(!slip.length && betMessage){ h='<div class="'+(betMessageType==="success"?"success":"fail")+'">'+esc(betMessage)+'</div>'+h; }
-  body.innerHTML='<div class="ss-sliponly">'+h+'</div>';
+  var q=document.getElementById("ssQuick"); if(q){ q.style.display=(slip.length? "flex":"none"); var tg=document.getElementById("ssQuickToggle"); if(tg) tg.classList.toggle("on", !!quickBetOn); }
+  var foot="";
+  if(slip.length){ var ts=0, tp=0; slip.forEach(function(x){ ts+=(x.stake||0); tp+=(x.stake||0)*Number(x.odds); });
+    foot='<div class="ss-foot"><div class="ss-totrow"><span>Total stake</span><b>'+fmt(ts)+' USDT</b></div><div class="ss-totrow big"><span>POTENTIAL RETURN</span><b>'+fmt(tp)+' USDT</b></div><button class="btn-green ss-place" onclick="placeAll()">PLACE BET &mdash; '+fmt(ts)+' USDT</button><button class="ss-share" onclick="shareSlip()">SHARE</button></div>'; }
+  body.innerHTML='<div class="ss-sliponly">'+h+'</div>'+foot;
 }
+var quickBetOn=false;
+function toggleQuickBet(){ quickBetOn=!quickBetOn; showToast(quickBetOn? "Quick Bet on - tapping odds places a 10 USDT single instantly." : "Quick Bet off."); renderSlipSheet(); }
+function shareSlip(){ if(!slip.length){ showToast("Your slip is empty."); return; } var txt="My Housebets slip: "+slip.map(function(x){ return (x.pickLabel||x.pick)+" @ "+Number(x.odds).toFixed(2)+" ("+x.label+")"; }).join("; "); if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(txt); } showToast("Slip summary copied - paste it anywhere."); }
 function renderSlipPage(){
   var html='<div class="fade"><div class="eyebrow" style="color:var(--cyan)">Bet Slip + My Bets</div><h1 class="serif" style="margin:6px 0 4px;color:var(--head);font-size:34px">Bet Slip & My Bets</h1><p style="color:var(--muted);margin:0 0 16px">One page, as briefed. Singles only · Decimal odds · Stakes in USDT · Balance <b>'+fmt(balance)+' USDT</b></p><div style="display:grid;grid-template-columns:1fr;gap:16px"><div>'+slipHTML("page")+'</div></div></div>';
   document.getElementById("page-slip").innerHTML=html;
