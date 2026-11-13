@@ -426,6 +426,17 @@ body.nav .fade{animation:fade .3s ease}
 .fblive{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:800;color:#FF5C7A;flex:none}
 .fbfollow{display:flex;align-items:center;gap:6px;padding:8px 12px;border-radius:999px;border:1px solid var(--line2);background:#10141F;color:#fff;font-weight:700;font-size:12.5px;cursor:pointer;flex:none;font-family:inherit}
 .fbfollow.on{background:var(--cyan);color:#04505C;border-color:transparent}
+.fbhead{flex-wrap:wrap;row-gap:8px}
+.fbtop{display:flex;gap:8px;align-items:center;margin-bottom:10px;position:relative;z-index:40}
+.fbback{width:40px;height:40px;flex:none;border-radius:12px;background:#141927;border:1px solid var(--line);color:#fff;font-size:20px;cursor:pointer;font-family:inherit;line-height:1}
+.fbselwrap{position:relative}
+.fbsel{display:flex;align-items:center;gap:8px;padding:0 14px;height:40px;border-radius:12px;background:#141927;border:1px solid var(--line);color:#fff;font-weight:800;font-size:14.5px;cursor:pointer;font-family:inherit}
+.fbcar{color:var(--muted);font-size:12px}
+.fbmenu{position:absolute;top:46px;left:0;min-width:190px;background:#171C2B;border:1px solid var(--line2);border-radius:14px;padding:6px;box-shadow:0 18px 40px rgba(0,0,0,.5);z-index:60}
+.fbmenu button{display:block;width:100%;text-align:left;background:none;border:none;color:#DDE6F2;font:inherit;font-size:14px;font-weight:700;padding:9px 10px;border-radius:9px;cursor:pointer}
+.fbmenu button.on{color:var(--cyan)}
+.fball{background:none;border:none;color:var(--muted);font:inherit;font-size:12.5px;font-weight:700;cursor:pointer;white-space:nowrap;padding:4px 0 4px 2px;flex:none}
+.fbpill{display:inline-flex;align-items:center;gap:6px;margin:2px 0 12px;padding:8px 12px;border-radius:999px;background:#141927;border:1px solid var(--line);color:#fff;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit}
 
 .livehead{display:flex;align-items:center;gap:10px}
 .liveback{width:38px;height:38px;flex:none;border-radius:11px;background:var(--panel2);border:1px solid var(--line2);color:var(--head);display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
@@ -607,6 +618,8 @@ var myBetsTab = "Open";
 var liveSport = "All";
 var liveLeague = "All";
 var fbView = "all";
+var fbLeague = null;
+var sportMenuOpen = false;
 var follows = {"fav-m1":true, "fav-lg-PL":true, "fav-tm-Arsenal":true};
 var LSKEY = "hb2-state-v1";
 function saveState(){ try{ localStorage.setItem(LSKEY, JSON.stringify({follows:follows, balance:balance, slip:slip, myBets:myBets})); }catch(e){} }
@@ -1239,7 +1252,7 @@ function renderDetail(){
   html+='</div>';
   el.innerHTML=html;
 }
-function setFbView(v){ fbView=v; route(false); }
+function setFbView(v){ fbView=v; if(v!=="league") fbLeague=null; route(false); }
 function fbTabsHTML(n){ return '<div class="segtabs"><button class="segtab '+(fbView==="liveup"?"on":"")+'" onclick="setFbView(\'liveup\')">Live &amp; Upcoming <span style="opacity:.75">'+n+'</span></button><button class="segtab '+(fbView==="all"?"on":"")+'" onclick="setFbView(\'all\')">All Football</button></div>'; }
 function setLiveSport(sp){
   liveSport=sp;
@@ -1250,13 +1263,44 @@ function setLiveSport(sp){
   renderLive();
 }
 function setLiveLeague(l){ liveLeague=(liveLeague===l)?"All":l; renderLive(); }
+function fbHeadHTML(l, list, showAll){
+  var fk="fav-lg-"+l.id;
+  var lc=list.filter(function(m){return m.live}).length;
+  return '<div class="fbhead">'+leagueBadge(l.id)+'<div style="flex:1;min-width:0"><div class="fbname">'+esc(l.name)+'</div><div class="fbmeta">'+esc(l.country)+' \u00b7 '+list.length+' matches</div></div>'+(lc?'<span class="fblive"><span class="pdot"></span>'+lc+' live</span>':'')+'<button class="fbfollow '+(follows[fk]?"on":"")+'" onclick="toggleFollow(\''+fk+'\',event)">'+icon("star", follows[fk]?"fill":"")+' '+(follows[fk]?"Following":"Follow")+'</button>'+(showAll?'<button class="fball" onclick="fbOpenLeague(\''+l.id+'\')">All '+list.length+' \u203a</button>':'')+'</div>';
+}
+function fbSortedList(lid){
+  return MATCHES.filter(function(m){return m.league===lid}).slice().sort(function(a,b){ if(a.live!==b.live) return a.live?-1:1; if(a.live&&b.live) return (b.minute||0)-(a.minute||0); return (a.koMin||9999)-(b.koMin||9999); });
+}
+function toggleSportMenu(ev){ if(ev) ev.stopPropagation(); sportMenuOpen=!sportMenuOpen; route(false); }
+function sportSwitch(sp){ sportMenuOpen=false; if(sp==="Football"){ route(false); return; } liveSportGo(sp); }
+function fbTopHTML(){
+  var rows=[["Football","Football"],["Live now","All"],["Basketball","Basketball"],["Tennis","Tennis"],["Esports","Esports"]];
+  var menu='';
+  if(sportMenuOpen){
+    menu='<div class="fbmenu">'+rows.map(function(r){ var cur=r[1]==="Football"; return '<button class="'+(cur?"on":"")+'" onclick="sportSwitch(\''+r[1]+'\')">'+r[0]+(cur?' <span style="float:right">\u2713</span>':'')+'</button>'; }).join("")+'</div>';
+  }
+  return '<div class="fbtop"><button class="fbback" onclick="location.hash=\'#/home\'" aria-label="Back to Sports home">\u2039</button><div class="fbselwrap"><button class="fbsel" onclick="toggleSportMenu(event)">Football <span class="fbcar">\u25be</span></button>'+menu+'</div></div>';
+}
+function fbOpenLeague(id){ fbLeague=id; fbView="league"; sportMenuOpen=false; route(); }
+function fbBackAll(){ fbLeague=null; fbView="all"; route(); }
 function renderFootball(){
   var fbLeagues=LEAGUES.filter(function(l){return l.id!=="NBA"});
   var all=MATCHES.filter(function(m){return fbLeagues.some(function(l){return l.id===m.league})});
-  var liveN=all.filter(function(m){return m.live}).length;
-  var html='<div class="fade">';
+  var html='<div class="fade">'+fbTopHTML();
   html+='<div style="margin-top:2px">'+homeSearchHTML()+'</div>';
   html+=fbTabsHTML(all.length);
+  if(fbView==="league" && fbLeague){
+    var lg=null; for(var i=0;i<fbLeagues.length;i++){ if(fbLeagues[i].id===fbLeague) lg=fbLeagues[i]; }
+    if(lg){
+      var llist=fbSortedList(lg.id);
+      html+='<div style="margin-top:14px"><button class="fbpill" onclick="fbBackAll()">\u2039 All Football</button></div>';
+      html+=fbHeadHTML(lg, llist, false)+matchesTable(llist,false);
+      html+='</div>';
+      document.getElementById("page-football").innerHTML=html;
+      return;
+    }
+    fbView="all"; fbLeague=null;
+  }
   if(fbView==="liveup"){
     var lv=all.filter(function(m){return m.live}).sort(function(a,b){ var la=LEAGUES.findIndex(function(x){return x.id===a.league}), lb=LEAGUES.findIndex(function(x){return x.id===b.league}); if(la!==lb) return la-lb; return (b.minute||0)-(a.minute||0); });
     var up=all.filter(function(m){return !m.live}).sort(function(a,b){ return (a.koMin||9999)-(b.koMin||9999); });
@@ -1269,10 +1313,8 @@ function renderFootball(){
   var ordered=fbLeagues.slice().sort(function(a,b){ var fa=follows["fav-lg-"+a.id]?0:1, fb=follows["fav-lg-"+b.id]?0:1; return fa-fb; });
   html+='<div class="fbnav">'+ordered.map(function(l){ return '<button class="fbnavpill" onclick="scrollToLeague(\''+l.id+'\')">'+leagueBadge(l.id)+' '+esc(l.name.replace("UEFA ",""))+'</button>'; }).join("")+'</div>';
   ordered.forEach(function(l){
-    var list=MATCHES.filter(function(m){return m.league===l.id}).slice().sort(function(a,b){ if(a.live!==b.live) return a.live?-1:1; if(a.live&&b.live) return (b.minute||0)-(a.minute||0); return (a.koMin||9999)-(b.koMin||9999); });
-    var fk="fav-lg-"+l.id;
-    var lc=list.filter(function(m){return m.live}).length;
-    html+='<div id="lg-'+l.id+'"><div class="fbhead">'+leagueBadge(l.id)+'<div style="flex:1;min-width:0"><div class="fbname">'+esc(l.name)+'</div><div class="fbmeta">'+esc(l.country)+' \u00b7 '+list.length+' matches</div></div>'+(lc?'<span class="fblive"><span class="pdot"></span>'+lc+' live</span>':'')+'<button class="fbfollow '+(follows[fk]?"on":"")+'" onclick="toggleFollow(\''+fk+'\',event)">'+icon("star", follows[fk]?"fill":"")+' '+(follows[fk]?"Following":"Follow")+'</button></div>'+matchesTable(list,false)+'</div>';
+    var list=fbSortedList(l.id);
+    html+='<div id="lg-'+l.id+'">'+fbHeadHTML(l, list, true)+matchesTable(list,false)+'</div>';
   });
   html+='</div>';
   document.getElementById("page-football").innerHTML=html;
