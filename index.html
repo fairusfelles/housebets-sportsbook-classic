@@ -328,9 +328,6 @@ body.nav .fade{animation:fade .3s ease}
 @keyframes sh{to{background-position:-200% 0}}
 .fade{animation:none}
 @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
-.searchbarMobile{display:none;background:var(--bg2);padding:10px 14px;border-bottom:1px solid var(--line);position:sticky;top:62px;z-index:55}
-.searchbarMobile.show{display:block}
-.searchbarMobile input{width:100%;padding:11px;border:1px solid var(--line2);border-radius:999px;background:#12151F;color:#fff;outline:none}
 .hidden{display:none!important}
 @media(max-width:1100px){.layout{grid-template-columns:220px 1fr}.rightpanel{display:none}.mobileslipbar{display:grid;place-items:center;position:fixed;left:50%;transform:translateX(-50%);right:auto;bottom:84px;width:58px;height:58px;border-radius:50%;background:var(--cyan);color:#06222B;z-index:70;padding:0;border:none;box-shadow:0 10px 26px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.35);font-weight:900;font-size:25px}
 #mobileSlipCount{position:absolute;top:-4px;right:-4px;background:#FF5C5C;color:#fff;font-size:11px;font-weight:800;min-width:21px;height:21px;border-radius:99px;display:grid;place-items:center;border:2px solid #07090E;padding:0 5px}
@@ -374,7 +371,7 @@ body.nav .fade{animation:fade .3s ease}
 }
 /* MOBILE HEADER FIT (≤760px): menu, H mark, search, wallet unit and profile stay visible.
    The top search icon is kept because it is the only trigger for the mobile search bar
-   (toggleMobSearch); the space comes from hiding the crown button, the wordmark text,
+   (the search button); the space comes from hiding the crown button, the wordmark text,
    the pill's "USDT" suffix (the full balance remains) and the separate Deposit button —
    the pill's pale wallet segment opens the wallet sheet on its Deposit tab instead.
    Desktop rules above are untouched. */
@@ -395,7 +392,9 @@ body.nav .fade{animation:fade .3s ease}
   .depbtn{display:none}
 }
 
-.homesearch{display:flex;align-items:center;gap:10px;width:100%;background:var(--panel2);border:1px solid var(--line2);color:var(--muted);border-radius:12px;padding:12px 14px;font:inherit;font-size:14px;cursor:pointer;text-align:left;margin-top:var(--gap-block)}
+.homesearch{display:flex;align-items:center;gap:10px;width:100%;background:var(--panel2);border:1px solid var(--line2);color:var(--muted);border-radius:12px;padding:0 14px;height:46px;margin-top:var(--gap-block)}
+.homesearch input{flex:1;min-width:0;background:none;border:none;outline:none;color:#fff;font:inherit;font-size:14px;height:100%}
+.homesearch input::placeholder{color:var(--muted)}
 .hometabs{display:flex;gap:4px;background:var(--panel2);border:1px solid var(--line2);border-radius:14px;padding:5px;margin-top:12px}
 .htab{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;color:var(--muted);font:inherit;font-size:11.5px;font-weight:700;padding:8px 2px;border-radius:10px;cursor:pointer}
 .htab .ic{width:20px;height:20px}
@@ -492,7 +491,7 @@ body.nav #page-football .mcard{animation-delay:.05s}
     <input id="searchInput" placeholder="Search teams, players, leagues, markets…" oninput="onSearch(this.value)">
   </div>
   <div class="topactions">
-    <button class="iconbtn" onclick="toggleMobSearch()" aria-label="Search"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg></button>
+    <button class="iconbtn" onclick="focusPageSearch()" aria-label="Search"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg></button>
     <button class="walletpill" onclick="openWallet()" aria-label="Wallet"><span id="walletBalanceTop">1,000.00</span><span class="pillunit">USDT</span><svg class="ic wchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9.5l6 6 6-6"/></svg><span class="walbtn"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10.5h18"/><circle cx="17" cy="14.8" r="1.1"/></svg></span></button>
     <button class="depbtn" onclick="openWallet()" aria-label="Deposit"><svg class="ic ic-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Deposit</button>
     
@@ -500,7 +499,6 @@ body.nav #page-football .mcard{animation-delay:.05s}
     <button class="avatar" onclick="openProfile()" title="Profile" aria-label="Profile"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M5 19.5c1.2-3.2 3.8-4.8 7-4.8s5.8 1.6 7 4.8"/></svg></button>
   </div>
 </header>
-<div class="searchbarMobile" id="mobSearch"><input id="searchInputMobile" placeholder="Search matches…" oninput="onSearch(this.value)"></div>
 <div class="scrim" id="scrim" onclick="closeAllSheets()"></div>
 
 <div class="layout">
@@ -961,8 +959,16 @@ function showToast(msg){
 function hubieTap(){ showToast("Hubie is live 24/7 in the full Housebets app — find him there any time."); }
 function toggleDrawer(){ document.body.classList.toggle("drawer"); document.getElementById("scrim").classList.toggle("show", document.body.classList.contains("drawer")); }
 function closeDrawer(){ document.body.classList.remove("drawer"); if(!document.querySelector(".sheet.open")) document.getElementById("scrim").classList.remove("show"); }
-function toggleMobSearch(){ var el=document.getElementById("mobSearch"); el.classList.toggle("show"); var inp=document.getElementById("searchInputMobile"); if(el.classList.contains("show")) inp.focus(); }
-function onSearch(q){ searchQuery=(q||"").toLowerCase().trim(); route(false); }
+function currentPageSearchInput(){ var id=(location.hash||"#/home").slice(2).split("/")[0]||"home"; var pg=document.getElementById("page-"+id); return pg ? pg.querySelector(".pagesearch-input") : null; }
+function focusPageSearch(){ var inp=currentPageSearchInput(); if(inp){ inp.scrollIntoView({block:"center",behavior:"smooth"}); setTimeout(function(){ inp.focus(); },80); } else { location.hash="#/home"; setTimeout(function(){ var i2=currentPageSearchInput(); if(i2) i2.focus(); },140); } }
+function onSearch(q){
+  var ae=document.activeElement;
+  var wasInPage=!!(ae && ae.classList && ae.classList.contains("pagesearch-input"));
+  searchQuery=(q||"").toLowerCase().trim();
+  var d=document.getElementById("searchInput"); if(d && d.value!==(q||"")) d.value=q||"";
+  route(false);
+  if(wasInPage){ var inp=currentPageSearchInput(); if(inp){ inp.focus(); try{ inp.setSelectionRange(inp.value.length, inp.value.length); }catch(e){} } }
+}
 function openWallet(){ closeAllSheets(); setWalletTab("deposit"); document.getElementById("walletSheet").classList.add("open"); document.getElementById("scrim").classList.add("show"); syncBalance(); }
 function openProfile(){ closeAllSheets(); document.getElementById("profileSheet").classList.add("open"); document.getElementById("scrim").classList.add("show"); }
 function sampleAuth(){ showToast("Sample only \u2014 no real accounts in this prototype"); }
@@ -1103,11 +1109,7 @@ function matchesTable(list, showLeague){
 }
 
 function homeSearchHTML(){
-  return '<button class="homesearch" onclick="homeSearchTap()">'+icon("search","ic-sm")+'<span>Search teams, players, leagues</span></button>';
-}
-function homeSearchTap(){
-  if(window.innerWidth<=760){ var mob=document.getElementById("mobSearch"); if(mob && !mob.classList.contains("show")) toggleMobSearch(); var i=document.getElementById("searchInputMobile"); if(i) setTimeout(function(){ i.focus(); },60); }
-  else { var d=document.getElementById("searchInput"); if(d){ window.scrollTo({top:0,behavior:"smooth"}); d.focus(); } }
+  return '<div class="homesearch">'+icon("search","ic-sm")+'<input class="pagesearch-input" type="text" inputmode="search" autocomplete="off" placeholder="Search teams, players, leagues" value="'+esc(searchQuery).replace(/"/g,"&quot;")+'" oninput="onSearch(this.value)"></div>';
 }
 function homeTabsHTML(n){
   var t='<div class="hometabs" role="navigation" aria-label="Sports">';
