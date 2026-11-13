@@ -696,6 +696,8 @@ var myBets = [
 ]; // {id, label, market, pick, odds, stake, potential, status, cashOutValue, when}
 var myBetsTab = "Open";
 var liveSport = "All";
+var lastRouteHash = "";
+var liveDeepLink = false;
 var liveLeague = "All";
 var fbView = "all";
 var fbLeague = null;
@@ -1009,6 +1011,7 @@ function basketballGo(){
   closeDrawer();
 }
 function liveSportGo(sp){
+  liveDeepLink=true;
   liveSport=sp; liveLeague="All";
   if(location.hash!=="#/live"){ location.hash="#/live"; }
   renderLive();
@@ -1929,6 +1932,11 @@ function route(rerender){
   if(h==="home"){ var bn1=document.getElementById("bnavSports"); if(bn1) bn1.classList.add("active"); }
   if(h==="scope"){ var bn2=document.getElementById(window._scopeName==="Chat"?"bnavChat":"bnavCasino"); if(bn2) bn2.classList.add("active"); }
   if(h!=="match") document.body.classList.remove("menuopen");
+  if(!keepScroll && h!==lastRouteHash){
+    if(h==="live"){ if(liveDeepLink){ liveDeepLink=false; } else { liveSport="All"; liveLeague="All"; } }
+    if(h==="football"){ fbView="all"; }
+  }
+  if(h!==lastRouteHash) lastRouteHash=h;
   if(h==="home") renderHome();
   if(h==="live") renderLive();
   if(h==="football") renderFootball();
