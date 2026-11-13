@@ -51,7 +51,16 @@ h1,h2,h3{letter-spacing:-.02em}
 .coin{width:26px;height:26px;flex:none}
 .coin-sm{width:22px;height:22px}
 .topactions{display:flex;gap:8px;align-items:center;margin-left:auto}
-.avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#1A2436,#10131B);color:var(--cyan);display:grid;place-items:center;font-weight:900;border:2px solid var(--cyan);cursor:pointer}
+.avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#1A2436,#10131B);color:var(--cyan);display:grid;place-items:center;font-weight:900;border:2px solid var(--cyan);cursor:pointer;padding:0}
+.avatar .ic{width:21px;height:21px}
+.walletpill .wpic{width:21px;height:21px;color:var(--cyan)}
+.profhead{display:flex;gap:14px;align-items:center;margin-top:16px}
+.pavatar{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#1A2436,#10131B);color:var(--cyan);display:grid;place-items:center;border:2px solid var(--cyan);flex:none}
+.pavatar .ic{width:28px;height:28px}
+.prow{display:flex;align-items:center;gap:12px;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:13px 14px;margin-top:10px;cursor:pointer;font-weight:700;color:var(--ink)}
+.prow:hover{border-color:var(--cyan)}
+.prow .ic{color:var(--cyan)}
+.prow small{margin-left:auto;color:var(--muted);font-size:17px}
 .layout{display:grid;grid-template-columns:248px 1fr 340px;gap:0;padding-top:62px;min-height:100vh}
 .leftnav{background:var(--bg2);border-right:1px solid var(--line);padding:18px 14px;position:sticky;top:62px;height:calc(100vh - 62px);overflow:auto}
 .leftnav h3{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin:18px 6px 8px;font-family:var(--sans)}
@@ -240,7 +249,7 @@ tr:last-child td{border-bottom:none}
 .supportfab{position:fixed;right:24px;bottom:24px;width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,#3FF7F7,#0FB5B5);color:#032630;border:none;display:grid;place-items:center;box-shadow:0 10px 26px rgba(0,0,0,.5),0 0 18px rgba(23,230,230,.18);z-index:65}
 .supportfab:hover{background:#3FF7F7}
 @media(max-width:1100px){.supportfab{bottom:140px;right:16px}}
-@media(max-width:560px){.depbtn{padding:8px 11px;font-size:13px}.utile{padding:var(--pad-card);font-size:13px}.utilrow{gap:var(--gap-grid)}}
+@media(max-width:560px){.walletpill .wpic{display:none}.depbtn{padding:8px 11px;font-size:13px}.utile{padding:var(--pad-card);font-size:13px}.utilrow{gap:var(--gap-grid)}}
 /* BOTTOM / MOBILE */
 .bottomnav{display:none}
 .mobileslipbar{display:none}
@@ -304,11 +313,11 @@ tr:last-child td{border-bottom:none}
   </div>
   <div class="topactions">
     <button class="iconbtn" onclick="toggleMobSearch()" aria-label="Search"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg></button>
-    <button class="walletpill" onclick="openWallet()"><svg class="coin coin-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#26A17B"/><text x="12" y="16.4" text-anchor="middle" font-size="11" font-weight="800" fill="#ffffff">₮</text></svg> <span id="walletBalanceTop">1,000.00</span> USDT</button>
+    <button class="walletpill" onclick="openWallet()"><svg class="ic wpic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10.5h18"/><circle cx="17" cy="14.8" r="1.1"/></svg><svg class="coin coin-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#26A17B"/><text x="12" y="16.4" text-anchor="middle" font-size="11" font-weight="800" fill="#ffffff">₮</text></svg> <span id="walletBalanceTop">1,000.00</span> USDT</button>
     <button class="depbtn" onclick="openWallet()" aria-label="Deposit"><svg class="ic ic-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Deposit</button>
     
     <button class="iconbtn" onclick="scopeGo('Rewards')" title="Rewards"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8l4.7 3.8L12 5.5l3.8 6.3L20.5 8 19.3 17H4.7z"/><line x1="5" y1="20.2" x2="19" y2="20.2"/></svg></button>
-    <div class="avatar" onclick="hubieTap()" title="Hubie">H</div>
+    <button class="avatar" onclick="openProfile()" title="Profile" aria-label="Profile"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M5 19.5c1.2-3.2 3.8-4.8 7-4.8s5.8 1.6 7 4.8"/></svg></button>
   </div>
 </header>
 <div class="searchbarMobile" id="mobSearch"><input id="searchInputMobile" placeholder="Search matches…" oninput="onSearch(this.value)"></div>
@@ -398,6 +407,23 @@ tr:last-child td{border-bottom:none}
   <button class="btn-green" onclick="closeAllSheets();scopeGo('Chat')">Chat with Support</button>
 </div>
 
+<div class="sheet" id="profileSheet">
+  <div style="display:flex;justify-content:space-between;align-items:center"><h2 style="margin:0;color:var(--head)">Profile</h2><button class="iconbtn" onclick="closeAllSheets()"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button></div>
+  <div class="profhead">
+    <div class="pavatar"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M5 19.5c1.2-3.2 3.8-4.8 7-4.8s5.8 1.6 7 4.8"/></svg></div>
+    <div><b style="color:var(--head);font-size:17px">Guest player</b><span style="display:block;color:var(--muted);font-size:13px;margin-top:3px;line-height:1.5">Sign in to sync your bets across devices</span></div>
+  </div>
+  <div style="display:flex;gap:10px;margin-top:18px">
+    <button class="btn" style="flex:1" onclick="sampleAuth()">Sign in</button>
+    <button class="btn-outline" style="flex:1" onclick="sampleAuth()">Create account</button>
+  </div>
+  <div class="prow" onclick="closeAllSheets();location.hash='#/slip'"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5h12V20l-2-1.3-2 1.3-2-1.3L10 20l-2-1.3L6 20z"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="9" y1="11.8" x2="15" y2="11.8"/></svg> My bets<small>›</small></div>
+  <div class="prow" onclick="closeAllSheets();openWallet()"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10.5h18"/><circle cx="17" cy="14.8" r="1.1"/></svg> Wallet<small>›</small></div>
+  <div class="prow" onclick="closeAllSheets();scopeGo('Rewards')"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8l4.7 3.8L12 5.5l3.8 6.3L20.5 8 19.3 17H4.7z"/><line x1="5" y1="20.2" x2="19" y2="20.2"/></svg> Rewards<small>›</small></div>
+  <div class="prow" onclick="closeAllSheets();openSupport()"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 13a8 8 0 0 1 16 0"/><rect x="3" y="13" width="4" height="6.5" rx="2"/><rect x="17" y="13" width="4" height="6.5" rx="2"/><path d="M19.5 19.5a4.5 4.5 0 0 1-4.5 2.7h-2.5"/></svg> Support 24/7<small>›</small></div>
+  <div class="prow" onclick="closeAllSheets();scopeGo('Hubie')"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="1.6"/><path d="M8.8 15.2a4.6 4.6 0 0 1 0-6.4"/><path d="M15.2 8.8a4.6 4.6 0 0 1 0 6.4"/><path d="M6.2 17.8a8.6 8.6 0 0 1 0-11.6"/><path d="M17.8 6.2a8.6 8.6 0 0 1 0 11.6"/></svg> Hubie<small>›</small></div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -485,7 +511,8 @@ var ICON_PATHS = {
   hockey:'<path d="M5 3.8l7.6 12.4a2 2 0 0 0 1.7 1h5.2"/><ellipse cx="16.8" cy="19.9" rx="3.1" ry="1.3"/>',
   headset:'<path d="M4 13a8 8 0 0 1 16 0"/><rect x="3" y="13" width="4" height="6.5" rx="2"/><rect x="17" y="13" width="4" height="6.5" rx="2"/><path d="M19.5 19.5a4.5 4.5 0 0 1-4.5 2.7h-2.5"/>',
   clock:'<circle cx="12" cy="12" r="8.5"/><polyline points="12 7.5 12 12 15 13.8"/>',
-  plus:'<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>'
+  plus:'<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',
+  person:'<circle cx="12" cy="8" r="3.6"/><path d="M5 19.5c1.2-3.2 3.8-4.8 7-4.8s5.8 1.6 7 4.8"/>'
 };
 function icon(name, cls){
   return '<svg class="ic '+(cls||"")+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(ICON_PATHS[name]||"")+'</svg>';
@@ -550,6 +577,7 @@ function doWithdraw(){
   if(v>0){ showToast("Sample only \u2014 no real funds move in this prototype"); }
 }
 function openSupport(){
+  closeAllSheets();
   var sh=document.getElementById("supportSheet"); if(sh) sh.classList.add("open");
   var sc=document.getElementById("scrim"); if(sc) sc.classList.add("show");
 }
@@ -597,7 +625,9 @@ function toggleDrawer(){ document.body.classList.toggle("drawer"); document.getE
 function closeDrawer(){ document.body.classList.remove("drawer"); if(!document.querySelector(".sheet.open")) document.getElementById("scrim").classList.remove("show"); }
 function toggleMobSearch(){ var el=document.getElementById("mobSearch"); el.classList.toggle("show"); var inp=document.getElementById("searchInputMobile"); if(el.classList.contains("show")) inp.focus(); }
 function onSearch(q){ searchQuery=(q||"").toLowerCase().trim(); route(false); }
-function openWallet(){ document.getElementById("walletSheet").classList.add("open"); document.getElementById("scrim").classList.add("show"); syncBalance(); }
+function openWallet(){ closeAllSheets(); document.getElementById("walletSheet").classList.add("open"); document.getElementById("scrim").classList.add("show"); syncBalance(); }
+function openProfile(){ closeAllSheets(); document.getElementById("profileSheet").classList.add("open"); document.getElementById("scrim").classList.add("show"); }
+function sampleAuth(){ showToast("Sample only \u2014 no real accounts in this prototype"); }
 function closeAllSheets(){ document.querySelectorAll(".sheet").forEach(function(s){s.classList.remove("open")}); document.getElementById("scrim").classList.remove("show"); closeDrawer(); }
 function scopeGo(name){
   closeDrawer(); location.hash="#/scope";
@@ -758,7 +788,7 @@ function renderMatch(){
 }
 function renderScope(name){
   var n=name || window._scopeName || "Casino";
-  var icons={"Casino":"dice","Chat":"chat","Rewards":"crown","House Games":"dice"};
+  var icons={"Casino":"dice","Chat":"chat","Rewards":"crown","House Games":"dice","Hubie":"live"};
   var html='<div class="fade" style="text-align:center;padding:36px 10px"><div style="color:var(--head)">'+icon(icons[n]||"target","ic-xl")+'</div><h1 class="serif" style="color:var(--head)">'+esc(n)+'</h1><p style="color:var(--muted);max-width:520px;margin:0 auto;line-height:1.7">This is the Housebets Prime Edition sportsbook prototype. <b>'+esc(n)+'</b> lives in the full Housebets product and is outside the scope of this contest entry — so there is nothing dead here, just an honest signpost.</p><div style="display:flex;gap:10px;justify-content:center;margin-top:20px;flex-wrap:wrap"><button class="btn-green" style="width:auto" onclick="location.hash=\'#/home\'">'+icon("arrowL","ic-sm")+' Back to Sports Home</button><button class="btn" onclick="location.hash=\'#/football\'">Go to Football</button></div></div>';
   document.getElementById("page-scope").innerHTML=html;
 }
