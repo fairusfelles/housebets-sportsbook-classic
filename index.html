@@ -1017,7 +1017,7 @@ function route(rerender){
 }
 
 function buildNav(){
-  var sports=[["ball","Football","#/football"],["live","Live","#/live"],["home","Sports Home","#/home"],["target","Match Page","#/match"]];
+  var sports=[["home","Sports Home","#/home"],["live","Live","#/live"],["ball","Football","#/football"],["target","Match Page","#/match"]];
   document.getElementById("sportsNav").innerHTML=sports.map(function(s){ return '<div class="navitem" onclick="sportGo(\''+s[2]+'\')"><span>'+icon(s[0])+' '+s[1]+'</span><small>›</small></div>'; }).join("");
   document.getElementById("compNav").innerHTML=LEAGUES.map(function(l){ return '<div class="navitem" onclick="compGo(\''+l.id+'\')"><span>'+icon(l.icon)+' '+esc(l.name)+'</span><small>'+esc(l.country)+'</small></div>'; }).join("");
 }
