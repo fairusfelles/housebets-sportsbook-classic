@@ -281,6 +281,12 @@ body.nav .fade{animation:fade .3s ease}
 .kit{width:38px;height:38px;flex:none;display:block}
 .pdisc{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:800;flex:none;letter-spacing:.5px}
 .kit-lg{width:46px;height:46px;flex:none;display:block}
+.chartcard{background:linear-gradient(180deg,#151926,var(--panel));border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin:12px 0 4px;box-shadow:var(--elev)}
+.charthead{display:flex;justify-content:space-between;align-items:center;gap:8px;color:var(--muted);font-size:12.5px;font-weight:700;margin-bottom:8px;flex-wrap:wrap}
+.lgndrow{display:flex;gap:16px;flex-wrap:wrap;margin-top:6px}
+.lgnd{font-size:12.5px;color:var(--muted);display:inline-flex;align-items:center;gap:6px}
+.lgnd i{width:9px;height:9px;border-radius:50%;display:inline-block}
+.lgnd b{color:var(--head)}
 .scoreboard{display:flex;align-items:center;gap:14px;margin:14px 0 6px;flex-wrap:wrap}
 .scoreboard .sb-team{font-size:17px;font-weight:800;color:var(--head)}
 .scoreboard .sb-score{font-size:28px;font-weight:800;color:var(--head);font-variant-numeric:tabular-nums;letter-spacing:1px}
@@ -997,6 +1003,7 @@ function renderMatch(){
   var suspPill = goalSuspended ? '<span class="pill" style="background:rgba(255,92,92,.16);color:#FF9A9A">All markets suspended \u00b7 '+esc(suspendReason)+'</span>' : (ouSuspended ? '<span class="pill" style="background:rgba(255,92,92,.16);color:#FF9A9A">O/U 2.5 suspended \u00b7 '+esc(suspendReason)+'</span>' : '<span class="pill">O/U 2.5 open</span>');
   var html='<div class="fade"><div class="eyebrow" style="color:var(--live)">'+icon("live","ic-sm")+' Live \u00b7 Premier League \u00b7 '+minTxt+'\'</div><h1 class="serif" style="margin:6px 0 2px;color:var(--head);font-size:36px">Arsenal v Brighton</h1><p style="color:var(--muted);margin:0 0 6px">Emirates Stadium \u00b7 Score <b style="color:var(--ink)">Arsenal '+esc(scoreTxt)+' Brighton</b> \u00b7 Clock ticks with the Live page</p><p><span class="pill">Match page \u00b7 20 pts in the brief</span> <span class="pill">Odds move live</span> '+suspPill+' <button class="pillbtn '+(follows["fav-m1"]?"on":"")+'" onclick="toggleFollow(\'fav-m1\',event)">'+icon("star", follows["fav-m1"]?"fill ic-sm":"ic-sm")+' '+(follows["fav-m1"]?"Following":"Follow")+'</button></p>';
   html+='<div class="scoreboard">'+kitIcon("Arsenal","kit-lg")+'<span class="sb-team">Arsenal</span><span class="sb-score">'+esc(scoreTxt)+'</span><span class="sb-team">Brighton</span>'+kitIcon("Brighton","kit-lg")+'<span class="pill">'+minTxt+'&#39; \u00b7 Live</span></div>';
+  html+=priceChartHTML();
   html+='<input class="mfilter" id="marketFilter" type="text" placeholder="Filter markets \u2014 try &#39;corners&#39;" oninput="filterMarkets(this.value)" value="'+esc(marketFilterQuery)+'">';
   MARKET_GROUPS.forEach(function(g){
     var gMarkets=MATCH_MARKETS.filter(function(x){return x.group===g;});
@@ -1248,6 +1255,42 @@ function syncBalance(){
   var wa=document.getElementById("wdAvail"); if(wa) wa.textContent=fmt(balance)+" USDT";
 }
 
+var oddsHist=[];
+function implied(o){ var s=(1/o["1"])+(1/o["X"])+(1/o["2"]); return {"1":(1/o["1"])/s*100, "X":(1/o["X"])/s*100, "2":(1/o["2"])/s*100}; }
+(function seedHist(){
+  var m1=null; for(var i=0;i<MATCHES.length;i++){ if(MATCHES[i].id==="m1") m1=MATCHES[i]; }
+  if(!m1) return;
+  for(var t=0;t<14;t++){
+    var f=function(seed){ return Math.sin(t*1.7+seed)*0.05; };
+    oddsHist.push({"1":Math.max(1.1,m1.odds["1"]*(1+f(0))), "X":Math.max(1.1,m1.odds["X"]*(1+f(2.1))), "2":Math.max(1.1,m1.odds["2"]*(1+f(4.2)))});
+  }
+  oddsHist.push({"1":m1.odds["1"], "X":m1.odds["X"], "2":m1.odds["2"]});
+})();
+function priceChartHTML(){
+  if(oddsHist.length<3) return "";
+  var series=oddsHist.map(implied);
+  var keys=["1","X","2"];
+  var min=100, max=0;
+  series.forEach(function(p){ keys.forEach(function(k){ if(p[k]<min)min=p[k]; if(p[k]>max)max=p[k]; }); });
+  min=Math.max(0,Math.floor(min-4)); max=Math.min(100,Math.ceil(max+4)); if(max-min<12){ max=min+12; }
+  var W=340,H=110,pl=6,pr=44,pt=8,pb=16;
+  function X(i){ return pl+(W-pl-pr)*i/(series.length-1); }
+  function Y(v){ return pt+(H-pt-pb)*(1-(v-min)/(max-min)); }
+  var colors={"1":"#17E6E6","X":"#8A94A6","2":"#E8A2E0"};
+  var names={"1":"Arsenal","X":"Draw","2":"Brighton"};
+  var svg='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;height:auto;display:block" role="img" aria-label="Win probability chart">';
+  [0.25,0.55,0.85].forEach(function(f){ var v=min+(max-min)*f; svg+='<line x1="'+pl+'" y1="'+Y(v)+'" x2="'+(W-pr)+'" y2="'+Y(v)+'" stroke="rgba(255,255,255,.06)"/><text x="'+(W-pr+6)+'" y="'+(Y(v)+3)+'" fill="#8A94A6" font-size="8.5">'+Math.round(v)+'%</text>'; });
+  keys.forEach(function(k){
+    var pts=series.map(function(p,i){ return X(i).toFixed(1)+","+Y(p[k]).toFixed(1); }).join(" ");
+    var last=series[series.length-1][k];
+    svg+='<polyline points="'+pts+'" fill="none" stroke="'+colors[k]+'" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>';
+    svg+='<circle cx="'+X(series.length-1)+'" cy="'+Y(last)+'" r="3" fill="'+colors[k]+'"/>';
+  });
+  svg+='</svg>';
+  var cur=series[series.length-1];
+  var legend=keys.map(function(k){ return '<span class="lgnd"><i style="background:'+colors[k]+'"></i>'+names[k]+' <b>'+cur[k].toFixed(0)+'%</b></span>'; }).join("");
+  return '<div class="chartcard"><div class="charthead"><span>Win probability \u00b7 live from the 1X2 prices</span><span class="pill">Moves every few seconds</span></div>'+svg+'<div class="lgndrow">'+legend+'</div></div>';
+}
 function driftOdds(){
   driftFlash={};
   MATCHES.forEach(function(m){
@@ -1264,6 +1307,7 @@ function driftOdds(){
       if(nv!==old) driftFlash[dk]=true;
     });
   });
+  var m1m=findMatch("m1"); if(m1m){ oddsHist.push({"1":m1m.odds["1"], "X":m1m.odds["X"], "2":m1m.odds["2"]}); if(oddsHist.length>28) oddsHist.shift(); }
   // Also drift a match-page market occasionally (BTTS)
   MATCH_MARKETS.forEach(function(mk){ if(mk.id==="btts"){ mk.picks.forEach(function(p){ var old=p.odds; var d=(Math.random()>0.5?0.04:-0.04); p.odds=Math.max(1.10, Math.round((p.odds+d)*100)/100); var dk="match-btts-"+p.k; if(p.odds>old) driftDir[dk]="up"; else if(p.odds<old) driftDir[dk]="down"; if(p.odds!==old) driftFlash[dk]=true; }); } });
   // Live cash-out prices walk with the match
