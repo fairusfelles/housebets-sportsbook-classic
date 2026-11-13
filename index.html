@@ -27,12 +27,14 @@ h1,h2,h3{letter-spacing:-.02em}
 /* SHELL */
 .topbar{position:fixed;top:0;left:0;right:0;height:62px;background:rgba(8,10,15,.96);backdrop-filter:blur(8px);color:#fff;display:flex;align-items:center;gap:12px;padding:0 16px;z-index:60;border-bottom:1px solid var(--line2);box-shadow:0 4px 24px rgba(0,0,0,.35)}
 .logo{display:flex;align-items:center;gap:10px;white-space:nowrap}
-.hmark{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#3FF7F7,#0FB5B5);color:#03222B;font-weight:900;font-size:22px;display:grid;place-items:center;box-shadow:0 0 12px rgba(23,230,230,.22);flex:none}
+.hmark{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#3FF7F7,#0FB5B5);color:#03222B;font-weight:900;font-size:22px;display:grid;place-items:center;flex:none}
 .logotext{font-size:20px;font-weight:800;letter-spacing:.05em;color:#fff;line-height:1}
 .logotext b{color:var(--cyan);font-weight:800}
 .logotext small{font-size:9px;letter-spacing:3.5px;text-transform:uppercase;color:var(--muted);display:block;margin-top:3px;font-weight:700}
 .iconbtn{background:#141926;border:1px solid var(--line);color:#DCE6EC;width:40px;height:40px;border-radius:10px;display:grid;place-items:center;font-size:18px}
 .iconbtn:hover{border-color:var(--cyan);color:#fff}
+.topbar .iconbtn{background:#161B26;border-color:var(--line2);color:#EDF1F5;border-radius:11px}
+.topbar .iconbtn:hover{border-color:rgba(255,255,255,.28);color:#fff}
 .ic{width:18px;height:18px;flex:none;vertical-align:-3px}
 .ic-sm{width:14px;height:14px;vertical-align:-2px}
 .ic-md{width:34px;height:34px}
@@ -46,14 +48,17 @@ h1,h2,h3{letter-spacing:-.02em}
 .searchwrap input{flex:1;padding:10px 14px;border-radius:999px;border:1px solid var(--line2);background:#0D1017;color:#fff;outline:none}
 .searchwrap input::placeholder{color:#59637A}
 .searchwrap input:focus{border-color:var(--cyan)}
-.walletpill{background:#141926;color:#fff;border:1px solid var(--line2);padding:7px 14px 7px 9px;border-radius:999px;font-weight:800;display:flex;gap:8px;align-items:center;white-space:nowrap}
+.walletpill{background:#141926;color:#fff;border:1px solid var(--line2);padding:4px 4px 4px 14px;border-radius:999px;font-weight:800;display:flex;gap:8px;align-items:center;white-space:nowrap}
 .walletpill:hover{border-color:var(--cyan)}
+.walletpill .wchev{width:14px;height:14px;color:var(--muted);flex:none}
+.walletpill .walbtn{width:36px;height:36px;border-radius:10px;background:#CDEFF2;color:#06222B;display:grid;place-items:center;flex:none}
+.walletpill .walbtn .ic{width:20px;height:20px}
+.walletpill:hover .walbtn{background:#B9E4EA}
 .coin{width:26px;height:26px;flex:none}
 .coin-sm{width:22px;height:22px}
 .topactions{display:flex;gap:8px;align-items:center;margin-left:auto}
-.avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#1A2436,#10131B);color:var(--cyan);display:grid;place-items:center;font-weight:900;border:2px solid var(--cyan);cursor:pointer;padding:0}
+.avatar{width:40px;height:40px;border-radius:11px;background:#161B26;color:#EDF1F5;display:grid;place-items:center;border:1px solid var(--line2);cursor:pointer;padding:0}
 .avatar .ic{width:21px;height:21px}
-.walletpill .wpic{width:21px;height:21px;color:var(--cyan)}
 .profhead{display:flex;gap:14px;align-items:center;margin-top:16px}
 .pavatar{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#1A2436,#10131B);color:var(--cyan);display:grid;place-items:center;border:2px solid var(--cyan);flex:none}
 .pavatar .ic{width:28px;height:28px}
@@ -195,7 +200,7 @@ tr:last-child td{border-bottom:none}
 .coinval b{display:block;color:#fff;font-variant-numeric:tabular-nums;font-size:14.5px}
 .coinval span{color:var(--muted);font-size:12px}
 /* TONPLAY-PASS: DEPOSIT / WALLET TABS / TILES / MATCH CARDS / SUPPORT */
-.depbtn{background:linear-gradient(135deg,#3FF7F7,#0FB5B5);color:#032630;border:1px solid transparent;padding:9px 16px;border-radius:999px;font-weight:800;display:flex;gap:6px;align-items:center;white-space:nowrap;box-shadow:0 0 14px rgba(23,230,230,.18)}
+.depbtn{background:linear-gradient(135deg,#3FF7F7,#0FB5B5);color:#032630;border:1px solid transparent;padding:9px 16px;border-radius:999px;font-weight:800;display:flex;gap:6px;align-items:center;white-space:nowrap}
 .depbtn:hover{background:#3FF7F7}
 .wtabs{display:flex;background:#0D1017;border:1px solid var(--line);border-radius:12px;padding:3px;gap:2px;margin:12px 0}
 .wtab{flex:1;background:transparent;border:none;color:var(--muted);padding:9px 6px;border-radius:9px;font-weight:800;font-size:13.5px}
@@ -302,11 +307,12 @@ tr:last-child td{border-bottom:none}
   .compgrid::-webkit-scrollbar{display:none}
   .compgrid .comp{flex:0 0 78%;scroll-snap-align:start}
 }
-/* MOBILE HEADER FIT (≤760px): menu, H mark, wallet pill, Deposit and profile all stay visible.
+/* MOBILE HEADER FIT (≤760px): menu, H mark, search, wallet unit and profile stay visible.
    The top search icon is kept because it is the only trigger for the mobile search bar
-   (toggleMobSearch); the space comes from dropping the crown button, the wordmark text,
-   the pill's wallet glyph + "USDT" suffix (the ₮ medallion and full balance remain),
-   and the Deposit plus icon. Desktop rules above are untouched. */
+   (toggleMobSearch); the space comes from hiding the crown button, the wordmark text,
+   the pill's "USDT" suffix (the full balance remains) and the separate Deposit button —
+   the pill's pale wallet segment opens the wallet sheet on its Deposit tab instead.
+   Desktop rules above are untouched. */
 @media(max-width:760px){
   .topbar{gap:6px;padding:0 8px}
   .topbar .logo{flex:none}
@@ -315,12 +321,11 @@ tr:last-child td{border-bottom:none}
   .crownbtn{display:none}
   .topactions{gap:6px;flex:none}
   .topbar .avatar{width:34px;height:34px;flex:none}
-  .walletpill{flex:none;padding:5px 9px 5px 6px;font-size:12.5px;gap:5px}
-
-  .walletpill .coin-sm{width:20px;height:20px}
+  .walletpill{flex:none;padding:3px 3px 3px 9px;font-size:12.5px;gap:4px}
+  .walletpill .walbtn{width:30px;height:30px;border-radius:8px}
+  .walletpill .walbtn .ic{width:17px;height:17px}
   .pillunit{display:none}
-  .depbtn{flex:none;padding:7px 10px;font-size:12.5px}
-  .depbtn .ic{display:none}
+  .depbtn{display:none}
   .supportfab{width:48px;height:48px}
 }
 </style>
@@ -334,7 +339,7 @@ tr:last-child td{border-bottom:none}
   </div>
   <div class="topactions">
     <button class="iconbtn" onclick="toggleMobSearch()" aria-label="Search"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg></button>
-    <button class="walletpill" onclick="openWallet()"><svg class="ic wpic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10.5h18"/><circle cx="17" cy="14.8" r="1.1"/></svg> <span id="walletBalanceTop">1,000.00</span><span class="pillunit">USDT</span></button>
+    <button class="walletpill" onclick="openWallet()" aria-label="Wallet"><span id="walletBalanceTop">1,000.00</span><span class="pillunit">USDT</span><svg class="ic wchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9.5l6 6 6-6"/></svg><span class="walbtn"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10.5h18"/><circle cx="17" cy="14.8" r="1.1"/></svg></span></button>
     <button class="depbtn" onclick="openWallet()" aria-label="Deposit"><svg class="ic ic-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Deposit</button>
     
     <button class="iconbtn crownbtn" onclick="scopeGo('Rewards')" title="Rewards"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8l4.7 3.8L12 5.5l3.8 6.3L20.5 8 19.3 17H4.7z"/><line x1="5" y1="20.2" x2="19" y2="20.2"/></svg></button>
@@ -646,7 +651,7 @@ function toggleDrawer(){ document.body.classList.toggle("drawer"); document.getE
 function closeDrawer(){ document.body.classList.remove("drawer"); if(!document.querySelector(".sheet.open")) document.getElementById("scrim").classList.remove("show"); }
 function toggleMobSearch(){ var el=document.getElementById("mobSearch"); el.classList.toggle("show"); var inp=document.getElementById("searchInputMobile"); if(el.classList.contains("show")) inp.focus(); }
 function onSearch(q){ searchQuery=(q||"").toLowerCase().trim(); route(false); }
-function openWallet(){ closeAllSheets(); document.getElementById("walletSheet").classList.add("open"); document.getElementById("scrim").classList.add("show"); syncBalance(); }
+function openWallet(){ closeAllSheets(); setWalletTab("deposit"); document.getElementById("walletSheet").classList.add("open"); document.getElementById("scrim").classList.add("show"); syncBalance(); }
 function openProfile(){ closeAllSheets(); document.getElementById("profileSheet").classList.add("open"); document.getElementById("scrim").classList.add("show"); }
 function sampleAuth(){ showToast("Sample only \u2014 no real accounts in this prototype"); }
 function closeAllSheets(){ document.querySelectorAll(".sheet").forEach(function(s){s.classList.remove("open")}); document.getElementById("scrim").classList.remove("show"); closeDrawer(); }
