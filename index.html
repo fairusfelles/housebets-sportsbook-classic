@@ -273,7 +273,7 @@ body.nav .fade{animation:fade .3s ease}
 .countbadge{position:absolute;top:-7px;right:-5px;background:#FF5C5C;color:#fff;font-size:11px;font-weight:800;min-width:20px;height:20px;border-radius:999px;display:grid;place-items:center;padding:0 5px;border:2px solid var(--bg)}
 .countbadge.navcb{position:static;border:none}
 .mcardlist{display:flex;flex-direction:column;gap:var(--gap-grid)}
-.mcard{background:linear-gradient(180deg,#151926,var(--panel));border:1px solid var(--line);border-radius:18px;padding:calc(var(--pad-card) + 4px);box-shadow:var(--elev);transition:transform .18s ease,box-shadow .18s ease}
+.mcard{background:linear-gradient(180deg,#151926,var(--panel));border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--elev);transition:transform .18s ease,box-shadow .18s ease}
 .mcard-head{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:12.5px;font-weight:700;letter-spacing:.3px}
 .mcard-head .star{padding:0}
 .mcard-live{display:flex;align-items:center;gap:7px;color:var(--cyan);font-size:13px;margin:6px 0 8px}
@@ -283,11 +283,11 @@ body.nav .fade{animation:fade .3s ease}
 .bottomnav button span{position:relative}
 .livedotbadge{position:absolute;top:-3px;right:-7px;width:9px;height:9px;border-radius:50%;background:var(--live);border:2px solid #080A0F;animation:livepulse 1.6s infinite,blinkdot 1.1s infinite}
 .mcard-soon{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:13px;font-weight:700;margin:6px 0 8px}
-.trow{display:flex;align-items:center;gap:12px;padding:9px 0}
+.trow{display:flex;align-items:center;gap:10px;padding:6px 0}
 .tbadge{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:800;color:#EDF1F5;border:1px solid rgba(255,255,255,.22);flex:none}
-.kit{width:38px;height:38px;flex:none;display:block}
-.pdisc{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:800;flex:none;letter-spacing:.5px}
-.kit-lg{width:46px;height:46px;flex:none;display:block}
+.kit{width:27px;height:27px;flex:none;display:block}
+.pdisc{width:27px;height:27px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:800;flex:none;letter-spacing:.5px}
+.kit-lg{width:38px;height:38px;flex:none;display:block}
 .backbtn{background:#12151F;border:1px solid var(--line2);color:#C3CEDA;padding:8px 14px;border-radius:999px;font-weight:700;font-size:13px;display:inline-flex;align-items:center;gap:6px;cursor:pointer}
 .detailhead{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;background:linear-gradient(180deg,#151926,var(--panel));border:1px solid var(--line);border-radius:18px;padding:20px 16px;margin-top:12px;box-shadow:var(--elev)}
 .dteam{display:flex;flex-direction:column;align-items:center;gap:9px;text-align:center;font-weight:800;color:var(--head);font-size:15.5px;flex:1}
@@ -305,14 +305,14 @@ body.nav .fade{animation:fade .3s ease}
 .scoreboard{display:flex;align-items:center;gap:14px;margin:14px 0 6px;flex-wrap:wrap}
 .scoreboard .sb-team{font-size:17px;font-weight:800;color:var(--head)}
 .scoreboard .sb-score{font-size:28px;font-weight:800;color:var(--head);font-variant-numeric:tabular-nums;letter-spacing:1px}
-.tname{font-weight:700;color:#fff;font-size:15.5px}
-.scorebox{margin-left:auto;background:#0B0D13;border:1px solid var(--line2);color:#fff;font-weight:800;font-size:15px;min-width:38px;text-align:center;padding:7px 0;border-radius:9px;font-variant-numeric:tabular-nums}
+.tname{font-weight:700;color:#fff;font-size:14.5px}
+.scorebox{margin-left:auto;background:#0B0D13;border:1px solid var(--line2);color:#fff;font-weight:800;font-size:14px;min-width:30px;text-align:center;padding:5px 0;border-radius:9px;font-variant-numeric:tabular-nums}
 .mcard-market{margin-top:12px;border-top:1px solid var(--line);padding-top:12px}
 .mlabel{font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:8px}
 .oddsrow{display:flex;gap:8px}
-.oddsbtn.wide{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:2px;padding:12px 8px;text-align:center;min-width:0}
+.oddsbtn.wide{flex:1;display:flex;flex-direction:row;justify-content:space-between;align-items:center;gap:8px;padding:10px 12px;text-align:left;min-width:0}
 .oddsbtn.wide .picklbl{font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
-.oddsbtn.wide .oddsnum{font-size:17px;font-weight:800}
+.oddsbtn.wide .oddsnum{font-size:15px;font-weight:800}
 .oddsbtn.wide.selected .picklbl{color:#04505C}
 @media(max-width:560px){.depbtn{padding:8px 11px;font-size:13px}.utile{padding:var(--pad-card);font-size:13px}.utilrow{gap:var(--gap-grid)}}
 /* BOTTOM / MOBILE */
