@@ -11,7 +11,7 @@
 :root{
   --bg:#07090E; --bg2:#0A0C12; --panel:#10131B; --panel2:#161B26; --panel3:#1F2635;
   --line:rgba(255,255,255,.07); --line2:rgba(255,255,255,.13);
-  --cyan:#17E6E6; --cyan-soft:#8FE3E3; --violet:#E8A2E0;
+  --cyan:#02F7FD; --cyan-soft:#8FE3E3; --violet:#E8A2E0;
   --ink:#EDF1F5; --head:#FFFFFF; --muted:#8A94A6;
   --live:#FF5C5C; --red:#FF6B6B; --good:#2BD98A;
   --sans: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -31,10 +31,10 @@ h1,h2{letter-spacing:-.022em}
 /* SHELL */
 .topbar{position:fixed;top:0;left:0;right:0;height:62px;background:rgba(8,10,15,.96);backdrop-filter:blur(8px);color:#fff;display:flex;align-items:center;gap:12px;padding:0 16px;z-index:60;border-bottom:1px solid var(--line2);box-shadow:0 4px 24px rgba(0,0,0,.35)}
 .logo{display:flex;align-items:center;gap:10px;white-space:nowrap}
-.hmark{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#3FF7F7,#0FB5B5);color:#03222B;font-weight:900;font-size:22px;display:grid;place-items:center;flex:none}
-.logotext{font-size:20px;font-weight:800;letter-spacing:.05em;color:#fff;line-height:1}
-.logotext b{color:var(--cyan);font-weight:800}
-.logotext small{font-size:9px;letter-spacing:3.5px;text-transform:uppercase;color:var(--muted);display:block;margin-top:3px;font-weight:700}
+.brand-full{display:flex;align-items:center}
+.brand-full svg{height:21px;width:auto;display:block}
+.brand-mark{display:none;align-items:center}
+.brand-mark svg{height:27px;width:auto;display:block}
 .iconbtn{background:#141926;border:1px solid var(--line);color:#DCE6EC;width:40px;height:40px;border-radius:10px;display:grid;place-items:center;font-size:18px}
 .iconbtn:hover{border-color:var(--cyan);color:#fff}
 .topbar .iconbtn{background:#161B26;border-color:var(--line2);color:#EDF1F5;border-radius:11px}
@@ -75,7 +75,7 @@ h1,h2{letter-spacing:-.022em}
 .leftnav h3{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin:18px 6px 8px;font-family:var(--sans)}
 .navitem{display:flex;justify-content:space-between;align-items:center;padding:10px 10px;border-radius:10px;cursor:pointer;font-size:14px;border:1px solid transparent;color:#CBD5E1}
 .navitem:hover{background:var(--panel2);border-color:var(--line)}
-.navitem.active{background:rgba(23,230,230,.12);color:#fff;border-color:rgba(23,230,230,.35)}
+.navitem.active{background:rgba(2,247,253,.12);color:#fff;border-color:rgba(2,247,253,.35)}
 .navitem.active small{color:var(--cyan)}
 .navitem small{color:var(--muted)}
 .main{padding:20px 22px 90px;max-width:980px;width:100%;min-width:0;margin:0 auto}
@@ -84,14 +84,14 @@ h1,h2{letter-spacing:-.022em}
 .rightpanel .sub{font-size:12px;color:var(--cyan);letter-spacing:.4px;text-transform:uppercase;font-weight:700}
 /* HERO */
 .hero{background:linear-gradient(120deg,#12161F,#0B0D13 60%);color:#F2FAFA;border:1px solid var(--line2);padding:30px 30px 26px;border-radius:18px;position:relative;overflow:hidden;box-shadow:0 10px 24px rgba(0,0,0,.3)}
-.hero:after{content:"";position:absolute;right:-90px;top:-90px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(23,230,230,.08),transparent 65%);pointer-events:none}
+.hero:after{content:"";position:absolute;right:-90px;top:-90px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(2,247,253,.08),transparent 65%);pointer-events:none}
 .hero h1{margin:0;font-size:40px;line-height:1.04;font-weight:800}
 .hero h1 em{color:var(--cyan);font-style:normal}
 .hero p{color:#9AA5B3;max-width:580px;line-height:1.6}
 .eyebrow{letter-spacing:3px;text-transform:uppercase;font-size:11px;color:var(--cyan);font-weight:700}
 .btn{background:var(--cyan);color:#032630;border:1px solid var(--cyan);padding:11px 18px;border-radius:999px;font-weight:800}
 .btn:hover{background:#3FF7F7}
-.btn-outline{background:rgba(23,230,230,.05);color:#EAFBFB;border:1px solid rgba(23,230,230,.5);padding:11px 18px;border-radius:999px;font-weight:700}
+.btn-outline{background:rgba(2,247,253,.05);color:#EAFBFB;border:1px solid rgba(2,247,253,.5);padding:11px 18px;border-radius:999px;font-weight:700}
 .btn-green{background:linear-gradient(135deg,#3FF7F7,#0FB5B5);color:#032630;border:1px solid transparent;padding:12px 18px;border-radius:10px;font-weight:800;width:100%}
 .btn-green:disabled{opacity:.45;cursor:not-allowed}
 /* REWARDS SLIDER */
@@ -122,7 +122,7 @@ h1,h2{letter-spacing:-.022em}
 .gate h3{margin:0;font-size:22px;color:#fff;position:relative;z-index:1}
 .gate p{color:#9AA5B3;margin:6px 0 10px;font-size:13.5px;position:relative;z-index:1}
 .gatecta{color:var(--cyan);font-weight:800;font-size:13px;position:relative;z-index:1}
-.gate .gate-ic{position:absolute;right:-14px;bottom:-24px;color:rgba(23,230,230,.09);z-index:0}
+.gate .gate-ic{position:absolute;right:-14px;bottom:-24px;color:rgba(2,247,253,.09);z-index:0}
 .gate.violet .gate-ic{color:rgba(232,162,224,.09)}
 .gate.violet .gatecta{color:var(--violet)}
 /* CARDS / TABLES */
@@ -173,7 +173,7 @@ body.nav .fade{animation:fade .3s ease}
 .star.on{color:var(--cyan)}
 .pill{font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;background:#141926;border:1px solid var(--line);color:#C3CEDA;padding:5px 8px;border-radius:999px}
 .pillbtn{font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;background:#141926;border:1px solid var(--line);color:#C3CEDA;padding:5px 10px;border-radius:999px;cursor:pointer;display:inline-flex;align-items:center;gap:5px;vertical-align:middle}
-.pillbtn.on{background:rgba(23,230,230,.14);border-color:rgba(23,230,230,.55);color:#fff}
+.pillbtn.on{background:rgba(2,247,253,.14);border-color:rgba(2,247,253,.55);color:#fff}
 .ttab.favtab{display:inline-flex;align-items:center;padding:4px 2px}
 .ttab.favtab .ic{width:19px;height:19px}
 .ttab.favtab.on{color:var(--cyan)}
@@ -189,7 +189,7 @@ body.nav .fade{animation:fade .3s ease}
 .slipitem b{font-size:14px;color:#fff}
 .slipitem p{margin:4px 0;color:var(--muted);font-size:13px}
 .flag{background:rgba(255,92,92,.10);color:#FFB4B4;border:1px solid rgba(255,120,120,.4);padding:8px;border-radius:8px;font-size:13px;margin:8px 0}
-.flag.gold{background:rgba(23,230,230,.10);color:#CFFBFB;border-color:rgba(23,230,230,.4)}
+.flag.gold{background:rgba(2,247,253,.10);color:#CFFBFB;border-color:rgba(2,247,253,.4)}
 .stakeRow{display:flex;gap:8px;margin-top:8px}
 .stakeRow input{flex:1;padding:10px;border:1px solid var(--line2);border-radius:8px;font-size:15px;background:#0D1017;color:#fff;outline:none}
 .stakeRow input:focus{border-color:var(--cyan)}
@@ -200,7 +200,7 @@ body.nav .fade{animation:fade .3s ease}
 .betitem{background:var(--panel);border:1px solid var(--line);padding:var(--pad-card);margin-bottom:var(--gap-grid);border-radius:12px}
 .betitem header{display:flex;justify-content:space-between}
 .cashout{background:transparent;border:1px solid var(--cyan);color:var(--cyan);padding:9px 12px;border-radius:999px;font-weight:800}
-.cashout:hover{background:rgba(23,230,230,.10)}
+.cashout:hover{background:rgba(2,247,253,.10)}
 .netrow{margin:10px 0 2px}
 .netrow>span{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px}
 .netchips{display:flex;gap:6px;flex-wrap:wrap}
@@ -222,7 +222,7 @@ body.nav .fade{animation:fade .3s ease}
 .fchip .badge{width:21px;height:21px;flex:none;display:block}
 .fchip .disc{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;color:#0A0C12;flex:none}
 .fchip .disc .ic{width:12px;height:12px}
-.fchip.on{background:rgba(23,230,230,.13);color:#fff;border-color:rgba(23,230,230,.55)}
+.fchip.on{background:rgba(2,247,253,.13);color:#fff;border-color:rgba(2,247,253,.55)}
 .mbtab.on{background:var(--cyan);color:#032630;border-color:var(--cyan)}
 .mbtabs{display:flex;gap:6px;margin:0 0 12px}
 .grouphead{font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--cyan);margin:calc(var(--gap-section) - var(--gap-grid)) 0 12px;padding-bottom:6px;border-bottom:1px solid var(--line2)}
@@ -230,7 +230,7 @@ body.nav .fade{animation:fade .3s ease}
 .coinlist{display:flex;flex-direction:column;gap:var(--gap-grid);margin:12px 0 0}
 .coinrow{display:flex;align-items:center;gap:12px;background:linear-gradient(180deg,#1A2130,var(--panel2));border:1px solid var(--line);border-radius:12px;padding:var(--pad-card);box-shadow:var(--elev);transition:transform .18s ease,box-shadow .18s ease}
 .coinrow .coin{width:38px;height:38px}
-.coinrow.main{border-color:rgba(23,230,230,.55);background:rgba(23,230,230,.06)}
+.coinrow.main{border-color:rgba(2,247,253,.55);background:rgba(2,247,253,.06)}
 .coinmeta b{display:block;color:#fff;font-size:14.5px}
 .coinmeta span{color:var(--muted);font-size:12px}
 .coinval{margin-left:auto;text-align:right}
@@ -242,10 +242,10 @@ body.nav .fade{animation:fade .3s ease}
 .wtabs{display:flex;background:#0D1017;border:1px solid var(--line);border-radius:12px;padding:3px;gap:2px;margin:12px 0}
 .wtab{flex:1;background:transparent;border:none;color:var(--muted);padding:9px 6px;border-radius:9px;font-weight:800;font-size:13.5px}
 .wtab.on{background:var(--cyan);color:#032630}
-.wdbanner{display:flex;gap:9px;align-items:center;background:rgba(23,230,230,.08);border:1px solid rgba(23,230,230,.35);color:#CFFBFB;border-radius:12px;padding:11px 13px;font-size:13.5px;font-weight:700;margin:0 0 12px}
+.wdbanner{display:flex;gap:9px;align-items:center;background:rgba(2,247,253,.08);border:1px solid rgba(2,247,253,.35);color:#CFFBFB;border-radius:12px;padding:11px 13px;font-size:13.5px;font-weight:700;margin:0 0 12px}
 .coingrid2{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap-grid);margin:0 0 var(--gap-grid)}
 .coincard{background:linear-gradient(180deg,#1A2130,var(--panel2));border:1px solid var(--line);border-radius:14px;padding:var(--pad-card);display:flex;flex-direction:column;gap:2px;box-shadow:var(--elev);transition:transform .18s ease,box-shadow .18s ease}
-.coincard.main{border-color:rgba(23,230,230,.55)}
+.coincard.main{border-color:rgba(2,247,253,.55)}
 .coincard b{color:#fff;font-size:15px;margin-top:8px}
 .coincard span{color:var(--muted);font-size:12.5px}
 .coincard small{color:var(--cyan);font-size:12px;font-weight:700;margin-top:4px}
@@ -260,7 +260,7 @@ body.nav .fade{animation:fade .3s ease}
 .stile{flex:0 0 108px;scroll-snap-align:start;background:linear-gradient(180deg,#151926,var(--panel));border:1px solid var(--line);border-radius:16px;padding:var(--pad-card) 8px;display:flex;flex-direction:column;align-items:center;gap:7px;cursor:pointer;color:#C3CEDA;box-shadow:var(--elev);transition:transform .18s ease,box-shadow .18s ease,border-color .15s ease}
 .stile span{font-size:12.5px;font-weight:700}
 .stile:hover{border-color:var(--cyan)}
-.stile.on{background:linear-gradient(160deg,#17E6E6,#0BA8A8);color:#032630;border-color:transparent;box-shadow:0 8px 20px rgba(23,230,230,.18)}
+.stile.on{background:linear-gradient(160deg,#02F7FD,#0BA8A8);color:#032630;border-color:transparent;box-shadow:0 8px 20px rgba(2,247,253,.18)}
 .utilrow{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap-grid);margin-top:var(--gap-block)}
 .utile{position:relative;border-radius:14px;padding:var(--pad-card);cursor:pointer;display:flex;align-items:center;gap:9px;font-weight:800;color:#fff;border:1px solid var(--line2);box-shadow:var(--elev);transition:transform .18s ease,box-shadow .18s ease,border-color .15s ease}
 .utile.u1{background:linear-gradient(120deg,#131E2E,#0C0E14)}
@@ -352,8 +352,8 @@ body.nav .fade{animation:fade .3s ease}
   .hero h1{font-size:31px}
   .hero{padding:24px 20px 20px}
   .walletpill{padding:6px 10px 6px 7px;font-size:13px}
-  .logotext{font-size:18px}
-  .hmark{width:34px;height:34px;font-size:20px}
+  .brand-full svg{height:19px}
+  .brand-mark svg{height:25px}
 }
 /* ELEVATION HOVER / PRESS (fine pointers only, so touch never sticks) */
 @media(hover:hover) and (pointer:fine){
@@ -379,7 +379,8 @@ body.nav .fade{animation:fade .3s ease}
   .topbar{gap:6px;padding:0 8px}
   .topbar .logo{flex:none}
   .topbar .iconbtn{width:34px;height:34px;flex:none}
-  .logotext{display:none}
+  .brand-full{display:none}
+  .brand-mark{display:flex}
   .crownbtn{display:none}
   .topactions{gap:6px;flex:none}
   .topbar .avatar{width:34px;height:34px;flex:none}
@@ -394,7 +395,19 @@ body.nav .fade{animation:fade .3s ease}
 <body>
 <header class="topbar">
   <button class="iconbtn" onclick="toggleDrawer()" aria-label="Menu"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>
-  <a href="#/home" class="logo"><span class="hmark">H</span><span class="logotext">HOUSE<b>BETS</b><small>Sportsbook</small></span></a>
+  <a href="#/home" class="logo" aria-label="Housebets home"><span class="brand-full"><svg viewBox="0 0 116 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M13.823 2.34476C13.823 2.29591 13.823 2.25928 13.823 2.21043C13.823 2.16158 13.823 2.12495 13.823 2.0761V0.329834H10.074V2.0761C10.074 2.12495 10.074 2.16158 10.074 2.21043C10.074 2.25928 10.074 2.29591 10.074 2.34476V7.13173H4.00484V2.33255C4.00484 2.29591 4.00484 2.24707 4.00484 2.21043C4.00484 2.1738 4.00484 2.12495 4.00484 2.08831V0.329834H0.255859V2.08831C0.255859 2.12495 0.255859 2.1738 0.255859 2.21043C0.255859 2.24707 0.255859 2.29591 0.255859 2.33255V15.6677C0.255859 15.7043 0.255859 15.7532 0.255859 15.7898C0.255859 15.8264 0.255859 15.8753 0.255859 15.9119V17.6704H4.00484V15.9119C4.00484 15.8753 4.00484 15.8264 4.00484 15.7898C4.00484 15.7532 4.00484 15.7043 4.00484 15.6677V10.8807L7.03334 9.00012L10.0618 10.8685V15.6555C10.0618 15.7043 10.0618 15.741 10.0618 15.7898C10.0618 15.8387 10.0618 15.8753 10.0618 15.9241V17.6704H13.8108V15.9241C13.8108 15.8753 13.8108 15.8387 13.8108 15.7898C13.8108 15.741 13.8108 15.7043 13.8108 15.6555V2.34476H13.823Z" fill="#02F7FD"/>
+<path d="M21.81 4.67712C17.8656 4.67712 15.5088 7.09503 15.5088 11.1493C15.5088 15.2036 17.8656 17.6093 21.81 17.6093C25.7544 17.6093 28.099 15.1914 28.099 11.1493C28.099 7.10725 25.7422 4.67712 21.81 4.67712ZM21.81 14.5319C20.1492 14.5319 19.2089 13.2986 19.2089 11.1493C19.2089 9.00006 20.1492 7.73004 21.81 7.73004C23.4708 7.73004 24.4233 8.97563 24.4233 11.1493C24.4233 13.323 23.4708 14.5319 21.81 14.5319Z" fill="white"/>
+<path d="M40.9457 4.92139V17.3773H37.3188V15.4112H36.8303V15.4723C36.6472 16.4858 35.8778 17.3162 34.9009 17.5238C34.6078 17.5849 34.3025 17.6093 33.985 17.6093C31.3229 17.6093 29.7354 15.6799 29.7354 12.4438V4.92139H33.3622V12.2972C33.3622 13.1398 33.6065 14.532 35.2184 14.532C36.8303 14.532 37.3188 13.4696 37.3188 11.6134V4.92139H40.9457Z" fill="white"/>
+<path d="M53.6453 13.4085C53.6453 14.7029 53.1202 15.7775 52.1433 16.5102C51.1786 17.2307 49.7864 17.6093 48.1134 17.6093C44.6575 17.6093 42.5938 15.9729 42.5938 13.2253V12.92H46.013V13.2253C46.013 14.7884 47.3319 15.0204 48.1134 15.0204C48.895 15.0204 50.1284 14.8617 50.1284 13.7626C50.1284 12.6636 49.1392 12.5903 47.5151 12.3094C45.5612 11.9919 42.8868 11.5401 42.8868 8.57265C42.8868 5.60521 44.8407 4.67712 48.1134 4.67712C51.3862 4.67712 53.3278 6.25243 53.3278 8.87794V9.17102H49.9085V8.87794C49.9085 7.51023 48.9316 7.21715 48.1134 7.21715C47.2952 7.21715 46.4038 7.32706 46.4038 8.30399C46.4038 9.28092 47.3319 9.26871 48.8339 9.53737H48.8828C50.8977 9.90372 53.6453 10.38 53.6453 13.4085Z" fill="white"/>
+<path d="M63.1585 12.5414L63.1096 12.7735C62.841 13.9702 61.9617 14.6418 60.7039 14.6418C59.4461 14.6418 58.7134 13.8969 58.3959 12.5414L56.9305 12.2972V11.7965H66.6388V11.1493C66.6388 7.09503 64.4163 4.67712 60.7039 4.67712C56.9916 4.67712 54.7202 7.09503 54.7202 11.1493C54.7202 15.2036 56.955 17.6093 60.7039 17.6093C64.4529 17.6093 66.1992 15.8386 66.6388 12.8834L66.6876 12.5414H63.1585ZM58.3227 10.0625C58.6768 8.04754 59.8125 7.62014 60.7039 7.62014C61.5954 7.62014 62.6944 7.93764 63.0364 10.0625V10.1357C63.0486 10.1357 58.3104 10.1357 58.3104 10.1357V10.0625H58.3227Z" fill="white"/>
+<path d="M75.8456 4.67704C74.1726 4.67704 72.8537 5.3609 72.1088 6.59428L71.9989 6.77745V0.390747H68.3721V17.3772H71.9989V15.4111H72.4996V15.4722C72.6339 16.2415 73.1102 16.8887 73.7818 17.194C74.3924 17.4749 75.0763 17.6092 75.8456 17.6092C78.9229 17.6092 80.7547 15.1913 80.7547 11.1492C80.7547 7.10717 78.9229 4.67704 75.8456 4.67704ZM74.4413 14.5319C72.8415 14.5319 71.8402 13.2374 71.8402 11.1492C71.8402 9.06103 72.8415 7.72996 74.4413 7.72996C76.041 7.72996 77.0546 8.97555 77.0546 11.1492C77.0546 13.3229 76.1021 14.5319 74.4413 14.5319Z" fill="white"/>
+<path d="M90.3665 12.5414L90.3176 12.7735C90.0368 13.9702 89.1575 14.6418 87.8997 14.6418C86.6419 14.6418 85.9214 13.8969 85.5917 12.5414L83.7966 12.2972V11.7965H93.8346V11.1493C93.8346 7.09503 91.6121 4.67712 87.8997 4.67712C84.1874 4.67712 81.916 7.09503 81.916 11.1493C81.916 15.2036 84.1508 17.6093 87.8997 17.6093C91.6487 17.6093 93.395 15.8386 93.8346 12.8834L93.8835 12.5414H90.3665ZM85.5307 10.0625C85.8726 8.04754 87.0083 7.62014 87.8997 7.62014C88.7912 7.62014 89.9025 7.93764 90.2322 10.0625V10.1357C90.2444 10.1357 85.5185 10.1357 85.5185 10.1357V10.0625H85.5307Z" fill="white"/>
+<path d="M114.9 13.4085C114.9 14.7029 114.375 15.7775 113.386 16.5102C112.433 17.2307 111.041 17.6093 109.368 17.6093C105.912 17.6093 103.849 15.9729 103.849 13.2253V12.92H107.268V13.2253C107.268 14.7884 108.587 15.0204 109.368 15.0204C110.15 15.0204 111.383 14.8617 111.383 13.7626C111.383 12.6636 110.394 12.5903 108.77 12.3094C106.816 11.9919 104.142 11.5523 104.142 8.57265C104.142 5.593 106.096 4.67712 109.368 4.67712C112.641 4.67712 114.57 6.25243 114.57 8.87794V9.17102H111.151V8.87794C111.151 7.51023 110.186 7.21715 109.368 7.21715C108.55 7.21715 107.659 7.32706 107.659 8.30399C107.659 9.28092 108.587 9.26871 110.089 9.53737H110.138C112.14 9.90372 114.9 10.38 114.9 13.4085Z" fill="white"/>
+<path d="M98.3531 7.65672V8.1574L99.6597 8.40164V13.0787C99.6597 13.7381 99.9284 14.5319 101.186 14.5319C102.444 14.5319 102.212 14.3976 102.578 14.19L103.03 13.9335V16.9498L102.859 17.0353C102.114 17.3894 101.125 17.6092 100.234 17.6092C97.5959 17.6092 96.0329 16.0706 96.0329 13.4817V7.66893H94.3843V4.92131H96.0329V1.27002H99.6597V4.92131H103.238V7.66893H98.3531V7.65672Z" fill="white"/>
+</svg></span><span class="brand-mark"><svg viewBox="0 0 22 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M21.8979 3.24966C21.8979 3.17793 21.9034 3.10621 21.9034 3.03448C21.9034 2.96276 21.9034 2.89103 21.8979 2.81931V0H15.8455V2.81931C15.8455 2.89103 15.84 2.96276 15.84 3.03448C15.84 3.10621 15.84 3.17793 15.8455 3.24966V10.9738H6.05793V3.23862C6.05793 3.17241 6.06345 3.10069 6.06345 3.03448C6.06345 2.96828 6.06345 2.89655 6.05793 2.83034V0H0.00551589V2.83034C0.00551589 2.89655 0 2.96828 0 3.03448C0 3.10069 -1.34706e-06 3.17241 0.00551589 3.23862V24.7614C0.00551589 24.8276 0 24.8993 0 24.9655C0 25.0317 -1.34706e-06 25.1034 0.00551589 25.1697V28H6.05793V25.1697C6.05793 25.1034 6.06345 25.0317 6.06345 24.9655C6.06345 24.8993 6.06345 24.8276 6.05793 24.7614V17.0262L10.9572 13.9972L15.851 17.0207V24.7503C15.851 24.8221 15.8455 24.8938 15.8455 24.9655C15.8455 25.0372 15.8455 25.109 15.851 25.1807V28H21.9034V25.1807C21.9034 25.109 21.909 25.0372 21.909 24.9655C21.909 24.8938 21.909 24.8221 21.9034 24.7503V3.24966H21.8979Z" fill="#02F7FD"/>
+</svg></span></a>
   <div class="searchwrap">
     <input id="searchInput" placeholder="Search teams, players, leagues, markets…" oninput="onSearch(this.value)">
   </div>
@@ -708,7 +721,7 @@ var settleNet = "TRON";
 function setRew(v){
   rewPct=parseInt(v,10)||0;
   var r=document.getElementById("rewRange");
-  if(r){ r.style.background="linear-gradient(90deg,#17E6E6 "+rewPct+"%,#E8A2E0 "+rewPct+"%)"; }
+  if(r){ r.style.background="linear-gradient(90deg,#02F7FD "+rewPct+"%,#E8A2E0 "+rewPct+"%)"; }
   var a=document.getElementById("rewRakeLbl"); if(a) a.textContent=rewPct+"% Rakeback";
   var b=document.getElementById("rewLossLbl"); if(b) b.textContent=(100-rewPct)+"% Lossback";
 }
@@ -718,7 +731,7 @@ function rewardsCardHTML(){
   var p=rewPct;
   var html='<div class="card rewcard" id="rewardsCard"><div class="rewhead"><h3>'+icon("crown")+' Rewards Slider</h3><div class="cyctoggle"><button class="'+(rewCycle==="Weekly"?"on":"")+'" onclick="setCycle(\'Weekly\')">Weekly</button><button class="'+(rewCycle==="Monthly"?"on":"")+'" onclick="setCycle(\'Monthly\')">Monthly</button></div></div>';
   html+='<div class="rewlabels"><span class="rake" id="rewRakeLbl">'+p+'% Rakeback</span><span class="loss" id="rewLossLbl">'+(100-p)+'% Lossback</span></div>';
-  html+='<input type="range" class="rewrange" id="rewRange" min="0" max="100" step="1" value="'+p+'" style="background:linear-gradient(90deg,#17E6E6 '+p+'%,#E8A2E0 '+p+'%)" oninput="setRew(this.value)">';
+  html+='<input type="range" class="rewrange" id="rewRange" min="0" max="100" step="1" value="'+p+'" style="background:linear-gradient(90deg,#02F7FD '+p+'%,#E8A2E0 '+p+'%)" oninput="setRew(this.value)">';
   html+='<p class="rewnote">You set your own rewards — the only sportsbook that lets you choose. Any updates made apply from the next cycle in 6d 9h.</p>';
   html+='<button class="btn-green" onclick="saveRewards()">Save</button></div>';
   return html;
@@ -864,7 +877,7 @@ function compGo(leagueId){
 }
 function scrollToLeague(leagueId){
   var el=document.getElementById("lg-"+leagueId);
-  if(el){ el.scrollIntoView({behavior:"smooth", block:"start"}); el.style.outline="2px solid #17E6E6"; setTimeout(function(){ el.style.outline=""; },1600); }
+  if(el){ el.scrollIntoView({behavior:"smooth", block:"start"}); el.style.outline="2px solid #02F7FD"; setTimeout(function(){ el.style.outline=""; },1600); }
   pendingLeague=null;
 }
 
@@ -1374,7 +1387,7 @@ function priceChartHTMLFor(m){
   var W=340,H=110,pl=6,pr=44,pt=8,pb=16;
   function X(i){ return pl+(W-pl-pr)*i/(series.length-1); }
   function Y(v){ return pt+(H-pt-pb)*(1-(v-min)/(max-min)); }
-  var colors={"1":"#17E6E6","X":"#8A94A6","2":"#E8A2E0"};
+  var colors={"1":"#02F7FD","X":"#8A94A6","2":"#E8A2E0"};
   var names={"1":m.home,"X":"Draw","2":m.away};
   var svg='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;height:auto;display:block" role="img" aria-label="Win probability chart">';
   [0.25,0.55,0.85].forEach(function(f){ var v=min+(max-min)*f; svg+='<line x1="'+pl+'" y1="'+Y(v)+'" x2="'+(W-pr)+'" y2="'+Y(v)+'" stroke="rgba(255,255,255,.06)"/><text x="'+(W-pr+6)+'" y="'+(Y(v)+3)+'" fill="#8A94A6" font-size="8.5">'+Math.round(v)+'%</text>'; });
