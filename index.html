@@ -761,8 +761,8 @@ function compSport(c){ return c.sport || (c.id==="NBA" ? "Basketball" : "Footbal
 var MATCHES = [
   {id:"m1", league:"PL", home:"Arsenal", away:"Brighton", time:"Live · 67'", minute:67, live:true, score:"2 – 1", odds:{"1":1.62,"X":3.90,"2":5.25}, sx:"saka havertz welbeck goalscorers anytime scorer goals halves handicaps corners cards btts over under ht/ft"},
   {id:"m13", league:"PL", home:"Liverpool", away:"Man City", time:"Today", minute:null, live:false, score:"", odds:{"1":2.40,"X":3.30,"2":2.90}, koMin:3, demo:true},
-  {id:"m2", league:"PL", home:"Liverpool", away:"Chelsea", time:"Today 21:00", minute:null, live:false, score:"", odds:{"1":2.05,"X":3.45,"2":3.40}, koMin:153},
-  {id:"m3", league:"PL", home:"Man City", away:"Tottenham", time:"Today 23:30", minute:null, live:false, score:"", odds:{"1":1.55,"X":4.10,"2":5.50}, koMin:303},
+  {id:"m2", league:"PL", home:"Chelsea", away:"Newcastle", time:"Today 21:00", minute:null, live:false, score:"", odds:{"1":2.05,"X":3.45,"2":3.40}, koMin:153},
+  {id:"m3", league:"PL", home:"Tottenham", away:"Aston Villa", time:"Today 23:30", minute:null, live:false, score:"", odds:{"1":2.25,"X":3.35,"2":3.05}, koMin:303},
   {id:"m4", league:"UCL", home:"Real Madrid", away:"Bayern Munich", time:"Live · 34'", minute:34, live:true, score:"1 – 0", odds:{"1":2.20,"X":3.30,"2":3.10}},
   {id:"m5", league:"UCL", home:"Inter", away:"Barcelona", time:"Tomorrow 02:00", minute:null, live:false, score:"", odds:{"1":2.70,"X":3.25,"2":2.60}, koMin:453},
   {id:"m6", league:"LALIGA", home:"Atlético Madrid", away:"Sevilla", time:"Live · 37'", minute:37, live:true, score:"1 – 0", suspended:true, suspReason:"VAR check", odds:{"1":1.95,"X":3.05,"2":4.40}},
@@ -1121,6 +1121,8 @@ var TEAM_KITS = {
   "Brighton":{main:"#0057B8", second:"#FFFFFF", style:"stripes"},
   "Liverpool":{main:"#C8102E", second:"#C8102E", style:"solid"},
   "Chelsea":{main:"#034694", second:"#034694", style:"solid"},
+  "Newcastle":{main:"#161616", second:"#FFFFFF", style:"stripes"},
+  "Aston Villa":{main:"#670E36", second:"#95BFE5", style:"solid"},
   "Man City":{main:"#6CABDD", second:"#FFFFFF", style:"solid"},
   "Tottenham":{main:"#FFFFFF", second:"#132257", style:"solid"},
   "Real Madrid":{main:"#FFFFFF", second:"#FFFFFF", style:"solid"},
@@ -1845,7 +1847,7 @@ function demoState(name){
     showToast("Demo \u2014 Suspended \u00b7 Goal check. This selection cannot be placed until the market reopens.");
   }
   else if(name==="fails"){
-    slip=[{key:"m2-1X2-1", matchId:"m2", label:"Liverpool v Chelsea", market:"Match Result 1X2", pick:"1", odds:2.05, stake:Math.round((balance+500)*100)/100, needsAccept:false, newOdds:null, suspended:false}];
+    slip=[{key:"m2-1X2-1", matchId:"m2", label:"Chelsea v Newcastle", market:"Match Result 1X2", pick:"1", odds:2.05, stake:Math.round((balance+500)*100)/100, needsAccept:false, newOdds:null, suspended:false}];
     renderSlipAll(false); demoGo("#/slip");
     showToast("Demo \u2014 press Place Bet to see the failure, then lower the stake and retry.");
   }
