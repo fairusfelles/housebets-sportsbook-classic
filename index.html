@@ -144,7 +144,7 @@ tr:last-child td{border-bottom:none}
 .oddsbtn.suspended,.oddsbtn:disabled{background:#0E1118;color:#59637A;border-color:var(--line);cursor:not-allowed;text-decoration:line-through;box-shadow:none;transform:none}
 .oddsbtn.moved{animation:btnflash 1s ease}
 @keyframes btnflash{0%{filter:brightness(1.55)}100%{filter:brightness(1)}}
-body.bg .fade{animation:none}
+body.nav .fade{animation:fade .3s ease}
 .odrift{font-size:10px;font-weight:900;margin-left:3px}
 .odrift.up{color:var(--cyan)}
 .odrift.down{color:#FF7A7A}
@@ -299,7 +299,7 @@ body.bg .fade{animation:none}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .skeleton{height:18px;background:linear-gradient(90deg,#10131B,#1B2230,#10131B);background-size:200% 100%;animation:sh 1.2s infinite;border-radius:4px;margin:10px 0}
 @keyframes sh{to{background-position:-200% 0}}
-.fade{animation:fade .3s ease}
+.fade{animation:none}
 @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 .searchbarMobile{display:none;background:var(--bg2);padding:10px 14px;border-bottom:1px solid var(--line);position:fixed;top:62px;left:0;right:0;z-index:55}
 .searchbarMobile.show{display:block}
@@ -1307,7 +1307,7 @@ var PAGES=["home","live","football","match","slip","scope"];
 function route(rerender){
   var keepScroll=(rerender===false);
   var sy=keepScroll?window.scrollY:0;
-  if(keepScroll){ document.body.classList.add("bg"); setTimeout(function(){ document.body.classList.remove("bg"); },80); }
+  if(!keepScroll){ document.body.classList.add("nav"); setTimeout(function(){ document.body.classList.remove("nav"); },450); }
   var h=(location.hash||"#/home").replace("#/","");
   if(PAGES.indexOf(h)===-1) h="home";
   PAGES.forEach(function(p){ var el=document.getElementById("page-"+p); if(el) el.classList.toggle("hidden", p!==h); });
