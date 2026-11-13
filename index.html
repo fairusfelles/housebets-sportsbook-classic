@@ -1254,7 +1254,7 @@ function renderDetail(){
   el.innerHTML=html;
 }
 function setFbView(v){ fbView=v; if(v!=="league") fbLeague=null; route(false); }
-function fbTabsHTML(n){ return '<div class="segtabs"><button class="segtab '+(fbView==="liveup"?"on":"")+'" onclick="setFbView(\'liveup\')">Live &amp; Upcoming <span style="opacity:.75">'+n+'</span></button><button class="segtab '+(fbView==="all"?"on":"")+'" onclick="setFbView(\'all\')">All Football</button></div>'; }
+function fbTabsHTML(n){ return '<div class="segtabs"><button class="segtab '+(fbView==="liveup"?"on":"")+'" onclick="setFbView(\'liveup\')">Live &amp; Upcoming <span style="opacity:.75">'+n+'</span></button><button class="segtab '+(fbView==="all"?"on":"")+'" onclick="setFbView(\'all\')">All Soccer</button></div>'; }
 function setLiveSport(sp){
   liveSport=sp;
   if(liveLeague!=="All"){
@@ -1276,12 +1276,12 @@ function toggleSportMenu(ev){ if(ev) ev.stopPropagation(); sportMenuOpen=!sportM
 function fbTopHTML(){
   var menu='';
   if(sportMenuOpen){
-    var rows=[["Live & Upcoming","liveup"],["All Football","all"]];
+    var rows=[["Live & Upcoming","liveup"],["All Soccer","all"]];
     var h=rows.map(function(r){ var cur=fbView===r[1]; return '<button class="'+(cur?"on":"")+'" onclick="fbMenuGo(\''+r[1]+'\')">'+r[0]+(cur?' <span style="float:right">\u2713</span>':'')+'</button>'; }).join("");
     h+=LEAGUES.filter(function(l){return l.id!=="NBA"}).map(function(l){ var cur=fbView==="league"&&fbLeague===l.id; return '<button class="'+(cur?"on":"")+'" onclick="fbOpenLeague(\''+l.id+'\')">'+leagueBadge(l.id)+' '+esc(l.name.replace("UEFA ",""))+(cur?' <span style="float:right">\u2713</span>':'')+'</button>'; }).join("");
     menu='<div class="fbmenu">'+h+'</div>';
   }
-  return '<div class="fbtop"><button class="fbback" onclick="location.hash=\'#/home\'" aria-label="Back to Sports home">\u2039</button><div class="fbselwrap"><button class="fbsel" onclick="toggleSportMenu(event)">Football <span class="fbcar">\u25be</span></button>'+menu+'</div></div>';
+  return '<div class="fbtop"><button class="fbback" onclick="location.hash=\'#/home\'" aria-label="Back to Sports home">\u2039</button><div class="fbselwrap"><button class="fbsel" onclick="toggleSportMenu(event)">Soccer <span class="fbcar">\u25be</span></button>'+menu+'</div></div>';
 }
 function fbMenuGo(v){ sportMenuOpen=false; setFbView(v); window.scrollTo({top:0,behavior:"smooth"}); }
 function fbOpenLeague(id){ fbLeague=id; fbView="league"; sportMenuOpen=false; route(); }
@@ -1296,7 +1296,7 @@ function renderFootball(){
     var lg=null; for(var i=0;i<fbLeagues.length;i++){ if(fbLeagues[i].id===fbLeague) lg=fbLeagues[i]; }
     if(lg){
       var llist=fbSortedList(lg.id);
-      html+='<div style="margin-top:14px"><button class="fbpill" onclick="fbBackAll()">\u2039 All Football</button></div>';
+      html+='<div style="margin-top:14px"><button class="fbpill" onclick="fbBackAll()">\u2039 All Soccer</button></div>';
       html+=fbHeadHTML(lg, llist, false)+matchesTable(llist,false);
       html+='</div>';
       document.getElementById("page-football").innerHTML=html;
