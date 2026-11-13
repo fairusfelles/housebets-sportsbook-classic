@@ -253,8 +253,11 @@ tr:last-child td{border-bottom:none}
 .mcard-head{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:12.5px;font-weight:700;letter-spacing:.3px}
 .mcard-head .star{padding:0}
 .mcard-live{display:flex;align-items:center;gap:7px;color:var(--cyan);font-size:13px;margin:6px 0 8px}
-.livedot{width:8px;height:8px;border-radius:50%;background:var(--live);box-shadow:0 0 0 0 rgba(255,92,92,.6);animation:livepulse 1.6s infinite}
+.livedot{width:8px;height:8px;border-radius:50%;background:var(--live);box-shadow:0 0 0 0 rgba(255,92,92,.6);animation:livepulse 1.6s infinite,blinkdot 1.1s infinite;display:inline-block}
 @keyframes livepulse{0%{box-shadow:0 0 0 0 rgba(255,92,92,.55)}100%{box-shadow:0 0 0 8px rgba(255,92,92,0)}}
+@keyframes blinkdot{0%,100%{opacity:1}50%{opacity:.15}}
+.bottomnav button span{position:relative}
+.livedotbadge{position:absolute;top:-3px;right:-7px;width:9px;height:9px;border-radius:50%;background:var(--live);border:2px solid #080A0F;animation:livepulse 1.6s infinite,blinkdot 1.1s infinite}
 .mcard-soon{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:13px;font-weight:700;margin:6px 0 8px}
 .trow{display:flex;align-items:center;gap:11px;padding:5px 0}
 .tbadge{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:800;color:#EDF1F5;border:1px solid rgba(255,255,255,.22);flex:none}
@@ -407,7 +410,7 @@ tr:last-child td{border-bottom:none}
 
 <nav class="bottomnav">
   <button onclick="location.hash='#/home'"><span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11l8-7 8 7"/><path d="M6.2 9.3V20h11.6V9.3"/><path d="M10 20v-5h4v5"/></svg></span>Home</button>
-  <button onclick="location.hash='#/live'"><span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="1.6"/><path d="M8.8 15.2a4.6 4.6 0 0 1 0-6.4"/><path d="M15.2 8.8a4.6 4.6 0 0 1 0 6.4"/><path d="M6.2 17.8a8.6 8.6 0 0 1 0-11.6"/><path d="M17.8 6.2a8.6 8.6 0 0 1 0 11.6"/></svg></span>Live</button>
+  <button onclick="location.hash='#/live'"><span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="1.6"/><path d="M8.8 15.2a4.6 4.6 0 0 1 0-6.4"/><path d="M15.2 8.8a4.6 4.6 0 0 1 0 6.4"/><path d="M6.2 17.8a8.6 8.6 0 0 1 0-11.6"/><path d="M17.8 6.2a8.6 8.6 0 0 1 0 11.6"/></svg><i class="livedotbadge"></i></span>Live</button>
   <button onclick="location.hash='#/football'"><span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 8.2l2.9 2.1-1.1 3.4h-3.6l-1.1-3.4z"/><path d="M12 8.2V3.6M14.9 10.3l4.3-1.3M13.8 13.7l2.5 3.7M10.2 13.7l-2.5 3.7M9.1 10.3L4.8 9"/></svg></span>Football</button>
   <button onclick="location.hash='#/match'"><span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.8"/><circle cx="12" cy="12" r="1.2"/></svg></span>Match</button>
   <button onclick="location.hash='#/slip'"><span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5h12V20l-2-1.3-2 1.3-2-1.3L10 20l-2-1.3L6 20z"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="9" y1="11.8" x2="15" y2="11.8"/></svg></span>Slip</button>
@@ -858,7 +861,7 @@ function renderHome(){
   if(fm.length){
     html+='<div class="sectionhead"><h2>Your matches</h2><p>'+fm.length+' from your follows</p></div><p style="color:var(--muted);font-size:13px;margin:-6px 0 12px">From your follows \u2014 tap a star to add or remove.</p>'+matchesTable(fm,true);
   }
-  html+='<div class="sectionhead"><h2>Live now</h2><p>'+live.length+' matches in play</p></div>'+matchesTable(live,true);
+  html+='<div class="sectionhead"><h2><span class="livedot"></span> Live now</h2><p>'+live.length+' matches in play</p></div>'+matchesTable(live,true);
   html+='<div class="sectionhead"><h2>Starting soon</h2><p>Upcoming fixtures \u00b7 kick-off times shown \u00b7 1X2</p></div>'+matchesTable(soon,true);
   html+='<div class="sectionhead"><h2>Top competitions</h2><p>Tap a competition to go straight to its section</p></div><div class="compgrid">';
   LEAGUES.forEach(function(l){ html+='<div class="comp" onclick="compGo(\''+l.id+'\')"><b>'+icon(l.icon)+' '+esc(l.name)+'</b><span>'+esc(l.country)+' · View fixtures & odds '+icon("arrowR","ic-sm")+'</span></div>'; });
@@ -880,7 +883,7 @@ function renderLive(){
   chips+='<button class="fchip '+(liveLeague==="All"?"on":"")+'" onclick="setLiveLeague(\'All\')">'+icon("trophy","ic-sm")+' All competitions</button>';
   LEAGUES.forEach(function(l){ chips+='<button class="fchip '+(liveLeague===l.id?"on":"")+'" onclick="setLiveLeague(\''+l.id+'\')">'+icon(l.icon,"ic-sm")+' '+esc(l.name)+'</button>'; });
   chips+='</div>';
-  var html='<div class="fade"><div class="eyebrow" style="color:var(--live)">'+icon("live","ic-sm")+' In Play</div><h1 class="serif" style="margin:6px 0 4px;color:var(--head);font-size:34px">Live Betting</h1><p style="color:var(--muted);margin:0">Clocks advance every 45 seconds. Odds drift as the desk trades \u2014 watch your slip if a price moves. Filter by sport or competition:</p>'+sportTilesHTML('live')+chips;
+  var html='<div class="fade"><div class="eyebrow" style="color:var(--live)"><span class="livedot"></span> In Play</div><h1 class="serif" style="margin:6px 0 4px;color:var(--head);font-size:34px">Live Betting</h1><p style="color:var(--muted);margin:0">Clocks advance every 45 seconds. Odds drift as the desk trades \u2014 watch your slip if a price moves. Filter by sport or competition:</p>'+sportTilesHTML('live')+chips;
   var showEmpty = forceNoLive || !filtered.length;
   if(!showEmpty){
     html+=matchesTable(filtered,true);
@@ -1267,7 +1270,7 @@ function route(rerender){
 
 function buildNav(){
   var sports=[["home","Sports Home","#/home"],["live","Live","#/live"],["ball","Football","#/football"],["target","Match Page","#/match"]];
-  document.getElementById("sportsNav").innerHTML=sports.map(function(s){ return '<div class="navitem" onclick="sportGo(\''+s[2]+'\')"><span>'+icon(s[0])+' '+s[1]+'</span><small>›</small></div>'; }).join("");
+  document.getElementById("sportsNav").innerHTML=sports.map(function(s){ return '<div class="navitem" onclick="sportGo(\''+s[2]+'\')"><span>'+icon(s[0])+' '+s[1]+(s[2]==="#/live"?' <span class="livedot"></span>':"")+'</span><small>›</small></div>'; }).join("");
   document.getElementById("compNav").innerHTML=LEAGUES.map(function(l){ return '<div class="navitem" onclick="compGo(\''+l.id+'\')"><span>'+icon(l.icon)+' '+esc(l.name)+'</span><small>'+esc(l.country)+'</small></div>'; }).join("");
 }
 
