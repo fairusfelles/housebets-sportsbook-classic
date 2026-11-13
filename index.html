@@ -27,6 +27,14 @@ h1,h2,h3,.serif{font-family:var(--serif)}
 .logo small{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#D6C98A;display:block;line-height:1;margin-top:-2px;font-family:var(--sans);font-weight:600}
 .iconbtn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);color:#fff;width:40px;height:40px;border-radius:8px;display:grid;place-items:center;font-size:18px}
 .iconbtn:hover{background:rgba(255,255,255,.2)}
+.ic{width:18px;height:18px;flex:none;vertical-align:-3px}
+.ic-sm{width:14px;height:14px;vertical-align:-2px}
+.ic-md{width:34px;height:34px}
+.ic-lg{width:22px;height:22px}
+.ic-xl{width:52px;height:52px}
+.ic.fill{fill:currentColor}
+.navitem .ic{margin-right:7px}
+.bottomnav .ic{width:21px;height:21px}
 .searchwrap{flex:1;max-width:520px;display:flex;gap:8px}
 .searchwrap input{flex:1;padding:10px 14px;border-radius:999px;border:1px solid #2A5A46;background:#0F4A36;color:#fff;outline:none}
 .searchwrap input::placeholder{color:#A8C0B2}
@@ -145,15 +153,15 @@ tr:last-child td{border-bottom:none}
 </head>
 <body>
 <header class="topbar">
-  <button class="iconbtn" onclick="toggleDrawer()" aria-label="Menu">☰</button>
+  <button class="iconbtn" onclick="toggleDrawer()" aria-label="Menu"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>
   <a href="#/home" class="logo">HOUSE<span>BETS</span><small>Classic Sportsbook</small></a>
   <div class="searchwrap">
     <input id="searchInput" placeholder="Search teams, leagues, matches…" oninput="onSearch(this.value)">
   </div>
   <div class="topactions">
-    <button class="iconbtn" onclick="toggleMobSearch()" aria-label="Search">⌕</button>
-    <button class="walletpill" onclick="openWallet()">◉ <span id="walletBalanceTop">1,000.00</span> USDT</button>
-    <button class="iconbtn" onclick="scopeGo('Rewards')" title="Rewards">♛</button>
+    <button class="iconbtn" onclick="toggleMobSearch()" aria-label="Search"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg></button>
+    <button class="walletpill" onclick="openWallet()"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10.5h18"/><circle cx="17" cy="14.8" r="1.1"/></svg> <span id="walletBalanceTop">1,000.00</span> USDT</button>
+    <button class="iconbtn" onclick="scopeGo('Rewards')" title="Rewards"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8l4.7 3.8L12 5.5l3.8 6.3L20.5 8 19.3 17H4.7z"/><line x1="5" y1="20.2" x2="19" y2="20.2"/></svg></button>
     <div class="avatar" onclick="hubieTap()" title="Hubie">H</div>
   </div>
 </header>
@@ -167,10 +175,10 @@ tr:last-child td{border-bottom:none}
     <h3>Competitions</h3>
     <div id="compNav"></div>
     <h3>Housebets</h3>
-    <div class="navitem" onclick="scopeGo('Casino')"><span>🎰 Casino</span><small>›</small></div>
-    <div class="navitem" onclick="scopeGo('Chat')"><span>💬 Chat</span><small>›</small></div>
-    <div class="navitem" onclick="scopeGo('Rewards')"><span>♛ Rewards</span><small>›</small></div>
-    <div class="navitem" onclick="location.hash='#/slip'"><span>🧾 My Bets</span><small id="navBetCount">0</small></div>
+    <div class="navitem" onclick="scopeGo('Casino')"><span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3.5"/><circle cx="9" cy="9" r="1.1"/><circle cx="15" cy="9" r="1.1"/><circle cx="9" cy="15" r="1.1"/><circle cx="15" cy="15" r="1.1"/></svg> Casino</span><small>›</small></div>
+    <div class="navitem" onclick="scopeGo('Chat')"><span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5c-1.5 0-3-.4-4.2-1.1L3 20l1.1-5.3A8.5 8.5 0 1 1 21 11.5z"/></svg> Chat</span><small>›</small></div>
+    <div class="navitem" onclick="scopeGo('Rewards')"><span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8l4.7 3.8L12 5.5l3.8 6.3L20.5 8 19.3 17H4.7z"/><line x1="5" y1="20.2" x2="19" y2="20.2"/></svg> Rewards</span><small>›</small></div>
+    <div class="navitem" onclick="location.hash='#/slip'"><span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5h12V20l-2-1.3-2 1.3-2-1.3L10 20l-2-1.3L6 20z"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="9" y1="11.8" x2="15" y2="11.8"/></svg> My Bets</span><small id="navBetCount">0</small></div>
     <p style="font-size:12px;color:var(--muted);line-height:1.6;padding:8px 6px">Est. Housebets Classic.<br>Singles only · Decimal odds · Stakes in USDT.<br>Sample data — front-end prototype.</p>
   </aside>
 
@@ -197,20 +205,20 @@ tr:last-child td{border-bottom:none}
   </aside>
 </div>
 
-<button class="mobileslipbar" id="mobileSlipBar" onclick="location.hash='#/slip'"><span>🧾 Bet Slip <span id="mobileSlipCount">(0)</span></span><span id="mobileSlipOdds">—</span></button>
+<button class="mobileslipbar" id="mobileSlipBar" onclick="location.hash='#/slip'"><span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5h12V20l-2-1.3-2 1.3-2-1.3L10 20l-2-1.3L6 20z"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="9" y1="11.8" x2="15" y2="11.8"/></svg> Bet Slip <span id="mobileSlipCount">(0)</span></span><span id="mobileSlipOdds">—</span></button>
 
 <nav class="bottomnav">
-  <button onclick="location.hash='#/home'"><span>⌂</span>Home</button>
-  <button onclick="location.hash='#/live'"><span>●</span>Live</button>
-  <button onclick="location.hash='#/football'"><span>⚽</span>Football</button>
-  <button onclick="location.hash='#/match'"><span>◆</span>Match</button>
-  <button onclick="location.hash='#/slip'"><span>🧾</span>Slip</button>
+  <button onclick="location.hash='#/home'"><span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11l8-7 8 7"/><path d="M6.2 9.3V20h11.6V9.3"/><path d="M10 20v-5h4v5"/></svg></span>Home</button>
+  <button onclick="location.hash='#/live'"><span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="1.6"/><path d="M8.8 15.2a4.6 4.6 0 0 1 0-6.4"/><path d="M15.2 8.8a4.6 4.6 0 0 1 0 6.4"/><path d="M6.2 17.8a8.6 8.6 0 0 1 0-11.6"/><path d="M17.8 6.2a8.6 8.6 0 0 1 0 11.6"/></svg></span>Live</button>
+  <button onclick="location.hash='#/football'"><span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 8.2l2.9 2.1-1.1 3.4h-3.6l-1.1-3.4z"/><path d="M12 8.2V3.6M14.9 10.3l4.3-1.3M13.8 13.7l2.5 3.7M10.2 13.7l-2.5 3.7M9.1 10.3L4.8 9"/></svg></span>Football</button>
+  <button onclick="location.hash='#/match'"><span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.8"/><circle cx="12" cy="12" r="1.2"/></svg></span>Match</button>
+  <button onclick="location.hash='#/slip'"><span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5h12V20l-2-1.3-2 1.3-2-1.3L10 20l-2-1.3L6 20z"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="9" y1="11.8" x2="15" y2="11.8"/></svg></span>Slip</button>
 </nav>
 
 <div class="sheet" id="walletSheet">
-  <div style="display:flex;justify-content:space-between;align-items:center"><h2 class="serif" style="margin:0;color:var(--green)">Wallet</h2><button class="iconbtn" style="background:var(--green)" onclick="closeAllSheets()">✕</button></div>
+  <div style="display:flex;justify-content:space-between;align-items:center"><h2 class="serif" style="margin:0;color:var(--green)">Wallet</h2><button class="iconbtn" style="background:var(--green)" onclick="closeAllSheets()"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button></div>
   <p style="color:var(--muted)">Housebets account — sample balance for this prototype.</p>
-  <div style="background:var(--cream);border:1px solid var(--gold);padding:18px;border-radius:8px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--muted)">Available balance</div><div style="font-family:var(--serif);font-size:32px;font-weight:700" id="walletBalanceSheet">1,000.00 USDT</div></div><div style="font-size:36px">◉</div></div>
+  <div style="background:var(--cream);border:1px solid var(--gold);padding:18px;border-radius:8px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--muted)">Available balance</div><div style="font-family:var(--serif);font-size:32px;font-weight:700" id="walletBalanceSheet">1,000.00 USDT</div></div><div style="color:var(--green)"><svg class="ic ic-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10.5h18"/><circle cx="17" cy="14.8" r="1.1"/></svg></div></div>
   <p style="line-height:1.6;color:var(--muted);font-size:14px">Bets deduct from this balance when placed. Cash out credits it back instantly at 0.88× the current potential return. No real funds are used.</p>
   <button class="btn-green" onclick="closeAllSheets()">Done</button>
 </div>
@@ -230,12 +238,12 @@ var betMessage = "";
 var betMessageType = "";
 
 var LEAGUES = [
-  {id:"PL", name:"Premier League", country:"England", icon:"🦁"},
-  {id:"UCL", name:"UEFA Champions League", country:"Europe", icon:"★"},
-  {id:"LALIGA", name:"La Liga", country:"Spain", icon:"◆"},
-  {id:"SERIEA", name:"Serie A", country:"Italy", icon:"●"},
-  {id:"BUNDES", name:"Bundesliga", country:"Germany", icon:"▲"},
-  {id:"NBA", name:"NBA", country:"USA Basketball", icon:"🏀"}
+  {id:"PL", name:"Premier League", country:"England", icon:"trophy"},
+  {id:"UCL", name:"UEFA Champions League", country:"Europe", icon:"trophy"},
+  {id:"LALIGA", name:"La Liga", country:"Spain", icon:"trophy"},
+  {id:"SERIEA", name:"Serie A", country:"Italy", icon:"trophy"},
+  {id:"BUNDES", name:"Bundesliga", country:"Germany", icon:"trophy"},
+  {id:"NBA", name:"NBA", country:"USA Basketball", icon:"basketball"}
 ];
 
 var MATCHES = [
@@ -261,6 +269,31 @@ var MATCH_MARKETS = [
   {id:"ng", name:"Next Goalscorer", suspended:true, picks:[{k:"Saka",label:"B. Saka",odds:6.50},{k:"Havertz",label:"K. Havertz",odds:7.00},{k:"Welbeck",label:"D. Welbeck",odds:9.00}]}
 ];
 
+var ICON_PATHS = {
+  menu:'<line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/>',
+  search:'<circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/>',
+  wallet:'<rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10.5h18"/><circle cx="17" cy="14.8" r="1.1"/>',
+  crown:'<path d="M3.5 8l4.7 3.8L12 5.5l3.8 6.3L20.5 8 19.3 17H4.7z"/><line x1="5" y1="20.2" x2="19" y2="20.2"/>',
+  home:'<path d="M4 11l8-7 8 7"/><path d="M6.2 9.3V20h11.6V9.3"/><path d="M10 20v-5h4v5"/>',
+  live:'<circle cx="12" cy="12" r="1.6"/><path d="M8.8 15.2a4.6 4.6 0 0 1 0-6.4"/><path d="M15.2 8.8a4.6 4.6 0 0 1 0 6.4"/><path d="M6.2 17.8a8.6 8.6 0 0 1 0-11.6"/><path d="M17.8 6.2a8.6 8.6 0 0 1 0 11.6"/>',
+  ball:'<circle cx="12" cy="12" r="8.5"/><path d="M12 8.2l2.9 2.1-1.1 3.4h-3.6l-1.1-3.4z"/><path d="M12 8.2V3.6M14.9 10.3l4.3-1.3M13.8 13.7l2.5 3.7M10.2 13.7l-2.5 3.7M9.1 10.3L4.8 9"/>',
+  basketball:'<circle cx="12" cy="12" r="8.5"/><path d="M3.6 12h16.8"/><path d="M12 3.6c3.1 2.9 3.1 13.9 0 16.8"/><path d="M12 3.6c-3.1 2.9-3.1 13.9 0 16.8"/>',
+  trophy:'<path d="M8 4h8v4.8A4 4 0 0 1 8 8.8z"/><path d="M8 5.6H5.2a2.9 2.9 0 0 0 3 3.3M16 5.6h2.8a2.9 2.9 0 0 1-3 3.3"/><line x1="12" y1="12.8" x2="12" y2="15.6"/><path d="M9.3 19.8l.8-4.2h3.8l.8 4.2z"/>',
+  target:'<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.8"/><circle cx="12" cy="12" r="1.2"/>',
+  receipt:'<path d="M6 3.5h12V20l-2-1.3-2 1.3-2-1.3L10 20l-2-1.3L6 20z"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="9" y1="11.8" x2="15" y2="11.8"/>',
+  dice:'<rect x="4" y="4" width="16" height="16" rx="3.5"/><circle cx="9" cy="9" r="1.1"/><circle cx="15" cy="9" r="1.1"/><circle cx="9" cy="15" r="1.1"/><circle cx="15" cy="15" r="1.1"/>',
+  chat:'<path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5c-1.5 0-3-.4-4.2-1.1L3 20l1.1-5.3A8.5 8.5 0 1 1 21 11.5z"/>',
+  star:'<path d="M12 3.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8L3.6 9.7l5.8-.8z"/>',
+  lock:'<rect x="5.5" y="10.5" width="13" height="9.5" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/><circle cx="12" cy="15.3" r="1.2"/>',
+  close:'<line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/>',
+  arrowR:'<line x1="4" y1="12" x2="19" y2="12"/><polyline points="13.5 6 19 12 13.5 18"/>',
+  arrowL:'<line x1="20" y1="12" x2="5" y2="12"/><polyline points="10.5 6 5 12 10.5 18"/>',
+  warn:'<path d="M12 4.2L3 19.5h18z"/><line x1="12" y1="10" x2="12" y2="13.8"/><circle cx="12" cy="16.8" r="0.7"/>',
+  pause:'<rect x="7.3" y="5" width="3.1" height="14" rx="1.2"/><rect x="13.6" y="5" width="3.1" height="14" rx="1.2"/>'
+};
+function icon(name, cls){
+  return '<svg class="ic '+(cls||"")+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(ICON_PATHS[name]||"")+'</svg>';
+}
 function fmt(n){ return Number(n).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
 function leagueName(id){ for(var i=0;i<LEAGUES.length;i++){ if(LEAGUES[i].id===id) return LEAGUES[i].name; } return id; }
 function findMatch(id){ for(var i=0;i<MATCHES.length;i++){ if(MATCHES[i].id===id) return MATCHES[i]; } return null; }
@@ -318,22 +351,22 @@ function matchRow(m, showLeague){
   return '<tr><td><div class="teams">'+esc(m.home)+' v '+esc(m.away)+'<span>'+(showLeague?leagueName(m.league)+" · ":"")+(m.live?('<span class="livebadge">LIVE</span> '+esc(m.score||"")):esc(m.time))+'</span></div></td>'+
   '<td><span class="timepill">'+(m.live? (m.minute+"'") : esc(m.time))+'</span></td>'+
   '<td style="white-space:nowrap">'+oddsButtons(m)+'</td>'+
-  '<td><button class="star '+(follows[starKey]?"on":"")+'" onclick="toggleFollow(\''+starKey+'\',event)" aria-label="Follow">☆</button></td></tr>';
+  '<td><button class="star '+(follows[starKey]?"on":"")+'" onclick="toggleFollow(\''+starKey+'\',event)" aria-label="Follow">'+icon("star", follows[starKey]?"fill ic-lg":"ic-lg")+'</button></td></tr>';
 }
 function matchesTable(list, showLeague){
   if(!list.length) return '<div class="empty">No matches match your search.</div>';
   var rows=list.map(function(m){ return matchRow(m, showLeague); }).join("");
   if(!rows) return '<div class="empty">No matches match your search.</div>';
-  return '<div class="card"><table><thead><tr><th>Match</th><th>Time</th><th>1 &nbsp; X &nbsp; 2</th><th>☆</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
+  return '<div class="card"><table><thead><tr><th>Match</th><th>Time</th><th>1 &nbsp; X &nbsp; 2</th><th>'+icon("star","ic-sm")+'</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
 }
 
 function renderHome(){
   var featured=MATCHES.slice(0,4);
   var live=MATCHES.filter(function(m){return m.live});
-  var html='<div class="hero fade"><div class="eyebrow">Housebets · Est. Classic Book</div><h1>The traditional book,<br><em>done properly.</em></h1><p>Deep racing green, honest decimal odds, and a slip that tells you plainly when odds move or a market suspends. Singles only, stakes in USDT — no clutter, no surprises.</p><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;position:relative;z-index:1"><button class="btn" onclick="location.hash=\'#/live\'">View Live Betting →</button><button class="btn-outline" onclick="location.hash=\'#/match\'">Arsenal v Brighton</button></div></div>';
+  var html='<div class="hero fade"><div class="eyebrow">Housebets · Est. Classic Book</div><h1>The traditional book,<br><em>done properly.</em></h1><p>Deep racing green, honest decimal odds, and a slip that tells you plainly when odds move or a market suspends. Singles only, stakes in USDT — no clutter, no surprises.</p><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;position:relative;z-index:1"><button class="btn" onclick="location.hash=\'#/live\'">View Live Betting '+icon("arrowR","ic-sm")+'</button><button class="btn-outline" onclick="location.hash=\'#/match\'">Arsenal v Brighton</button></div></div>';
   html+='<div class="sectionhead"><h2>Featured Matches</h2><p>Hand-picked by the trading desk</p></div>'+matchesTable(featured,true);
   html+='<div class="sectionhead"><h2>Competitions</h2><p>Tap a competition to go straight to its section</p></div><div class="compgrid">';
-  LEAGUES.forEach(function(l){ html+='<div class="comp" onclick="compGo(\''+l.id+'\')"><b>'+l.icon+' '+esc(l.name)+'</b><span>'+esc(l.country)+' · View fixtures & odds →</span></div>'; });
+  LEAGUES.forEach(function(l){ html+='<div class="comp" onclick="compGo(\''+l.id+'\')"><b>'+icon(l.icon)+' '+esc(l.name)+'</b><span>'+esc(l.country)+' · View fixtures & odds '+icon("arrowR","ic-sm")+'</span></div>'; });
   html+='</div>';
   html+='<div class="sectionhead"><h2>Live Now</h2><p>'+live.length+' matches in play</p></div>'+matchesTable(live,true);
   html+='<div class="card" style="margin-top:20px;padding:18px"><h3 class="serif" style="margin:0 0 6px;color:var(--green)">House Rules — Classic Edition</h3><p style="margin:0;color:var(--muted);line-height:1.7;font-size:14px">Singles only. If odds change while a selection sits in your slip, you must accept the new price before placing. Suspended selections are flagged and cannot be placed until the market reopens. Cash out is offered at 0.88× the current potential return.</p></div>';
@@ -341,27 +374,27 @@ function renderHome(){
 }
 function renderLive(){
   var live=MATCHES.filter(function(m){return m.live});
-  var html='<div class="fade"><div class="eyebrow" style="color:var(--live)">● In Play</div><h1 class="serif" style="margin:6px 0 4px;color:var(--green);font-size:34px">Live Betting</h1><p style="color:var(--muted);margin:0 0 16px">Clocks advance every 45 seconds. Odds drift as the desk trades — watch your slip if a price moves.</p>'+matchesTable(live,true)+'</div>';
+  var html='<div class="fade"><div class="eyebrow" style="color:var(--live)">'+icon("live","ic-sm")+' In Play</div><h1 class="serif" style="margin:6px 0 4px;color:var(--green);font-size:34px">Live Betting</h1><p style="color:var(--muted);margin:0 0 16px">Clocks advance every 45 seconds. Odds drift as the desk trades — watch your slip if a price moves.</p>'+matchesTable(live,true)+'</div>';
   document.getElementById("page-live").innerHTML=html;
 }
 function renderFootball(){
-  var html='<div class="fade"><div class="eyebrow" style="color:var(--gold2)">Football</div><h1 class="serif" style="margin:6px 0 4px;color:var(--green);font-size:34px">Football — All Leagues</h1><p style="color:var(--muted);margin:0">1X2 decimal odds. Tap ☆ to follow a match. Tap any price to add it to your slip.</p>';
+  var html='<div class="fade"><div class="eyebrow" style="color:var(--gold2)">Football</div><h1 class="serif" style="margin:6px 0 4px;color:var(--green);font-size:34px">Football — All Leagues</h1><p style="color:var(--muted);margin:0">1X2 decimal odds. Tap '+icon("star","ic-sm")+' to follow a match. Tap any price to add it to your slip.</p>';
   LEAGUES.filter(function(l){return l.id!=="NBA"}).forEach(function(l){
     var list=MATCHES.filter(function(m){return m.league===l.id});
-    html+='<div id="lg-'+l.id+'"><div class="sectionhead"><h2>'+l.icon+' '+esc(l.name)+'</h2><p>'+esc(l.country)+'</p></div>'+matchesTable(list,false)+'</div>';
+    html+='<div id="lg-'+l.id+'"><div class="sectionhead"><h2>'+icon(l.icon)+' '+esc(l.name)+'</h2><p>'+esc(l.country)+'</p></div>'+matchesTable(list,false)+'</div>';
   });
   html+='</div>';
   document.getElementById("page-football").innerHTML=html;
   if(pendingLeague){ setTimeout(function(){ scrollToLeague(pendingLeague); },60); }
 }
 function renderMatch(){
-  var html='<div class="fade"><div class="eyebrow" style="color:var(--live)">● Live · Premier League · 67\'</div><h1 class="serif" style="margin:6px 0 2px;color:var(--green);font-size:36px">Arsenal v Brighton</h1><p style="color:var(--muted);margin:0 0 6px">Emirates Stadium · Score <b style="color:var(--ink)">Arsenal 2 – 1 Brighton</b> · Clock ticks with the Live page</p><p><span class="pill">Match page · 20 pts in the brief</span> <span class="pill">Odds move live</span> '+(ouSuspended?'<span class="pill" style="background:#FDE8E8">O/U 2.5 suspended</span>':'<span class="pill">O/U 2.5 open</span>')+'</p>';
+  var html='<div class="fade"><div class="eyebrow" style="color:var(--live)">'+icon("live","ic-sm")+' Live · Premier League · 67\'</div><h1 class="serif" style="margin:6px 0 2px;color:var(--green);font-size:36px">Arsenal v Brighton</h1><p style="color:var(--muted);margin:0 0 6px">Emirates Stadium · Score <b style="color:var(--ink)">Arsenal 2 – 1 Brighton</b> · Clock ticks with the Live page</p><p><span class="pill">Match page · 20 pts in the brief</span> <span class="pill">Odds move live</span> '+(ouSuspended?'<span class="pill" style="background:#FDE8E8">O/U 2.5 suspended</span>':'<span class="pill">O/U 2.5 open</span>')+'</p>';
   MATCH_MARKETS.forEach(function(mk){
     var isSusp = mk.suspended || (mk.id==="ou" && ouSuspended);
-    html+='<div class="market"><h3>'+esc(mk.name)+'<span>'+(isSusp?"SUSPENDED 🔒":"OPEN")+'</span></h3>';
+    html+='<div class="market"><h3>'+esc(mk.name)+'<span>'+(isSusp?("SUSPENDED "+icon("lock","ic-sm")):"OPEN")+'</span></h3>';
     if(isSusp){
-      if(mk.id==="ng"){ html+='<div class="suspendedbox">🔒 Market suspended — Next Goalscorer is closed for betting in this prototype. Prices are shown for reference only and cannot be added to the slip.</div><div class="marketbody">'; mk.picks.forEach(function(p){ html+='<button class="oddsbtn suspended" disabled><small>'+esc(p.k)+'</small>'+p.odds.toFixed(2)+'</button>'; }); html+='</div>'; }
-      else { html+='<div class="marketbody"><div class="suspendedbox">⏸ Temporarily suspended — the desk is repricing Over / Under 2.5. It will reopen automatically in a few seconds. Any O/U selection in your slip is flagged meanwhile.</div></div>'; }
+      if(mk.id==="ng"){ html+='<div class="suspendedbox">'+icon("lock")+' Market suspended — Next Goalscorer is closed for betting in this prototype. Prices are shown for reference only and cannot be added to the slip.</div><div class="marketbody">'; mk.picks.forEach(function(p){ html+='<button class="oddsbtn suspended" disabled><small>'+esc(p.k)+'</small>'+p.odds.toFixed(2)+'</button>'; }); html+='</div>'; }
+      else { html+='<div class="marketbody"><div class="suspendedbox">'+icon("pause")+' Temporarily suspended — the desk is repricing Over / Under 2.5. It will reopen automatically in a few seconds. Any O/U selection in your slip is flagged meanwhile.</div></div>'; }
     } else {
       html+='<div class="marketbody">';
       mk.picks.forEach(function(p){
@@ -380,8 +413,8 @@ function renderMatch(){
 }
 function renderScope(name){
   var n=name || window._scopeName || "Casino";
-  var icons={"Casino":"🎰","Chat":"💬","Rewards":"♛"};
-  var html='<div class="fade" style="text-align:center;padding:36px 10px"><div style="font-size:52px">'+(icons[n]||"◆")+'</div><h1 class="serif" style="color:var(--green)">'+esc(n)+'</h1><p style="color:var(--muted);max-width:520px;margin:0 auto;line-height:1.7">This is the Housebets Classic sportsbook prototype. <b>'+esc(n)+'</b> lives in the full Housebets product and is outside the scope of this contest entry — so there is nothing dead here, just an honest signpost.</p><div style="display:flex;gap:10px;justify-content:center;margin-top:20px;flex-wrap:wrap"><button class="btn-green" style="width:auto" onclick="location.hash=\'#/home\'">← Back to Sports Home</button><button class="btn" onclick="location.hash=\'#/football\'">Go to Football</button></div></div>';
+  var icons={"Casino":"dice","Chat":"chat","Rewards":"crown"};
+  var html='<div class="fade" style="text-align:center;padding:36px 10px"><div style="color:var(--green)">'+icon(icons[n]||"target","ic-xl")+'</div><h1 class="serif" style="color:var(--green)">'+esc(n)+'</h1><p style="color:var(--muted);max-width:520px;margin:0 auto;line-height:1.7">This is the Housebets Classic sportsbook prototype. <b>'+esc(n)+'</b> lives in the full Housebets product and is outside the scope of this contest entry — so there is nothing dead here, just an honest signpost.</p><div style="display:flex;gap:10px;justify-content:center;margin-top:20px;flex-wrap:wrap"><button class="btn-green" style="width:auto" onclick="location.hash=\'#/home\'">'+icon("arrowL","ic-sm")+' Back to Sports Home</button><button class="btn" onclick="location.hash=\'#/football\'">Go to Football</button></div></div>';
   document.getElementById("page-scope").innerHTML=html;
 }
 
@@ -440,9 +473,9 @@ function slipHTML(containerId){
   if(betMessage){ html+='<div class="'+(betMessageType==="success"?"success":"fail")+'">'+esc(betMessage)+'</div>'; }
   slip.forEach(function(s){
     var potential=(s.stake||0)*Number(s.odds);
-    html+='<div class="slipitem '+(s.suspended?"susp":(s.needsAccept?"warn":""))+'"><button class="remove" onclick="removeFromSlip(\''+s.key+'\')">✕ Remove</button><b>'+esc(s.label)+'</b><p>'+esc(s.market)+' · <b>'+esc(s.pickLabel||s.pick)+'</b></p><p>Odds: <b style="font-size:16px;color:var(--green)">'+Number(s.odds).toFixed(2)+'</b> &nbsp;·&nbsp; Singles only</p>';
-    if(s.needsAccept){ html+='<div class="flag gold">⚠ Odds have changed to <b>'+Number(s.newOdds).toFixed(2)+'</b>. You must accept the new odds before placing this bet.</div><div style="display:flex;gap:8px"><button class="btn" style="flex:1" onclick="acceptOdds(\''+s.key+'\')">Accept '+Number(s.newOdds).toFixed(2)+'</button><button class="cashout" onclick="rejectOdds(\''+s.key+'\')">Remove</button></div>'; }
-    if(s.suspended){ html+='<div class="flag">🔒 This market is currently suspended. You cannot place this bet until it reopens — or remove the selection.</div>'; }
+    html+='<div class="slipitem '+(s.suspended?"susp":(s.needsAccept?"warn":""))+'"><button class="remove" onclick="removeFromSlip(\''+s.key+'\')">'+icon("close","ic-sm")+' Remove</button><b>'+esc(s.label)+'</b><p>'+esc(s.market)+' · <b>'+esc(s.pickLabel||s.pick)+'</b></p><p>Odds: <b style="font-size:16px;color:var(--green)">'+Number(s.odds).toFixed(2)+'</b> &nbsp;·&nbsp; Singles only</p>';
+    if(s.needsAccept){ html+='<div class="flag gold">'+icon("warn","ic-sm")+' Odds have changed to <b>'+Number(s.newOdds).toFixed(2)+'</b>. You must accept the new odds before placing this bet.</div><div style="display:flex;gap:8px"><button class="btn" style="flex:1" onclick="acceptOdds(\''+s.key+'\')">Accept '+Number(s.newOdds).toFixed(2)+'</button><button class="cashout" onclick="rejectOdds(\''+s.key+'\')">Remove</button></div>'; }
+    if(s.suspended){ html+='<div class="flag">'+icon("lock","ic-sm")+' This market is currently suspended. You cannot place this bet until it reopens — or remove the selection.</div>'; }
     html+='<div class="stakeRow"><span style="align-self:center;font-weight:700">Stake USDT</span><input type="number" min="0" step="1" value="'+(s.stake||"")+'" oninput="updateStake(\''+s.key+'\',this.value)" onchange="renderSlipAll();route(false)"></div>';
     html+='<p style="margin-top:8px">Potential return: <b>'+fmt(potential)+' USDT</b> &nbsp;·&nbsp; Balance after: '+fmt(balance-(s.stake||0))+' USDT</p>';
     var disabled = s.needsAccept || s.suspended;
@@ -572,9 +605,9 @@ function route(rerender){
 }
 
 function buildNav(){
-  var sports=[["⚽ Football","#/football"],["● Live","#/live"],["⌂ Sports Home","#/home"],["◆ Match Page","#/match"]];
-  document.getElementById("sportsNav").innerHTML=sports.map(function(s){ return '<div class="navitem" onclick="sportGo(\''+s[1]+'\')"><span>'+s[0]+'</span><small>›</small></div>'; }).join("");
-  document.getElementById("compNav").innerHTML=LEAGUES.map(function(l){ return '<div class="navitem" onclick="compGo(\''+l.id+'\')"><span>'+l.icon+' '+esc(l.name)+'</span><small>'+esc(l.country)+'</small></div>'; }).join("");
+  var sports=[["ball","Football","#/football"],["live","Live","#/live"],["home","Sports Home","#/home"],["target","Match Page","#/match"]];
+  document.getElementById("sportsNav").innerHTML=sports.map(function(s){ return '<div class="navitem" onclick="sportGo(\''+s[2]+'\')"><span>'+icon(s[0])+' '+s[1]+'</span><small>›</small></div>'; }).join("");
+  document.getElementById("compNav").innerHTML=LEAGUES.map(function(l){ return '<div class="navitem" onclick="compGo(\''+l.id+'\')"><span>'+icon(l.icon)+' '+esc(l.name)+'</span><small>'+esc(l.country)+'</small></div>'; }).join("");
 }
 
 buildNav();

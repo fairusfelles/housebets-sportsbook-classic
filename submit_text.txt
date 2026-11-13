@@ -1,0 +1,8 @@
+ENTRY #2 — CLASSIC EDITION
+Link: https://fairusfelles.github.io/housebets-sportsbook-classic/
+
+Your big idea:
+A second, deliberately different direction: the classic professional bookmaker. Racing green, ivory and brass, serif display type and dense tabular odds — the look of a bookmaker that has taken bets for a hundred years, rebuilt inside the Housebets shell. Where entry one is a modern app, this one is a trading desk: calm, credible, numbers first. All five pages, singles-only USDT slip, odds-change accept flow, suspended markets, bet placed and failed states, and cash out.
+
+Tools note:
+Built with Claude assisting on design and code; hand-written HTML/CSS/JS, hosted on GitHub Pages.
