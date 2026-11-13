@@ -181,6 +181,10 @@ body.nav .fade{animation:fade .3s ease}
 .market h3{margin:0;padding:12px var(--pad-card);background:var(--panel2);color:#fff;font-family:var(--sans);font-size:13px;letter-spacing:1px;text-transform:uppercase;display:flex;justify-content:space-between;border-radius:12px 12px 0 0}
 .market h3 span{color:var(--cyan)}
 .marketbody{padding:var(--pad-card);display:flex;flex-wrap:wrap;gap:8px;background:var(--panel);border:1px solid var(--line);border-top:none;border-radius:0 0 12px 12px}
+.marketbody.grid2{display:grid;grid-template-columns:repeat(2,1fr)}
+.marketbody.grid2 .oddsbtn{min-width:0;padding:11px 8px}
+.imp{font-size:10px;font-weight:700;color:var(--muted);margin-left:5px}
+.gcount{color:var(--muted);letter-spacing:.4px;font-weight:700}
 .suspendedbox{padding:var(--pad-card);background:rgba(255,92,92,.07);color:#D8B4B4;border:1px dashed rgba(255,120,120,.35);border-radius:10px;text-align:center;width:100%;font-weight:700}
 /* SLIP */
 .slipitem{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--cyan);padding:var(--pad-card);margin-bottom:var(--gap-grid);border-radius:12px}
@@ -706,7 +710,7 @@ var MATCH_MARKETS = [
   {id:"crd", group:"Corners & cards", name:"Total Cards \u2014 Over / Under 3.5", picks:[{k:"Over",label:"Over 3.5",odds:2.10},{k:"Under",label:"Under 3.5",odds:1.72}]},
   {id:"dc", group:"Popular", name:"Double Chance", picks:[{k:"1X",label:"Arsenal or Draw",odds:1.32},{k:"12",label:"Arsenal or Brighton",odds:1.29},{k:"X2",label:"Draw or Brighton",odds:2.55}]},
   {id:"dnb", group:"Popular", name:"Draw No Bet", picks:[{k:"1",label:"Arsenal",odds:1.24},{k:"2",label:"Brighton",odds:3.90}]},
-  {id:"cs", group:"Popular", name:"Correct Score", picks:[{k:"21",label:"2\u20131",odds:7.50},{k:"31",label:"3\u20131",odds:11.00},{k:"20",label:"2\u20130",odds:8.00},{k:"11",label:"1\u20131",odds:7.00},{k:"22",label:"2\u20132",odds:13.00},{k:"32",label:"3\u20132",odds:21.00}]},
+  {id:"cs", group:"Popular", name:"Correct Score", grid:true, picks:[{k:"11",label:"1\u20131",odds:7.00},{k:"21",label:"2\u20131",odds:7.50},{k:"20",label:"2\u20130",odds:8.00},{k:"10",label:"1\u20130",odds:8.50},{k:"31",label:"3\u20131",odds:11.00},{k:"22",label:"2\u20132",odds:13.00},{k:"30",label:"3\u20130",odds:15.00},{k:"00",label:"0\u20130",odds:16.00},{k:"12",label:"1\u20132",odds:17.00},{k:"01",label:"0\u20131",odds:19.00},{k:"32",label:"3\u20132",odds:21.00},{k:"23",label:"2\u20133",odds:26.00},{k:"41",label:"4\u20131",odds:29.00},{k:"40",label:"4\u20130",odds:34.00},{k:"02",label:"0\u20132",odds:36.00},{k:"13",label:"1\u20133",odds:41.00}]},
   {id:"wm", group:"Popular", name:"Winning Margin", picks:[{k:"A1",label:"Arsenal by 1",odds:3.40},{k:"A2",label:"Arsenal by 2+",odds:2.95},{k:"B1",label:"Brighton by 1",odds:6.75},{k:"D",label:"Draw",odds:3.85}]},
   {id:"ou15", group:"Goals", name:"Over / Under 1.5 Goals", picks:[{k:"Over",label:"Over 1.5",odds:1.24},{k:"Under",label:"Under 1.5",odds:3.85}]},
   {id:"ou45", group:"Goals", name:"Over / Under 4.5 Goals", picks:[{k:"Over",label:"Over 4.5",odds:5.60},{k:"Under",label:"Under 4.5",odds:1.13}]},
@@ -1091,7 +1095,7 @@ function matchCard(m, showLeague){
   var lg=null; for(var i=0;i<LIVE_COMPS.length;i++){ if(LIVE_COMPS[i].id===m.league) lg=LIVE_COMPS[i]; }
   var spIcon={Football:"ball",Basketball:"basketball",Tennis:"tennis",Esports:"gamepad"}[sportOf(m)]||"ball";
   var html='<div class="mcard" data-detail onclick="openDetail(\''+m.id+'\')">';
-  html+='<div class="mcard-head"><span>'+icon(spIcon,"ic-sm")+' '+esc(leagueName(m.league))+(lg?(" \u00b7 "+esc(lg.country)):"")+'</span>'+(m.live?'<span class="moremkts" style="margin-left:auto">+'+(m.id==="m1"?163:(24+(((m.id.charCodeAt(1)||7)*7)%60)))+' \u203a</span>':"")+'<button class="star '+(follows[starKey]?"on":"")+'" onclick="toggleFollow(\''+starKey+'\',event)" aria-label="Follow">'+icon("star", follows[starKey]?"fill ic-lg":"ic-lg")+'</button></div>';
+  html+='<div class="mcard-head"><span>'+icon(spIcon,"ic-sm")+' '+esc(leagueName(m.league))+(lg?(" \u00b7 "+esc(lg.country)):"")+'</span>'+(m.live?'<span class="moremkts" style="margin-left:auto">+'+(m.id==="m1"?MATCH_MARKETS.reduce(function(a,x){return a+x.picks.length;},0):(24+(((m.id.charCodeAt(1)||7)*7)%60)))+' \u203a</span>':"")+'<button class="star '+(follows[starKey]?"on":"")+'" onclick="toggleFollow(\''+starKey+'\',event)" aria-label="Follow">'+icon("star", follows[starKey]?"fill ic-lg":"ic-lg")+'</button></div>';
   var scores=null;
   if(m.live){
     var half=m.halfTxt ? esc(m.halfTxt) : ((m.league==="NBA") ? esc(String(m.time).replace("Live \u00b7 ","")) : ((m.minute!==null && m.minute<=45)?"1st half":"2nd half"));
@@ -1379,22 +1383,22 @@ function renderMatch(){
     var gMarkets=MATCH_MARKETS.filter(function(x){return x.group===g;});
     var searchTxt=gMarkets.map(function(x){ return x.name+' '+x.picks.map(function(p){return p.label;}).join(' '); }).join(' ');
     html+='<div class="mgroup" data-group="'+esc(g)+'" data-search="'+esc(searchTxt)+'">';
-    html+='<div class="grouphead">'+g+'</div>';
+    html+='<div class="grouphead">'+g+' <span class="gcount">\u00b7 '+gMarkets.length+' markets</span></div>';
     gMarkets.forEach(function(mk){
     var isSusp = mk.suspended || (mk.id==="ou" && ouSuspended) || goalSuspended;
     html+='<div class="market"><h3>'+esc(mk.name)+'<span>'+(isSusp?("SUSPENDED \u00b7 "+esc(suspendReason)+" "+icon("lock","ic-sm")):"OPEN")+'</span></h3>';
     if(isSusp){
-      if(mk.id==="ng" && !goalSuspended){ html+='<div class="suspendedbox">'+icon("lock")+' Market suspended \u2014 the Goalscorers market is closed for betting in this prototype. Prices are shown for reference only and cannot be added to the slip.</div><div class="marketbody">'; mk.picks.forEach(function(p){ html+='<button class="oddsbtn suspended" disabled><small>'+esc(p.k)+'</small>'+p.odds.toFixed(2)+'</button>'; }); html+='</div>'; }
+      if(mk.id==="ng" && !goalSuspended){ html+='<div class="suspendedbox">'+icon("lock")+' Market suspended \u2014 the Goalscorers market is closed for betting in this prototype. Prices are shown for reference only and cannot be added to the slip.</div><div class="marketbody">'; mk.picks.forEach(function(p){ html+='<button class="oddsbtn suspended" disabled><small>'+esc(p.k)+'</small>'+p.odds.toFixed(2)+'<span class="imp">'+Math.round(100/p.odds)+'%</span></button>'; }); html+='</div>'; }
       else if(goalSuspended){ html+='<div class="marketbody"><div class="suspendedbox">'+icon("pause")+' Suspended \u00b7 '+esc(suspendReason)+' \u2014 Brighton have just scored and the desk is repricing every market. Reopens shortly; any selection in your slip is flagged meanwhile.</div></div>'; }
       else { html+='<div class="marketbody"><div class="suspendedbox">'+icon("pause")+' Suspended \u00b7 '+esc(suspendReason)+' \u2014 the desk is repricing Over / Under 2.5. Reopens shortly. Any O/U selection in your slip is flagged meanwhile.</div></div>'; }
     } else {
-      html+='<div class="marketbody">';
+      html+='<div class="marketbody'+(mk.grid?" grid2":"")+'">';
       mk.picks.forEach(function(p){
         var key="match-"+mk.id+"-"+p.k;
         var dkey=(mk.id==="mr") ? ("m1-1X2-"+p.k) : key;
         var curOdds=p.odds;
         if(mk.id==="mr"){ var mm=findMatch("m1"); if(mm) curOdds=mm.odds[p.k]; }
-        html+='<button class="oddsbtn '+(isSelected(key)?"selected":"")+flashCls(dkey)+'" onclick="addMatchToSlip(\''+key+'\',\''+mk.id+'\',\''+esc(p.label)+'\','+curOdds+')"><small>'+esc(p.label)+'</small>'+Number(curOdds).toFixed(2)+driftSpan(dkey)+'</button>';
+        html+='<button class="oddsbtn '+(isSelected(key)?"selected":"")+flashCls(dkey)+'" onclick="addMatchToSlip(\''+key+'\',\''+mk.id+'\',\''+esc(p.label)+'\','+curOdds+')"><small>'+esc(p.label)+'</small>'+Number(curOdds).toFixed(2)+'<span class="imp">'+Math.round(100/curOdds)+'%</span>'+driftSpan(dkey)+'</button>';
       });
       html+='</div>';
     }
