@@ -864,7 +864,7 @@ function rejectOdds(key){ removeFromSlip(key); showToast("Selection removed — 
 function slipHTML(containerId){
   refreshSlipFlags();
   if(!slip.length){
-    return '<div class="empty"><b style="font-family:var(--sans);color:var(--head);font-size:18px">Your slip is empty</b><br><br>Tap any gold odds price on Home, Live, Football or the Match page to add a single.</div>'+myBetsSummaryHTML();
+    return '<div class="empty"><b style="font-family:var(--sans);color:var(--head);font-size:18px">Your slip is empty</b><br><br>Tap any odds button on Home, Live, Football or the Match page to add a single.</div>'+myBetsSummaryHTML();
   }
   var html="";
   if(betMessage){ html+='<div class="'+(betMessageType==="success"?"success":"fail")+'">'+esc(betMessage)+'</div>'; }
