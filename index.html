@@ -475,6 +475,43 @@ body.nav #page-football .mcard{animation-delay:.05s}
 .viewall{margin-left:auto;background:none;border:none;color:var(--muted);font:inherit;font-size:13px;font-weight:700;display:inline-flex;align-items:center;gap:4px;cursor:pointer;padding:4px}
 .suspbar{display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(255,170,60,.08);border:1px solid rgba(255,170,60,.35);color:#FFB84D;border-radius:12px;padding:13px;font-weight:800;font-size:14px;margin-top:10px}
 .fade .homesearch{margin-top:14px}
+.mselrow{display:flex;gap:8px;align-items:center;margin:2px 0 10px}
+.selback{background:#141926;border:1px solid var(--line);color:#C3CEDA;border-radius:11px;width:42px;height:42px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex:none}
+.msel{background:var(--panel2);border:1px solid var(--line);color:var(--head);font-weight:800;font-size:14px;letter-spacing:.6px;padding:11px 16px;border-radius:11px;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.mselchev{color:var(--muted);font-size:11px}
+.mselmenu{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:6px;margin-bottom:12px;box-shadow:var(--elev)}
+.mselitem{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;background:none;border:none;color:var(--ink);font-size:13.5px;font-weight:600;padding:10px 10px;border-radius:9px;cursor:pointer;text-align:left}
+.mselitem:active{background:var(--panel2)}
+.mselmeta{color:var(--cyan);font-weight:800;font-variant-numeric:tabular-nums;flex:none}
+.sbcard{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px;box-shadow:var(--elev)}
+.sb-top{display:flex;align-items:center;justify-content:space-between}
+.sb-league{font-size:11px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted)}
+.sb-back,.sb-star{background:#141926;border:1px solid var(--line);color:#C3CEDA;border-radius:9px;width:30px;height:30px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex:none}
+.sb-star.on{color:#F5C542;border-color:rgba(245,197,66,.5)}
+.sb-main{display:flex;align-items:flex-start;justify-content:space-between;margin-top:12px}
+.sb-side{display:flex;flex-direction:column;align-items:center;gap:6px;width:100px;text-align:center}
+.sb-name{font-size:14px;font-weight:800;color:var(--head)}
+.sb-mid{display:flex;flex-direction:column;align-items:center;gap:7px;padding-top:2px}
+.sb-nums{display:flex;align-items:center;gap:8px}
+.sb-num{background:#0D1119;border:1px solid var(--line);border-radius:9px;min-width:42px;text-align:center;font-size:24px;font-weight:800;color:var(--head);padding:3px 0;font-variant-numeric:tabular-nums}
+.sb-dash{color:var(--muted);font-weight:800}
+.sb-live{display:flex;align-items:center;gap:8px}
+.livepill{display:inline-flex;align-items:center;gap:6px;background:rgba(255,92,92,.16);color:#FF8A8A;font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;padding:4px 9px;border-radius:999px}
+.livepill .livedot{background:#FF5C5C}
+.sb-min{color:#FF8A8A;font-weight:800;font-size:13px;font-variant-numeric:tabular-nums}
+.sb-follow{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:12px;flex-wrap:wrap}
+.pillbtn.gold.on{background:rgba(245,197,66,.15);color:#F5C542;border-color:rgba(245,197,66,.45)}
+.gtabs{display:flex;gap:8px;overflow-x:auto;padding:2px 0 10px;scrollbar-width:none}
+.gtabs::-webkit-scrollbar{display:none}
+.gtab{flex:none;background:#141926;border:1px solid var(--line);color:#C3CEDA;font-size:12px;font-weight:700;padding:8px 13px;border-radius:999px;cursor:pointer;font-variant-numeric:tabular-nums}
+.gtab.on{background:var(--cyan);color:#06202B;border-color:var(--cyan)}
+.market h3{cursor:pointer}
+.market h3 .mright{display:inline-flex;align-items:center;gap:9px}
+.market h3 .mchev{color:var(--muted);transition:transform .15s ease;font-size:11px}
+.market.closed .marketbody,.market.closed .suspendedbox{display:none}
+.market.closed h3 .mchev{transform:rotate(-90deg)}
+.oprice{color:var(--cyan)}
+#page-match .marketbody .oddsbtn{flex:1 1 26%}
 </style>
 </head>
 <body>
@@ -1375,10 +1412,19 @@ function renderMatch(){
   var scoreTxt=m1?m1.score:"2 \u2013 1";
   var minTxt=m1 && m1.minute!==null ? m1.minute : 67;
   var suspPill = goalSuspended ? '<span class="pill" style="background:rgba(255,92,92,.16);color:#FF9A9A">All markets suspended \u00b7 '+esc(suspendReason)+'</span>' : (ouSuspended ? '<span class="pill" style="background:rgba(255,92,92,.16);color:#FF9A9A">O/U 2.5 suspended \u00b7 '+esc(suspendReason)+'</span>' : '<span class="pill">O/U 2.5 open</span>');
-  var html='<div class="fade"><div class="eyebrow" style="color:var(--live)">'+icon("live","ic-sm")+' Live \u00b7 Premier League \u00b7 '+minTxt+'\'</div><h1 class="serif" style="margin:6px 0 2px;color:var(--head);font-size:36px">Arsenal v Brighton</h1><p style="color:var(--muted);margin:0 0 6px">Emirates Stadium \u00b7 Score <b style="color:var(--ink)">Arsenal '+esc(scoreTxt)+' Brighton</b> \u00b7 Clock ticks with the Live page</p><p><span class="pill">Match page \u00b7 20 pts in the brief</span> <span class="pill">Odds move live</span> '+suspPill+' <button class="pillbtn '+(follows["fav-m1"]?"on":"")+'" onclick="toggleFollow(\'fav-m1\',event)">'+icon("star", follows["fav-m1"]?"fill ic-sm":"ic-sm")+' '+(follows["fav-m1"]?"Following":"Follow")+'</button></p><p style="margin:8px 0 0;display:flex;gap:8px;flex-wrap:wrap"><button class="pillbtn '+(follows["fav-tm-Arsenal"]?"on":"")+'" onclick="toggleFollow(\'fav-tm-Arsenal\',event)">'+icon("star","ic-sm")+' Follow Arsenal</button><button class="pillbtn '+(follows["fav-tm-Brighton"]?"on":"")+'" onclick="toggleFollow(\'fav-tm-Brighton\',event)">'+icon("star","ic-sm")+' Follow Brighton</button></p>';
-  html+='<div class="scoreboard">'+kitIcon("Arsenal","kit-lg")+'<span class="sb-team">Arsenal</span><span class="sb-score">'+esc(scoreTxt)+'</span><span class="sb-team">Brighton</span>'+kitIcon("Brighton","kit-lg")+'<span class="pill">'+minTxt+'&#39; \u00b7 Live</span></div>';
-  html+=priceChartHTML();
-  html+='<input class="mfilter" id="marketFilter" type="text" placeholder="Filter markets \u2014 try &#39;corners&#39;" oninput="filterMarkets(this.value)" value="'+esc(marketFilterQuery)+'">';
+  var sp=scoreTxt.split("\u2013"); var hs=(sp[0]||"").trim(), as=(sp[1]||"").trim();
+  var H=m1?m1.home:"Arsenal", A=m1?m1.away:"Brighton";
+  var tcode=function(t){ return t==="Brighton"?"BHA":t.slice(0,3).toUpperCase(); };
+  var folBtn=function(team,gold){ var on=follows["fav-tm-"+team]; return '<button class="pillbtn '+(gold?"gold ":"")+(on?"on":"")+'" onclick="toggleFollow(\'fav-tm-'+team+'\',event)">'+icon("star", on?"fill ic-sm":"ic-sm")+' '+(on?"Following":"Follow")+'</button>'; };
+  var menuRows=MATCHES.filter(function(x){return x.home&&x.away;}).map(function(x){ var cur=x.id==="m1"; return '<button class="mselitem" onclick="'+(cur?"toggleMatchMenu(event)":"openDetail(\'"+x.id+"\')")+'"><span>'+esc(x.home)+" v "+esc(x.away)+'</span><span class="mselmeta">'+(x.live?esc(x.score||"Live"):esc(x.time||""))+'</span></button>'; }).join("");
+  var html='<div class="fade"><div class="mselrow"><button class="selback" onclick="location.hash=\'#/football\'" aria-label="Back to Football">'+icon("arrowL")+'</button><button class="msel" onclick="toggleMatchMenu(event)">'+tcode(H)+" - "+tcode(A)+' <span class="mselchev">\u25be</span></button></div><div class="mselmenu" id="matchMenu" style="display:none">'+menuRows+'</div>';
+  html+='<div class="sbcard"><div class="sb-top"><button class="sb-back" onclick="location.hash=\'#/football\'" aria-label="Back">'+icon("arrowL","ic-sm")+'</button><span class="sb-league">'+esc(leagueName(m1?m1.league:"PL"))+'</span><button class="sb-star '+(follows["fav-m1"]?"on":"")+'" onclick="toggleFollow(\'fav-m1\',event)" aria-label="Follow this match">'+icon("star", follows["fav-m1"]?"fill":"")+'</button></div>';
+  html+='<div class="sb-main"><div class="sb-side">'+kitIcon(H,"kit-lg")+'<span class="sb-name">'+esc(H)+'</span></div><div class="sb-mid"><div class="sb-nums"><span class="sb-num">'+esc(hs)+'</span><span class="sb-dash">\u2013</span><span class="sb-num">'+esc(as)+'</span></div><div class="sb-live"><span class="livepill"><span class="livedot"></span>Live</span><span class="sb-min">'+minTxt+'&#39;</span></div></div><div class="sb-side">'+kitIcon(A,"kit-lg")+'<span class="sb-name">'+esc(A)+'</span></div></div>';
+  html+='<div class="sb-follow">'+folBtn(H,true)+'<span class="sb-state">'+suspPill+'</span>'+folBtn(A,false)+'</div></div>';
+
+
+  html+='<input class="mfilter" id="marketFilter" type="text" placeholder="Search markets or players" oninput="filterMarkets(this.value)" value="'+esc(marketFilterQuery)+'">';
+  html+='<div class="gtabs"><button class="gtab on" onclick="jumpGroup(this,\'\')">All '+MATCH_MARKETS.length+'</button>'+MARKET_GROUPS.map(function(g){ var c=MATCH_MARKETS.filter(function(x){return x.group===g;}).length; return '<button class="gtab" onclick="jumpGroup(this,\''+g+'\')">'+esc(g)+" "+c+'</button>'; }).join("")+'</div>';
   MARKET_GROUPS.forEach(function(g){
     var gMarkets=MATCH_MARKETS.filter(function(x){return x.group===g;});
     var searchTxt=gMarkets.map(function(x){ return x.name+' '+x.picks.map(function(p){return p.label;}).join(' '); }).join(' ');
@@ -1386,9 +1432,9 @@ function renderMatch(){
     html+='<div class="grouphead">'+g+' <span class="gcount">\u00b7 '+gMarkets.length+' markets</span></div>';
     gMarkets.forEach(function(mk){
     var isSusp = mk.suspended || (mk.id==="ou" && ouSuspended) || goalSuspended;
-    html+='<div class="market"><h3>'+esc(mk.name)+'<span>'+(isSusp?("SUSPENDED \u00b7 "+esc(suspendReason)+" "+icon("lock","ic-sm")):"OPEN")+'</span></h3>';
+    html+='<div class="market"><h3 onclick="toggleMarket(this)">'+esc(mk.name)+'<span class="mright"><span>'+(isSusp?("SUSPENDED \u00b7 "+esc(suspendReason)+" "+icon("lock","ic-sm")):"OPEN")+'</span><span class="mchev">\u25be</span></span></h3>';
     if(isSusp){
-      if(mk.id==="ng" && !goalSuspended){ html+='<div class="suspendedbox">'+icon("lock")+' Market suspended \u2014 the Goalscorers market is closed for betting in this prototype. Prices are shown for reference only and cannot be added to the slip.</div><div class="marketbody">'; mk.picks.forEach(function(p){ html+='<button class="oddsbtn suspended" disabled><small>'+esc(p.k)+'</small>'+p.odds.toFixed(2)+'<span class="imp">'+Math.round(100/p.odds)+'%</span></button>'; }); html+='</div>'; }
+      if(mk.id==="ng" && !goalSuspended){ html+='<div class="suspendedbox">'+icon("lock")+' Market suspended \u2014 the Goalscorers market is closed for betting in this prototype. Prices are shown for reference only and cannot be added to the slip.</div><div class="marketbody">'; mk.picks.forEach(function(p){ html+='<button class="oddsbtn suspended" disabled><small>'+esc(p.k)+'</small>'+'<span class="oprice">'+p.odds.toFixed(2)+'</span>'+'<span class="imp">'+Math.round(100/p.odds)+'%</span></button>'; }); html+='</div>'; }
       else if(goalSuspended){ html+='<div class="marketbody"><div class="suspendedbox">'+icon("pause")+' Suspended \u00b7 '+esc(suspendReason)+' \u2014 Brighton have just scored and the desk is repricing every market. Reopens shortly; any selection in your slip is flagged meanwhile.</div></div>'; }
       else { html+='<div class="marketbody"><div class="suspendedbox">'+icon("pause")+' Suspended \u00b7 '+esc(suspendReason)+' \u2014 the desk is repricing Over / Under 2.5. Reopens shortly. Any O/U selection in your slip is flagged meanwhile.</div></div>'; }
     } else {
@@ -1398,7 +1444,7 @@ function renderMatch(){
         var dkey=(mk.id==="mr") ? ("m1-1X2-"+p.k) : key;
         var curOdds=p.odds;
         if(mk.id==="mr"){ var mm=findMatch("m1"); if(mm) curOdds=mm.odds[p.k]; }
-        html+='<button class="oddsbtn '+(isSelected(key)?"selected":"")+flashCls(dkey)+'" onclick="addMatchToSlip(\''+key+'\',\''+mk.id+'\',\''+esc(p.label)+'\','+curOdds+')"><small>'+esc(p.label)+'</small>'+Number(curOdds).toFixed(2)+'<span class="imp">'+Math.round(100/curOdds)+'%</span>'+driftSpan(dkey)+'</button>';
+        html+='<button class="oddsbtn '+(isSelected(key)?"selected":"")+flashCls(dkey)+'" onclick="addMatchToSlip(\''+key+'\',\''+mk.id+'\',\''+esc(p.label)+'\','+curOdds+')"><small>'+esc(p.label)+'</small>'+'<span class="oprice">'+Number(curOdds).toFixed(2)+'</span>'+'<span class="imp">'+Math.round(100/curOdds)+'%</span>'+driftSpan(dkey)+'</button>';
       });
       html+='</div>';
     }
@@ -1407,10 +1453,14 @@ function renderMatch(){
     html+='</div>';
   });
   html+='<div class="empty" id="marketNoMatch" style="display:none">No markets match your filter.</div>';
+  html+=priceChartHTML();
   html+='<p style="color:var(--muted);font-size:13px;line-height:1.6">Suspended markets are never clickable. If a market suspends after you have added a selection, your slip flags it and Place Bet is blocked for that selection until it reopens or you remove it.</p></div>';
   document.getElementById("page-match").innerHTML=html;
   if(marketFilterQuery) filterMarkets(marketFilterQuery);
 }
+function toggleMatchMenu(e){ if(e) e.stopPropagation(); var m=document.getElementById("matchMenu"); if(m) m.style.display=(m.style.display==="none"||!m.style.display)?"":"none"; }
+function jumpGroup(btn, g){ var tabs=btn.parentNode.querySelectorAll(".gtab"); tabs.forEach(function(t){ t.classList.remove("on"); }); btn.classList.add("on"); if(marketFilterQuery){ var inp=document.getElementById("marketFilter"); if(inp) inp.value=""; filterMarkets(""); } var target=g?document.querySelector('#page-match .mgroup[data-group="'+g+'"]'):document.querySelector("#page-match .mgroup"); if(target && target.scrollIntoView){ try{ target.scrollIntoView({behavior:"smooth", block:"start"}); }catch(_){ target.scrollIntoView(); } } }
+function toggleMarket(h){ h.parentNode.classList.toggle("closed"); }
 function filterMarkets(q){
   marketFilterQuery=(q||"").toLowerCase().trim();
   var groups=document.querySelectorAll("#page-match .mgroup");
