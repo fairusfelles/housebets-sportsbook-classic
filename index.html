@@ -1026,22 +1026,20 @@ function refreshSlipFlags(){
   });
 }
 function addToSlip(key, matchId, label, market, pick, odds){
-  if(isSelected(key)){ removeFromSlip(key); showToast("Selection removed from slip."); return; }
+  if(isSelected(key)){ removeFromSlip(key); return; }
   var grp=key.split("-").slice(0,-1).join("-");
   slip=slip.filter(function(x){ return x.key.split("-").slice(0,-1).join("-")!==grp; });
   slip.push({key:key, matchId:matchId, label:label, market:market, pick:pick, odds:odds, stake:10, needsAccept:false, newOdds:null, suspended:false});
-  showToast("Added to slip ("+slip.length+"): "+label+" — "+pick+" @ "+Number(odds).toFixed(2));
   betMessage=""; renderSlipAll(); route(false);
 }
 function addMatchToSlip(key, marketId, pickLabel, odds){
   var marketName=""; MATCH_MARKETS.forEach(function(m){ if(m.id===marketId) marketName=m.name; });
   var pick=pickLabel;
   if(marketId==="mr"){ if(pickLabel.indexOf("Arsenal")===0) pick="1"; else if(pickLabel.indexOf("Draw")===0) pick="X"; else if(pickLabel.indexOf("Brighton")===0) pick="2"; }
-  if(isSelected(key)){ removeFromSlip(key); showToast("Selection removed."); renderSlipAll(); route(false); return; }
+  if(isSelected(key)){ removeFromSlip(key); renderSlipAll(); route(false); return; }
   var grp2=key.split("-").slice(0,-1).join("-");
   slip=slip.filter(function(x){ return x.key.split("-").slice(0,-1).join("-")!==grp2; });
   slip.push({key:key, matchId:"m1", label:"Arsenal v Brighton", market:marketName, pick:pick, pickLabel:pickLabel, odds:odds, stake:10, needsAccept:false, newOdds:null, suspended:false});
-  showToast("Added to slip ("+slip.length+"): "+pickLabel+" @ "+Number(odds).toFixed(2));
   betMessage=""; renderSlipAll(); route(false);
 }
 function removeFromSlip(key){ slip=slip.filter(function(s){return s.key!==key}); renderSlipAll(); route(false); }
