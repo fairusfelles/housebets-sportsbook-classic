@@ -487,7 +487,7 @@ body.nav .fade{animation:fade .3s ease}
 <button class="mobileslipbar" id="mobileSlipBar" style="display:none" onclick="location.hash='#/slip'" aria-label="Open bet slip">H<span id="mobileSlipCount">0</span></button>
 
 <nav class="bottomnav">
-  <button onclick="location.hash='#/home'"><span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11l8-7 8 7"/><path d="M6.2 9.3V20h11.6V9.3"/><path d="M10 20v-5h4v5"/></svg></span>Home</button>
+  <button onclick="location.hash='#/home'"><span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17"/><path d="M12 3.5v17"/><path d="M5.6 6.4c2.8 2.3 2.8 8.9 0 11.2"/><path d="M18.4 6.4c-2.8 2.3-2.8 8.9 0 11.2"/></svg></span>Sports</button>
   <button onclick="location.hash='#/live'"><span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="1.6"/><path d="M8.8 15.2a4.6 4.6 0 0 1 0-6.4"/><path d="M15.2 8.8a4.6 4.6 0 0 1 0 6.4"/><path d="M6.2 17.8a8.6 8.6 0 0 1 0-11.6"/><path d="M17.8 6.2a8.6 8.6 0 0 1 0 11.6"/></svg><i class="livedotbadge"></i></span>Live</button>
   <button onclick="location.hash='#/football'"><span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 8.2l2.9 2.1-1.1 3.4h-3.6l-1.1-3.4z"/><path d="M12 8.2V3.6M14.9 10.3l4.3-1.3M13.8 13.7l2.5 3.7M10.2 13.7l-2.5 3.7M9.1 10.3L4.8 9"/></svg></span>Football</button>
   <button onclick="location.hash='#/match'"><span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.8"/><circle cx="12" cy="12" r="1.2"/></svg></span>Match</button>
@@ -1051,7 +1051,7 @@ function scrollCarousel(id,dir){ var el=document.getElementById(id); if(el) el.s
 function renderHome(){
   var soon=MATCHES.filter(function(m){return !m.live});
   var live=MATCHES.filter(function(m){return m.live});
-  var html='<div class="hero fade"><div class="eyebrow">Housebets · Sportsbook</div><h1>Bet in USDT.<br><em>Settled on-chain.</em></h1><p>Live odds on the world\'s football, backed by a public on-chain bankroll of $2,850,275. Wins land in seconds — no wagering on winnings, no waiting rooms.</p><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;position:relative;z-index:1"><button class="btn" onclick="location.hash=\'#/live\'">View Live Betting '+icon("arrowR","ic-sm")+'</button><button class="btn-outline" onclick="location.hash=\'#/match\'">Arsenal v Brighton</button></div></div>';
+  var html='';
   html+=homeSearchHTML()+homeTabsHTML(live.length);
   var fc=favChipsHTML();
   if(fc){ html+='<div class="sectionhead"><h2>Favourites</h2><p>Tap \u2715 to remove</p></div>'+fc; }
@@ -1064,6 +1064,7 @@ function renderHome(){
   html+='<div class="sectionhead"><h2>Top competitions</h2><p>Tap a competition to go straight to its section</p></div><div class="compgrid">';
   LEAGUES.forEach(function(l){ html+='<div class="comp" onclick="compGo(\''+l.id+'\')"><button class="star compstar '+(follows["fav-lg-"+l.id]?"on":"")+'" onclick="toggleFollow(\'fav-lg-'+l.id+'\',event)" aria-label="Follow competition">'+icon("star", follows["fav-lg-"+l.id]?"fill ic-sm":"ic-sm")+'</button><b>'+icon(l.icon)+' '+esc(l.name)+'</b><span>'+esc(l.country)+' · View fixtures & odds '+icon("arrowR","ic-sm")+'</span></div>'; });
   html+='</div>';
+  html+='<div class="hero fade"><div class="eyebrow">Housebets · Sportsbook</div><h1>Bet in USDT.<br><em>Settled on-chain.</em></h1><p>Live odds on the world\'s football, backed by a public on-chain bankroll of $2,850,275. Wins land in seconds — no wagering on winnings, no waiting rooms.</p><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;position:relative;z-index:1"><button class="btn" onclick="location.hash=\'#/live\'">View Live Betting '+icon("arrowR","ic-sm")+'</button><button class="btn-outline" onclick="location.hash=\'#/match\'">Arsenal v Brighton</button></div></div>';
   html+=rewardsCardHTML();
   html+=trustStripHTML();
   html+=gatewayHTML();
