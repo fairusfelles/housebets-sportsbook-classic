@@ -558,6 +558,16 @@ body.menuopen .mobileslipbar{display:none}
 .mobileslipbar.susp #mobileSlipCount{background:#FF5C5C;color:#fff}
 .mobileslipbar.susp .msb-sub{color:#FFA3A3}
 .mobileslipbar.susp .msb-chev{color:#FF5C5C}
+.ss-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:-4px 0 14px}
+.ss-tabs{display:flex;gap:6px;background:var(--panel2);border:1px solid var(--line2);border-radius:99px;padding:4px}
+.ss-tab{display:inline-flex;align-items:center;gap:7px;background:none;border:none;color:var(--muted);font:inherit;font-size:13px;font-weight:800;padding:7px 13px;border-radius:99px;cursor:pointer}
+.ss-tab.on{background:var(--cyan);color:#06222B}
+.ss-count{background:#0B1B21;color:#fff;font-size:11px;font-weight:900;min-width:19px;height:19px;border-radius:99px;display:grid;place-items:center;padding:0 5px}
+.ss-tab.on .ss-count{background:#06222B;color:var(--cyan)}
+.ss-sliponly .mybets-block{display:none}
+.ss-chat{text-align:center;padding:18px 6px 8px}
+.ss-chat-ic{color:var(--cyan);display:grid;place-items:center;margin-bottom:8px}
+#slipSheet{background:linear-gradient(180deg,#101623,#0A0D14);border-top:2px solid var(--cyan);box-shadow:0 -18px 44px rgba(0,0,0,.65)}
 </style>
 </head>
 <body>
@@ -628,7 +638,7 @@ body.menuopen .mobileslipbar{display:none}
   </aside>
 </div>
 
-<button class="mobileslipbar" id="mobileSlipBar" style="display:none" onclick="location.hash='#/slip'" aria-label="Open bet slip"><span id="mobileSlipCount">0</span><span class="msb-main"><span class="msb-txt" id="mobileSlipText">Bet slip</span><span class="msb-sub" id="mobileSlipSub"></span></span><span class="msb-chev"><svg class="ic ic-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></span></button>
+<button class="mobileslipbar" id="mobileSlipBar" style="display:none" onclick="openSlipSheet()" aria-label="Open bet slip"><span id="mobileSlipCount">0</span><span class="msb-main"><span class="msb-txt" id="mobileSlipText">Bet slip</span><span class="msb-sub" id="mobileSlipSub"></span></span><span class="msb-chev"><svg class="ic ic-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></span></button>
 
 <nav class="bottomnav">
   <button id="bnavMenu" onclick="toggleDrawer()"><span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></span>Menu</button>
@@ -673,6 +683,18 @@ body.menuopen .mobileslipbar{display:none}
   <div style="display:flex;justify-content:space-between;align-items:center"><h2 style="margin:0;color:var(--head)">Support — 24/7</h2><button class="iconbtn" onclick="closeAllSheets()"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button></div>
   <p style="color:var(--muted);line-height:1.7">Real humans, around the clock — average reply under 5 minutes. Deposits, withdrawals, bet settlement: ask us anything.</p>
   <button class="btn-green" onclick="closeAllSheets();scopeGo('Chat')">Chat with Support</button>
+</div>
+
+<div class="sheet" id="slipSheet">
+  <div class="ss-head">
+    <div class="ss-tabs">
+      <button class="ss-tab on" id="ssTabSlip" onclick="setSlipSheetTab('slip')">Bet slip <span class="ss-count" id="ssSlipCount">0</span></button>
+      <button class="ss-tab" id="ssTabBets" onclick="setSlipSheetTab('bets')">My bets <span class="ss-count" id="ssBetsCount">0</span></button>
+      <button class="ss-tab" id="ssTabChat" onclick="setSlipSheetTab('chat')">Chat</button>
+    </div>
+    <button class="iconbtn" onclick="closeAllSheets()" aria-label="Close slip"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  </div>
+  <div id="slipSheetBody"></div>
 </div>
 
 <div class="sheet" id="profileSheet">
@@ -1678,7 +1700,7 @@ function myBetsSummaryHTML(){
   var open=myBets.filter(function(b){return b.status==="Open"});
   var settled=myBets.filter(function(b){return b.status!=="Open"});
   var list=(myBetsTab==="Settled")?settled:open;
-  var html='<div style="margin-top:16px"><h3 class="serif" style="color:var(--head);margin:0 0 8px">My Bets ('+myBets.length+')</h3>';
+  var html='<div class="mybets-block" style="margin-top:16px"><h3 class="serif" style="color:var(--head);margin:0 0 8px">My Bets ('+myBets.length+')</h3>';
   html+='<div class="mbtabs"><button class="mbtab '+(myBetsTab==="Open"?"on":"")+'" onclick="setMyBetsTab(\'Open\')">Open ('+open.length+')</button><button class="mbtab '+(myBetsTab==="Settled"?"on":"")+'" onclick="setMyBetsTab(\'Settled\')">Settled ('+settled.length+')</button></div>';
   if(!list.length){
     html+='<div class="empty">'+(myBetsTab==="Settled" ? "No settled bets yet \u2014 cash out an open bet, or wait for a full-time result." : "No open bets right now \u2014 place one and it lands here.")+'</div></div>';
@@ -1712,6 +1734,7 @@ function renderSlipAll(rerenderPage){
   var side=document.getElementById("sideSlip"); if(side) side.innerHTML=slipHTML("side");
   var sheet=document.getElementById("sheetSlip"); if(sheet) sheet.innerHTML="<h2 class='serif' style='color:var(--head)'>Bet Slip</h2>"+slipHTML("sheet");
   var cnt=document.getElementById("mobileSlipCount"); if(cnt) cnt.textContent=slip.length;
+  var ssEl=document.getElementById("slipSheet"); if(ssEl && ssEl.classList.contains("open")) renderSlipSheet();
   var mt=document.getElementById("mobileSlipText"), msb=document.getElementById("mobileSlipSub"), mbar=document.getElementById("mobileSlipBar");
   if(mt && mbar && slip.length){
     var warnIt=null, suspIt=null;
@@ -1730,6 +1753,20 @@ function renderSlipAll(rerenderPage){
   if(rerenderPage!==false && location.hash.indexOf("slip")!==-1){ renderSlipPage(); }
   saveState();
 }
+var slipSheetTab="slip";
+function openSlipSheet(){ closeAllSheets(); slipSheetTab="slip"; renderSlipSheet(); document.getElementById("slipSheet").classList.add("open"); document.getElementById("scrim").classList.add("show"); }
+function setSlipSheetTab(t){ slipSheetTab=t; renderSlipSheet(); }
+function renderSlipSheet(){
+  var sc=document.getElementById("ssSlipCount"); if(sc) sc.textContent=slip.length;
+  var bc=document.getElementById("ssBetsCount"); if(bc) bc.textContent=myBets.filter(function(b){return b.status==="Open"}).length;
+  ["Slip","Bets","Chat"].forEach(function(k){ var el=document.getElementById("ssTab"+k); if(el) el.classList.toggle("on", slipSheetTab===k.toLowerCase()); });
+  var body=document.getElementById("slipSheetBody"); if(!body) return;
+  if(slipSheetTab==="bets"){ body.innerHTML=myBetsSummaryHTML(); return; }
+  if(slipSheetTab==="chat"){ body.innerHTML='<div class="ss-chat"><div class="ss-chat-ic">'+icon("headset","ic-xl")+'</div><b style="color:var(--head);font-size:17px">Live chat</b><p style="color:var(--muted);line-height:1.65;margin:8px auto 14px;max-width:420px">Chat with the Housebets team lives in the full product. In this prototype, support is wired through the profile menu and the Home support tile.</p><button class="btn" style="width:auto;padding:10px 18px" onclick="closeAllSheets();openProfile()">Open support</button></div>'; return; }
+  var h=slipHTML();
+  if(!slip.length && betMessage){ h='<div class="'+(betMessageType==="success"?"success":"fail")+'">'+esc(betMessage)+'</div>'+h; }
+  body.innerHTML='<div class="ss-sliponly">'+h+'</div>';
+}
 function renderSlipPage(){
   var html='<div class="fade"><div class="eyebrow" style="color:var(--cyan)">Bet Slip + My Bets</div><h1 class="serif" style="margin:6px 0 4px;color:var(--head);font-size:34px">Bet Slip & My Bets</h1><p style="color:var(--muted);margin:0 0 16px">One page, as briefed. Singles only · Decimal odds · Stakes in USDT · Balance <b>'+fmt(balance)+' USDT</b></p><div style="display:grid;grid-template-columns:1fr;gap:16px"><div>'+slipHTML("page")+'</div></div></div>';
   document.getElementById("page-slip").innerHTML=html;
@@ -1747,7 +1784,7 @@ function placeBet(key){
   if(s.stake > 5000){ betMessage="Bet failed \u2014 maximum stake is 5,000 USDT per single."; betMessageType="fail"; renderSlipAll(); return; }
   if(s.stake > balance){
     betMessage="Bet failed — insufficient balance. Stake "+fmt(s.stake)+" USDT exceeds your balance of "+fmt(balance)+" USDT. No money was taken.";
-    betMessageType="fail"; renderSlipAll(); if(location.hash.indexOf("slip")===-1) location.hash="#/slip"; else renderSlipPage();
+    betMessageType="fail"; renderSlipAll(); if(document.getElementById("slipSheet").classList.contains("open")){ renderSlipSheet(); } else if(location.hash.indexOf("slip")===-1) location.hash="#/slip"; else renderSlipPage();
     showToast("Bet failed — insufficient balance.");
     return;
   }
@@ -1758,12 +1795,12 @@ function placeBet(key){
   betMessage="Bet placed successfully! "+bet.label+" — "+(bet.pickLabel||bet.pick)+" @ "+Number(bet.odds).toFixed(2)+" for "+fmt(bet.stake)+" USDT. Potential return "+fmt(bet.potential)+" USDT. See My Bets below.";
   betMessageType="success";
   syncBalance(); renderSlipAll();
-  if(location.hash.indexOf("slip")===-1) location.hash="#/slip"; else renderSlipPage();
+  if(document.getElementById("slipSheet").classList.contains("open")){ renderSlipSheet(); } else if(location.hash.indexOf("slip")===-1) location.hash="#/slip"; else renderSlipPage();
   // Re-inject success into page slip area by keeping betMessage until next render cycle clears? Keep it visible in My Bets area via toast as well
   showToast("Bet placed — "+fmt(bet.stake)+" USDT staked.");
   // Preserve message for slip page render: renderSlipPage uses slipHTML which checks betMessage, but slip is empty so it returns empty+mybets without message. Patch: prepend message manually
   var pageEl=document.getElementById("page-slip");
-  if(pageEl && betMessageType==="success"){ var fadeEl=pageEl.querySelector(".fade"); if(fadeEl) fadeEl.insertAdjacentHTML("beforeend", '<div class="success">'+esc(betMessage)+'</div>'); }
+  if(pageEl && betMessageType==="success" && !document.getElementById("slipSheet").classList.contains("open")){ var fadeEl=pageEl.querySelector(".fade"); if(fadeEl) fadeEl.insertAdjacentHTML("beforeend", '<div class="success">'+esc(betMessage)+'</div>'); }
 }
 function askCashOut(id){
   cashConfirm[id]=true;
@@ -1797,7 +1834,7 @@ function placeAll(){
   var placedBefore=myBets.length;
   keys.forEach(function(k){ if(slip.some(function(s){ return s.key===k; })) placeBet(k); });
   var placed=myBets.length-placedBefore;
-  if(placed>0){ betMessage=placed+" single"+(placed>1?"s":"")+" placed. Each settles on its own — see My Bets below."; betMessageType="success"; renderSlipAll(); if(location.hash.indexOf("slip")===-1) location.hash="#/slip"; else renderSlipPage(); }
+  if(placed>0){ betMessage=placed+" single"+(placed>1?"s":"")+" placed. Each settles on its own — see My Bets below."; betMessageType="success"; renderSlipAll(); if(document.getElementById("slipSheet").classList.contains("open")){ renderSlipSheet(); } else if(location.hash.indexOf("slip")===-1) location.hash="#/slip"; else renderSlipPage(); }
 }
 // Aliases for brief wording / grep checks
 function cashOut(id){ return cashOutBet(id); }
