@@ -1181,7 +1181,7 @@ function homeSearchHTML(){
   return '<div class="homesearch">'+icon("search","ic-sm")+'<input class="pagesearch-input" type="text" inputmode="search" autocomplete="off" placeholder="Search teams, players, leagues" value="'+esc(searchQuery).replace(/"/g,"&quot;")+'" oninput="onSearch(this.value)"></div>';
 }
 function homeTabsHTML(n){
-  var t='<div class="hometabs" role="navigation" aria-label="Sports">';
+  var t='<div class="hometabs" id="stripHomeTabs" role="navigation" aria-label="Sports">';
   t+='<button class="htab on">'+icon("home")+'<span>Home</span></button>';
   t+='<button class="htab" onclick="location.hash=\'#/live\'">'+icon("live")+'<span>Live <b class="livecount">'+n+'</b></span></button>';
   t+='<button class="htab" onclick="location.hash=\'#/football\'">'+icon("ball")+'<span>Football</span></button>';
@@ -1241,7 +1241,7 @@ function liveHeadHTML(){
 function segTabsHTML(){
   var counts={All:0,Football:0,Basketball:0,Tennis:0,Esports:0};
   MATCHES.forEach(function(m){ if(m.live){ counts.All++; counts[sportOf(m)]++; } });
-  var t='<div class="segtabs" role="group" aria-label="Filter live matches by sport">';
+  var t='<div class="segtabs" id="stripLiveTabs" role="group" aria-label="Filter live matches by sport">';
   t+='<button class="segtab '+(liveSport==="Favs"?"on":"")+'" onclick="setLiveSport(\'Favs\')" aria-label="Favourites">'+icon("star", liveSport==="Favs"?"fill":"")+'</button>';
   [["All","live"],["Football","ball"],["Basketball","basketball"],["Tennis","tennis"],["Esports","gamepad"]].forEach(function(pair){
     t+='<button class="segtab '+(liveSport===pair[0]?"on":"")+'" onclick="setLiveSport(\''+pair[0]+'\')">'+icon(pair[1],"ic-sm")+' '+pair[0]+' <b>'+counts[pair[0]]+'</b></button>';
@@ -1339,7 +1339,7 @@ function renderDetail(){
   el.innerHTML=html;
 }
 function setFbView(v){ fbView=v; if(v!=="league") fbLeague=null; route(false); }
-function fbTabsHTML(n){ return '<div class="segtabs"><button class="segtab '+(fbView==="liveup"?"on":"")+'" onclick="setFbView(\'liveup\')">Live &amp; Upcoming <span style="opacity:.75">'+n+'</span></button><button class="segtab '+(fbView==="all"?"on":"")+'" onclick="setFbView(\'all\')">All Soccer</button></div>'; }
+function fbTabsHTML(n){ return '<div class="segtabs" id="stripFbTabs"><button class="segtab '+(fbView==="liveup"?"on":"")+'" onclick="setFbView(\'liveup\')">Live &amp; Upcoming <span style="opacity:.75">'+n+'</span></button><button class="segtab '+(fbView==="all"?"on":"")+'" onclick="setFbView(\'all\')">All Soccer</button></div>'; }
 function setLiveSport(sp){
   liveSport=sp;
   if(liveLeague!=="All"){
@@ -1401,7 +1401,7 @@ function renderFootball(){
     return;
   }
   var ordered=fbLeagues.slice().sort(function(a,b){ var fa=follows["fav-lg-"+a.id]?0:1, fb=follows["fav-lg-"+b.id]?0:1; return fa-fb; });
-  html+='<div class="fbnav">'+ordered.map(function(l){ return '<button class="fbnavpill" onclick="scrollToLeague(\''+l.id+'\')">'+leagueBadge(l.id)+' '+esc(l.name.replace("UEFA ",""))+'</button>'; }).join("")+'</div>';
+  html+='<div class="fbnav" id="stripFbnav">'+ordered.map(function(l){ return '<button class="fbnavpill" onclick="scrollToLeague(\''+l.id+'\')">'+leagueBadge(l.id)+' '+esc(l.name.replace("UEFA ",""))+'</button>'; }).join("")+'</div>';
   ordered.forEach(function(l){
     var list=fbSortedList(l.id);
     html+='<div id="lg-'+l.id+'">'+fbHeadHTML(l, list, true)+matchesTable(list,false)+'</div>';
@@ -1427,7 +1427,7 @@ function renderMatch(){
 
 
   html+='<input class="mfilter" id="marketFilter" type="text" placeholder="Search markets or players" oninput="filterMarkets(this.value)" value="'+esc(marketFilterQuery)+'">';
-  html+='<div class="gtabs"><button class="gtab'+(activeGTab===""?" on":"")+'" onclick="jumpGroup(this,\'\')">All '+MATCH_MARKETS.length+'</button>'+MARKET_GROUPS.map(function(g){ var c=MATCH_MARKETS.filter(function(x){return x.group===g;}).length; return '<button class="gtab'+(activeGTab===g?" on":"")+'" onclick="jumpGroup(this,\''+g+'\')">'+esc(g)+" "+c+'</button>'; }).join("")+'</div>';
+  html+='<div class="gtabs" id="stripGtabs"><button class="gtab'+(activeGTab===""?" on":"")+'" onclick="jumpGroup(this,\'\')">All '+MATCH_MARKETS.length+'</button>'+MARKET_GROUPS.map(function(g){ var c=MATCH_MARKETS.filter(function(x){return x.group===g;}).length; return '<button class="gtab'+(activeGTab===g?" on":"")+'" onclick="jumpGroup(this,\''+g+'\')">'+esc(g)+" "+c+'</button>'; }).join("")+'</div>';
   MARKET_GROUPS.forEach(function(g){
     var gMarkets=MATCH_MARKETS.filter(function(x){return x.group===g;});
     var searchTxt=gMarkets.map(function(x){ return x.name+' '+x.picks.map(function(p){return p.label;}).join(' '); }).join(' ');
@@ -1842,7 +1842,7 @@ function route(rerender){
   var keepScroll=(rerender===false);
   var sy=keepScroll?window.scrollY:0;
   var carPos={};
-  if(keepScroll){ document.querySelectorAll(".hscroll[id]").forEach(function(el){ carPos[el.id]=el.scrollLeft; }); }
+  if(keepScroll){ document.querySelectorAll(".hscroll[id], .gtabs[id], .fbnav[id], .segtabs[id], .hometabs[id]").forEach(function(el){ carPos[el.id]=el.scrollLeft; }); }
   if(!keepScroll){ document.body.classList.add("nav"); setTimeout(function(){ document.body.classList.remove("nav"); },450); }
   var h=(location.hash||"#/home").replace("#/","");
   if(PAGES.indexOf(h)===-1) h="home";
