@@ -213,7 +213,7 @@ tr:last-child td{border-bottom:none}
 .fchip .disc{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;color:#0A0C12;flex:none}
 .fchip .disc .ic{width:12px;height:12px}
 .fchip.on{background:rgba(23,230,230,.13);color:#fff;border-color:rgba(23,230,230,.55)}
-.fchip.on,.mbtab.on{background:var(--cyan);color:#032630;border-color:var(--cyan)}
+.mbtab.on{background:var(--cyan);color:#032630;border-color:var(--cyan)}
 .mbtabs{display:flex;gap:6px;margin:0 0 12px}
 .grouphead{font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--cyan);margin:calc(var(--gap-section) - var(--gap-grid)) 0 12px;padding-bottom:6px;border-bottom:1px solid var(--line2)}
 /* WALLET SHEET COINS */
@@ -910,7 +910,7 @@ function renderLive(){
   var chips='<div class="texttabs" role="group" aria-label="Filter live matches by sport">';
   ["All","Football","Basketball"].forEach(function(sp){ chips+='<button class="ttab '+(liveSport===sp?"on":"")+'" onclick="setLiveSport(\''+sp+'\')">'+sp+'</button>'; });
   chips+='</div><div class="filterchips" role="group" aria-label="Filter live matches by competition">';
-  chips+='<button class="fchip '+(liveLeague==="All"?"on":"")+'" onclick="setLiveLeague(\'All\')"><span class="disc" style="background:var(--cyan)">'+icon("grid","ic-sm")+'</span> All competitions</button>';
+  chips+='<button class="fchip '+(liveLeague==="All"?"on":"")+'" onclick="setLiveLeague(\'All\')"><span class="disc" style="background:var(--cyan)">'+icon("grid","ic-sm")+'</span> All</button>';
   LEAGUES.forEach(function(l){ chips+='<button class="fchip '+(liveLeague===l.id?"on":"")+'" onclick="setLiveLeague(\''+l.id+'\')">'+leagueBadge(l.id)+' '+esc(l.name)+'</button>'; });
   chips+='</div>';
   var html='<div class="fade"><div class="eyebrow" style="color:var(--live)"><span class="livedot"></span> In Play</div><h1 class="serif" style="margin:6px 0 4px;color:var(--head);font-size:34px">Live Betting</h1><p style="color:var(--muted);margin:0 0 14px">Live score, clock and drifting odds on every match in play.</p>'+chips;
