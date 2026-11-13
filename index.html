@@ -168,6 +168,11 @@ body.nav .fade{animation:fade .3s ease}
 .star{background:none;border:none;font-size:20px;color:#525C6E;padding:4px}
 .star.on{color:var(--cyan)}
 .pill{font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;background:#141926;border:1px solid var(--line);color:#C3CEDA;padding:5px 8px;border-radius:999px}
+.pillbtn{font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;background:#141926;border:1px solid var(--line);color:#C3CEDA;padding:5px 10px;border-radius:999px;cursor:pointer;display:inline-flex;align-items:center;gap:5px;vertical-align:middle}
+.pillbtn.on{background:rgba(23,230,230,.14);border-color:rgba(23,230,230,.55);color:#fff}
+.ttab.favtab{display:inline-flex;align-items:center;padding:4px 2px}
+.ttab.favtab .ic{width:19px;height:19px}
+.ttab.favtab.on{color:var(--cyan)}
 .market{margin-bottom:var(--gap-grid)}
 .market h3{margin:0;padding:12px var(--pad-card);background:var(--panel2);color:#fff;font-family:var(--sans);font-size:13px;letter-spacing:1px;text-transform:uppercase;display:flex;justify-content:space-between;border-radius:12px 12px 0 0}
 .market h3 span{color:var(--cyan)}
@@ -796,7 +801,6 @@ function sportGo(hash){ closeDrawer(); location.hash=hash; }
 function toggleFollow(id, ev){
   if(ev) ev.stopPropagation();
   follows[id]=!follows[id];
-  showToast(follows[id] ? "Following — added to your favourites." : "Removed from favourites.");
   route(false);
 }
 function compGo(leagueId){
@@ -941,16 +945,18 @@ function renderHome(){
 function renderLive(){
   var live=MATCHES.filter(function(m){return m.live});
   var filtered=live.filter(function(m){
-    if(liveSport!=="All" && sportOf(m)!==liveSport) return false;
+    if(liveSport==="Favs"){ if(!follows["fav-"+m.id]) return false; }
+    else if(liveSport!=="All" && sportOf(m)!==liveSport) return false;
     if(liveLeague!=="All" && m.league!==liveLeague) return false;
     return true;
   });
   var chips='<div class="texttabs" role="group" aria-label="Filter live matches by sport">';
+  chips+='<button class="ttab favtab '+(liveSport==="Favs"?"on":"")+'" onclick="setLiveSport(\'Favs\')" aria-label="Favourites">'+icon("star", liveSport==="Favs"?"fill":"")+'</button>';
   ["All","Football","Basketball","Tennis","Esports"].forEach(function(sp){ chips+='<button class="ttab '+(liveSport===sp?"on":"")+'" onclick="setLiveSport(\''+sp+'\')">'+sp+'</button>'; });
   chips+='</div><div class="filterchips" role="group" aria-label="Filter live matches by competition">';
   var allLbl = liveSport==="Tennis" ? "All tours" : (liveSport==="All" ? "All competitions" : "All leagues");
   chips+='<button class="fchip '+(liveLeague==="All"?"on":"")+'" onclick="setLiveLeague(\'All\')"><span class="disc" style="background:var(--cyan)">'+icon("grid","ic-sm")+'</span> '+allLbl+'</button>';
-  LIVE_COMPS.filter(function(l){ return liveSport==="All" || compSport(l)===liveSport; }).forEach(function(l){ chips+='<button class="fchip '+(liveLeague===l.id?"on":"")+'" onclick="setLiveLeague(\''+l.id+'\')">'+leagueBadge(l.id)+' '+esc(l.name)+'</button>'; });
+  LIVE_COMPS.filter(function(l){ return liveSport==="All" || liveSport==="Favs" || compSport(l)===liveSport; }).forEach(function(l){ chips+='<button class="fchip '+(liveLeague===l.id?"on":"")+'" onclick="setLiveLeague(\''+l.id+'\')">'+leagueBadge(l.id)+' '+esc(l.name)+'</button>'; });
   chips+='</div>';
   var html='<div class="fade"><div class="eyebrow" style="color:var(--live)"><span class="livedot"></span> In Play</div><h1 class="serif" style="margin:6px 0 4px;color:var(--head);font-size:34px">Live Betting</h1><p style="color:var(--muted);margin:0 0 14px">Live score, clock and drifting odds on every match in play.</p>'+chips;
   var showEmpty = forceNoLive || !filtered.length;
@@ -958,7 +964,8 @@ function renderLive(){
     html+=matchesTable(filtered,true);
   } else {
     var soon=MATCHES.filter(function(m){return !m.live});
-    html+='<div class="empty" style="margin:0"><b style="color:var(--head)">'+(forceNoLive?"Nothing is live right now.":"Nothing is live for this filter right now.")+'</b><br>No blank screens here \u2014 this is what starts next instead:</div>';
+    var emptyMsg = forceNoLive ? "Nothing is live right now." : (liveSport==="Favs" ? (Object.keys(follows).some(function(k){return follows[k]}) ? "None of your favourites are live right now." : "No favourites yet \u2014 tap the star on any match card to follow it, and it will live here.") : "Nothing is live for this filter right now.");
+    html+='<div class="empty" style="margin:0"><b style="color:var(--head)">'+emptyMsg+'</b><br>No blank screens here \u2014 this is what starts next instead:</div>';
     html+='<div class="sectionhead"><h2>Starting soon</h2><p>Upcoming fixtures \u00b7 kick-off times shown \u00b7 1X2</p></div>'+matchesTable(soon,true);
   }
   html+='</div>';
@@ -988,7 +995,7 @@ function renderMatch(){
   var scoreTxt=m1?m1.score:"2 \u2013 1";
   var minTxt=m1 && m1.minute!==null ? m1.minute : 67;
   var suspPill = goalSuspended ? '<span class="pill" style="background:rgba(255,92,92,.16);color:#FF9A9A">All markets suspended \u00b7 '+esc(suspendReason)+'</span>' : (ouSuspended ? '<span class="pill" style="background:rgba(255,92,92,.16);color:#FF9A9A">O/U 2.5 suspended \u00b7 '+esc(suspendReason)+'</span>' : '<span class="pill">O/U 2.5 open</span>');
-  var html='<div class="fade"><div class="eyebrow" style="color:var(--live)">'+icon("live","ic-sm")+' Live \u00b7 Premier League \u00b7 '+minTxt+'\'</div><h1 class="serif" style="margin:6px 0 2px;color:var(--head);font-size:36px">Arsenal v Brighton</h1><p style="color:var(--muted);margin:0 0 6px">Emirates Stadium \u00b7 Score <b style="color:var(--ink)">Arsenal '+esc(scoreTxt)+' Brighton</b> \u00b7 Clock ticks with the Live page</p><p><span class="pill">Match page \u00b7 20 pts in the brief</span> <span class="pill">Odds move live</span> '+suspPill+'</p>';
+  var html='<div class="fade"><div class="eyebrow" style="color:var(--live)">'+icon("live","ic-sm")+' Live \u00b7 Premier League \u00b7 '+minTxt+'\'</div><h1 class="serif" style="margin:6px 0 2px;color:var(--head);font-size:36px">Arsenal v Brighton</h1><p style="color:var(--muted);margin:0 0 6px">Emirates Stadium \u00b7 Score <b style="color:var(--ink)">Arsenal '+esc(scoreTxt)+' Brighton</b> \u00b7 Clock ticks with the Live page</p><p><span class="pill">Match page \u00b7 20 pts in the brief</span> <span class="pill">Odds move live</span> '+suspPill+' <button class="pillbtn '+(follows["fav-m1"]?"on":"")+'" onclick="toggleFollow(\'fav-m1\',event)">'+icon("star", follows["fav-m1"]?"fill ic-sm":"ic-sm")+' '+(follows["fav-m1"]?"Following":"Follow")+'</button></p>';
   html+='<div class="scoreboard">'+kitIcon("Arsenal","kit-lg")+'<span class="sb-team">Arsenal</span><span class="sb-score">'+esc(scoreTxt)+'</span><span class="sb-team">Brighton</span>'+kitIcon("Brighton","kit-lg")+'<span class="pill">'+minTxt+'&#39; \u00b7 Live</span></div>';
   html+='<input class="mfilter" id="marketFilter" type="text" placeholder="Filter markets \u2014 try &#39;corners&#39;" oninput="filterMarkets(this.value)" value="'+esc(marketFilterQuery)+'">';
   MARKET_GROUPS.forEach(function(g){
