@@ -1693,7 +1693,7 @@ function autoCarouselTick(){
   var now=Date.now();
   document.querySelectorAll(".hscroll.autocar").forEach(function(el){
     if(!el.id) return;
-    if(autoCarHold[el.id]===undefined){ autoCarHold[el.id]=now+4200; return; }
+    if(autoCarHold[el.id]===undefined){ autoCarHold[el.id]=now+2400; return; }
     if(now<autoCarHold[el.id]) return;
     var kids=el.children.length; if(kids<2) return;
     var maxScroll=el.scrollWidth-el.clientWidth; if(maxScroll<=4) return;
@@ -1701,7 +1701,7 @@ function autoCarouselTick(){
     var cur=Math.round(el.scrollLeft/step);
     var nxt=cur+1; if(nxt>kids-1 || el.scrollLeft>=maxScroll-4) nxt=0;
     el.scrollTo({left:Math.min(nxt*step,maxScroll),behavior:"smooth"});
-    autoCarHold[el.id]=now+4200;
+    autoCarHold[el.id]=now+2400;
   });
 }
 ["pointerdown","touchstart","wheel"].forEach(function(ev){ document.addEventListener(ev,function(e){ var c=(e.target&&e.target.closest)?e.target.closest(".hscroll.autocar"):null; if(c&&c.id) autoCarHold[c.id]=Date.now()+10000; },{passive:true}); });
