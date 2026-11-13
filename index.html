@@ -413,6 +413,24 @@ body.nav .fade{animation:fade .3s ease}
 .comp{position:relative}
 .compstar{position:absolute;top:8px;right:8px}
 .lgstar{vertical-align:middle}
+
+.livehead{display:flex;align-items:center;gap:10px}
+.liveback{width:38px;height:38px;flex:none;border-radius:11px;background:var(--panel2);border:1px solid var(--line2);color:var(--head);display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+.livetitle{font-size:18px;font-weight:800;color:var(--head);background:var(--panel2);border:1px solid var(--line2);border-radius:11px;padding:8px 14px}
+.livepill{margin-left:auto;display:inline-flex;align-items:center;gap:7px;color:var(--muted);font-size:12.5px;font-weight:700}
+.segtabs{display:flex;gap:4px;background:var(--panel2);border:1px solid var(--line2);border-radius:14px;padding:5px;margin-top:12px;overflow-x:auto;scrollbar-width:none}
+.segtabs::-webkit-scrollbar{display:none}
+.segtab{flex:1 0 auto;display:inline-flex;align-items:center;justify-content:center;gap:6px;background:none;border:none;color:var(--muted);font:inherit;font-size:12.5px;font-weight:700;padding:8px 10px;border-radius:10px;cursor:pointer;white-space:nowrap}
+.segtab b{color:var(--muted);font-weight:800}
+.segtab.on{background:var(--panel3);color:var(--head)}
+.segtab.on b{color:var(--cyan)}
+.companel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:14px;margin-top:16px;box-shadow:var(--elev)}
+.companel-head{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.companel-head h3{margin:0;font-size:16px;color:var(--head)}
+.pdot{width:7px;height:7px;flex:none;border-radius:50%;background:#FF5C7A;animation:blink 1.1s infinite}
+.viewall{margin-left:auto;background:none;border:none;color:var(--muted);font:inherit;font-size:13px;font-weight:700;display:inline-flex;align-items:center;gap:4px;cursor:pointer;padding:4px}
+.suspbar{display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(255,170,60,.08);border:1px solid rgba(255,170,60,.35);color:#FFB84D;border-radius:12px;padding:13px;font-weight:800;font-size:14px;margin-top:10px}
+.fade .homesearch{margin-top:14px}
 </style>
 </head>
 <body>
@@ -615,7 +633,7 @@ var MATCHES = [
   {id:"m3", league:"PL", home:"Man City", away:"Tottenham", time:"Today 23:30", minute:null, live:false, score:"", odds:{"1":1.55,"X":4.10,"2":5.50}, koMin:303},
   {id:"m4", league:"UCL", home:"Real Madrid", away:"Bayern Munich", time:"Live · 34'", minute:34, live:true, score:"1 – 0", odds:{"1":2.20,"X":3.30,"2":3.10}},
   {id:"m5", league:"UCL", home:"Inter", away:"Barcelona", time:"Tomorrow 02:00", minute:null, live:false, score:"", odds:{"1":2.70,"X":3.25,"2":2.60}, koMin:453},
-  {id:"m6", league:"LALIGA", home:"Atlético Madrid", away:"Sevilla", time:"Live · 52'", minute:52, live:true, score:"0 – 0", odds:{"1":1.95,"X":3.05,"2":4.40}},
+  {id:"m6", league:"LALIGA", home:"Atlético Madrid", away:"Sevilla", time:"Live · 37'", minute:37, live:true, score:"1 – 0", suspended:true, suspReason:"VAR check", odds:{"1":1.95,"X":3.05,"2":4.40}},
   {id:"m7", league:"LALIGA", home:"Valencia", away:"Real Betis", time:"Tomorrow 00:30", minute:null, live:false, score:"", odds:{"1":2.45,"X":3.20,"2":2.95}, koMin:363},
   {id:"m8", league:"SERIEA", home:"AC Milan", away:"Napoli", time:"Today 20:45", minute:null, live:false, score:"", odds:{"1":2.60,"X":3.10,"2":2.80}, koMin:138},
   {id:"m9", league:"SERIEA", home:"Juventus", away:"Roma", time:"Live · 78'", minute:78, live:true, score:"1 – 1", odds:{"1":2.90,"X":2.85,"2":3.05}},
@@ -999,7 +1017,11 @@ function matchCard(m, showLeague){
     var key=m.id+"-1X2-"+k;
     return '<button class="oddsbtn wide '+(isSelected(key)?"selected":"")+flashCls(key)+'" onclick="event.stopPropagation();addToSlip(\''+key+'\',\''+m.id+'\',\''+esc(m.home+" v "+m.away)+'\',\''+(m.twoWay?"Match Winner":"Match Result 1X2")+'\',\''+k+'\','+m.odds[k]+')"><span class="picklbl">'+esc(labels[k])+'</span><span class="oddsnum">'+Number(m.odds[k]).toFixed(2)+driftSpan(key)+'</span></button>';
   }).join("");
+  if(m.suspended){
+  html+='<div class="suspbar">'+icon("lock","ic-sm")+' Suspended \u2014 '+esc(m.suspReason||"VAR check")+'</div>';
+  } else {
   html+='<div class="mcard-market"><span class="mlabel">'+(m.twoWay?"Match Winner":"1X2 \u00b7 Match Result")+'</span><div class="oddsrow">'+btns+'</div></div>';
+  }
   html+='</div>';
   return html;
 }
@@ -1072,29 +1094,57 @@ function renderHome(){
   html+='<div class="card" style="margin-top:var(--gap-block);padding:var(--pad-card)"><h3 style="margin:0 0 6px;color:var(--head)">House Rules — Prime Edition</h3><p style="margin:0;color:var(--muted);line-height:1.7;font-size:14px">Singles only, stakes in USDT. If odds change while a selection sits in your slip, you must accept the new price before placing. Suspended selections are flagged and cannot be placed until the market reopens. Cash out is offered at a live price that moves with the match, starting at 0.88× the current potential return. Winnings settle on-chain — no wagering requirements, ever.</p></div>';
   document.getElementById("page-home").innerHTML=html;
 }
+function liveHeadHTML(){
+  return '<div class="livehead"><button class="liveback" onclick="location.hash=\'#/home\'" aria-label="Back to Sports home">'+icon("arrowL")+'</button><span class="livetitle">Live now</span><span class="livepill"><span class="livedot"></span>'+MATCHES.filter(function(m){return m.live}).length+' in play</span></div>';
+}
+function segTabsHTML(){
+  var counts={All:0,Football:0,Basketball:0,Tennis:0,Esports:0};
+  MATCHES.forEach(function(m){ if(m.live){ counts.All++; counts[sportOf(m)]++; } });
+  var t='<div class="segtabs" role="group" aria-label="Filter live matches by sport">';
+  t+='<button class="segtab '+(liveSport==="Favs"?"on":"")+'" onclick="setLiveSport(\'Favs\')" aria-label="Favourites">'+icon("star", liveSport==="Favs"?"fill":"")+'</button>';
+  [["All","live"],["Football","ball"],["Basketball","basketball"],["Tennis","tennis"],["Esports","gamepad"]].forEach(function(pair){
+    t+='<button class="segtab '+(liveSport===pair[0]?"on":"")+'" onclick="setLiveSport(\''+pair[0]+'\')">'+icon(pair[1],"ic-sm")+' '+pair[0]+' <b>'+counts[pair[0]]+'</b></button>';
+  });
+  return t+'</div>';
+}
+function compPanelHTML(lg, list){
+  var probe=list.map(function(m){ return matchCard(m,true); }).join("");
+  if(!probe) return "";
+  var fk="fav-lg-"+lg.id;
+  var inner = list.length>1 ? carouselHTML(list, "car-live-"+lg.id) : matchesTable(list,true);
+  return '<section class="companel"><div class="companel-head">'+leagueBadge(lg.id)+'<span class="pdot"></span><h3>'+esc(lg.name)+'</h3><button class="star '+(follows[fk]?"on":"")+'" onclick="toggleFollow(\''+fk+'\',event)" aria-label="Follow '+esc(lg.name)+'">'+icon("star", follows[fk]?"fill":"")+'</button><button class="viewall" onclick="liveViewAll(\''+lg.id+'\')">View all '+icon("arrowR","ic-sm")+'</button></div>'+inner+'</section>';
+}
+function liveViewAll(id){ liveLeague=id; renderLive(); window.scrollTo({top:0,behavior:"smooth"}); }
+function liveBackAll(){ liveLeague="All"; renderLive(); }
 function renderLive(){
   var live=MATCHES.filter(function(m){return m.live});
-  var filtered=live.filter(function(m){
-    if(liveSport==="Favs"){ if(!follows["fav-"+m.id]) return false; }
-    else if(liveSport!=="All" && sportOf(m)!==liveSport) return false;
-    if(liveLeague!=="All" && m.league!==liveLeague) return false;
-    return true;
-  });
-  var chips='<div class="texttabs" role="group" aria-label="Filter live matches by sport">';
-  chips+='<button class="ttab favtab '+(liveSport==="Favs"?"on":"")+'" onclick="setLiveSport(\'Favs\')" aria-label="Favourites">'+icon("star", liveSport==="Favs"?"fill":"")+'</button>';
-  ["All","Football","Basketball","Tennis","Esports"].forEach(function(sp){ chips+='<button class="ttab '+(liveSport===sp?"on":"")+'" onclick="setLiveSport(\''+sp+'\')">'+sp+'</button>'; });
-  chips+='</div><div class="filterchips" role="group" aria-label="Filter live matches by competition">';
-  LIVE_COMPS.filter(function(l){ return liveSport==="All" || liveSport==="Favs" || compSport(l)===liveSport; }).forEach(function(l){ var on=liveLeague===l.id; chips+='<button class="fchip '+(on?"on":"")+'" onclick="setLiveLeague(\''+l.id+'\')" title="'+(on?"Tap again to clear":"Filter to "+esc(l.name))+'">'+leagueBadge(l.id)+' '+esc(l.name)+(on?' <span aria-hidden="true" style="opacity:.75;font-weight:800">✕</span>':"")+'</button>'; });
-  chips+='</div>';
-  var html='<div class="fade"><div class="eyebrow" style="color:var(--live)"><span class="livedot"></span> In Play</div><h1 class="serif" style="margin:6px 0 4px;color:var(--head);font-size:34px">Live Betting</h1><p style="color:var(--muted);margin:0 0 14px">Live score, clock and drifting odds on every match in play.</p>'+chips;
-  var showEmpty = forceNoLive || !filtered.length;
-  if(!showEmpty){
-    html+=matchesTable(filtered,true);
-  } else {
-    var soon=MATCHES.filter(function(m){return !m.live});
-    var emptyMsg = forceNoLive ? "Nothing is live right now." : (liveSport==="Favs" ? (Object.keys(follows).some(function(k){return follows[k]}) ? "None of your favourites are live right now." : "No favourites yet \u2014 tap the star on any match card to follow it, and it will live here.") : "Nothing is live for this filter right now.");
-    html+='<div class="empty" style="margin:0"><b style="color:var(--head)">'+emptyMsg+'</b><br>No blank screens here \u2014 this is what starts next instead:</div>';
+  var soon=MATCHES.filter(function(m){return !m.live});
+  var html='<div class="fade">'+liveHeadHTML()+homeSearchHTML()+segTabsHTML();
+  if(forceNoLive){
+    html+='<div class="empty" style="margin-top:16px"><b style="color:var(--head)">Nothing is live right now.</b><br>No blank screens here \u2014 this is what starts next instead:</div>';
     html+='<div class="sectionhead"><h2>Starting soon</h2><p>Upcoming fixtures \u00b7 kick-off times shown \u00b7 1X2</p></div>'+matchesTable(soon,true);
+  } else if(liveSport==="Favs"){
+    var favs=live.filter(function(m){ return !!(follows["fav-"+m.id]||follows["fav-lg-"+m.league]||follows["fav-tm-"+m.home]||follows["fav-tm-"+m.away]); });
+    if(favs.length){
+      html+='<div style="margin-top:16px">'+matchesTable(favs,true)+'</div>';
+    } else {
+      var anyF=Object.keys(follows).some(function(k){return follows[k]});
+      html+='<div class="empty" style="margin-top:16px"><b style="color:var(--head)">'+(anyF?"None of your favourites are live right now.":"No favourites yet \u2014 tap the star on any match card or league panel to follow it, and it will live here.")+'</b><br>Here is everything in play instead:</div>'+matchesTable(live,true);
+    }
+  } else if(liveLeague!=="All"){
+    var inLg=live.filter(function(m){ return m.league===liveLeague && (liveSport==="All"||sportOf(m)===liveSport); });
+    html+='<p style="margin:16px 0 10px"><button class="pillbtn" onclick="liveBackAll()">'+icon("arrowL","ic-sm")+' All competitions</button></p>';
+    html+= inLg.length ? matchesTable(inLg,true) : '<div class="empty">Nothing live in this competition right now.</div>';
+  } else {
+    var shown=0;
+    LIVE_COMPS.forEach(function(lg){
+      var list=live.filter(function(m){ return m.league===lg.id && (liveSport==="All"||sportOf(m)===liveSport); });
+      if(list.length){ var panel=compPanelHTML(lg,list); if(panel){ html+=panel; shown+=list.length; } }
+    });
+    if(!shown){
+      html+='<div class="empty" style="margin-top:16px"><b style="color:var(--head)">Nothing is live for this filter right now.</b><br>No blank screens here \u2014 this is what starts next instead:</div>';
+      html+='<div class="sectionhead"><h2>Starting soon</h2><p>Upcoming fixtures \u00b7 kick-off times shown \u00b7 1X2</p></div>'+matchesTable(soon,true);
+    }
   }
   html+='</div>';
   document.getElementById("page-live").innerHTML=html;
@@ -1139,7 +1189,11 @@ function renderDetail(){
     var key=m.id+"-1X2-"+k;
     return '<button class="oddsbtn wide '+(isSelected(key)?"selected":"")+flashCls(key)+'" onclick="addToSlip(\''+key+'\',\''+m.id+'\',\''+esc(m.home+" v "+m.away)+'\',\''+(m.twoWay?"Match Winner":"Match Result 1X2")+'\',\''+k+'\','+m.odds[k]+')"><span class="picklbl">'+esc(labels[k])+'</span><span class="oddsnum">'+Number(m.odds[k]).toFixed(2)+driftSpan(key)+'</span></button>';
   }).join("");
+  if(m.suspended){
+  html+='<div class="mcard" style="margin-top:12px"><div class="suspbar" style="margin-top:0">'+icon("lock","ic-sm")+' Suspended \u2014 '+esc(m.suspReason||"VAR check")+'</div><p class="microcopy">This market is suspended right now. Prices reopen as soon as play is cleared.</p></div>';
+  } else {
   html+='<div class="mcard" style="margin-top:12px"><span class="mlabel">'+(m.twoWay?"Match Winner":"1X2 \u00b7 Match Result")+'</span><div class="oddsrow">'+btns+'</div><p class="microcopy">Tap a price to add it to your slip as a single \u00b7 settles on-chain in USDT</p></div>';
+  }
   html+='</div>';
   el.innerHTML=html;
 }
@@ -1471,6 +1525,7 @@ function priceChartHTMLFor(m){
 function driftOdds(){
   driftFlash={};
   MATCHES.forEach(function(m){
+    if(m.suspended) return;
     if(!m.live && Math.random()>0.4) return;
     ["1","X","2"].forEach(function(k){
       if(m.odds[k]===undefined) return;
