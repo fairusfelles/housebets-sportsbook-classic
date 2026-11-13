@@ -305,7 +305,11 @@ tr:last-child td{border-bottom:none}
 .searchbarMobile input{width:100%;padding:11px;border:1px solid var(--line2);border-radius:999px;background:#12151F;color:#fff;outline:none}
 .hidden{display:none!important}
 @media(max-width:1100px){.layout{grid-template-columns:220px 1fr}.rightpanel{display:none}.mobileslipbar{display:grid;place-items:center;position:fixed;left:50%;transform:translateX(-50%);right:auto;bottom:84px;width:58px;height:58px;border-radius:50%;background:var(--cyan);color:#06222B;z-index:70;padding:0;border:none;box-shadow:0 10px 26px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.35);font-weight:900;font-size:25px}
-#mobileSlipCount{position:absolute;top:-4px;right:-4px;background:#FF5C5C;color:#fff;font-size:11px;font-weight:800;min-width:21px;height:21px;border-radius:99px;display:grid;place-items:center;border:2px solid #07090E;padding:0 5px}}
+#mobileSlipCount{position:absolute;top:-4px;right:-4px;background:#FF5C5C;color:#fff;font-size:11px;font-weight:800;min-width:21px;height:21px;border-radius:99px;display:grid;place-items:center;border:2px solid #07090E;padding:0 5px}
+@keyframes fabpop{0%{transform:translateX(-50%) scale(1)}35%{transform:translateX(-50%) scale(1.22)}65%{transform:translateX(-50%) scale(.94)}100%{transform:translateX(-50%) scale(1)}}
+.mobileslipbar.pop{animation:fabpop .45s ease}
+@keyframes badgepop{0%{transform:scale(.4)}60%{transform:scale(1.4)}100%{transform:scale(1)}}
+.mobileslipbar.pop #mobileSlipCount{animation:badgepop .45s ease}}
 @media(max-width:760px){
   :root{--gap-block:20px;--pad-card:16px;--gap-section:28px}
   .layout{grid-template-columns:1fr}
@@ -500,6 +504,7 @@ tr:last-child td{border-bottom:none}
 <script>
 var balance = 1000.00;
 var slip = []; // {key, matchId, label, market, pick, odds, stake, needsAccept, suspended}
+var lastSlipCount = 0;
 var myBets = [
   {id:1001, label:"Newcastle v Aston Villa", market:"Match Result 1X2", pick:"1", pickLabel:"Newcastle (1)", odds:1.55, stake:25, potential:38.75, status:"Won", cashOutValue:0, when:"Yesterday \u00b7 Full time"},
   {id:1002, label:"Real Madrid v Bayern Munich", market:"Match Result 1X2", pick:"1", pickLabel:"Real Madrid (1)", odds:2.10, stake:15, potential:31.50, status:"Lost", cashOutValue:0, when:"Yesterday \u00b7 Full time"},
@@ -1116,7 +1121,8 @@ function renderSlipAll(rerenderPage){
   var cnt=document.getElementById("mobileSlipCount"); if(cnt) cnt.textContent=slip.length;
   var navCnt=document.getElementById("navBetCount"); if(navCnt) navCnt.textContent=String(myBets.filter(function(b){return b.status==="Open"}).length);
   var mobOdds=document.getElementById("mobileSlipOdds"); if(mobOdds) mobOdds.textContent=slip.length? Number(slip[0].odds).toFixed(2)+" · "+fmt(slip[0].stake||0)+" USDT" : "Tap odds to bet";
-  var mobBar=document.getElementById("mobileSlipBar"); if(mobBar) mobBar.style.display=slip.length? "" : "none";
+  var mobBar=document.getElementById("mobileSlipBar"); if(mobBar){ mobBar.style.display=slip.length? "" : "none"; if(slip.length && slip.length!==lastSlipCount){ mobBar.classList.remove("pop"); void mobBar.offsetWidth; mobBar.classList.add("pop"); } }
+  lastSlipCount=slip.length;
   if(rerenderPage!==false && location.hash.indexOf("slip")!==-1){ renderSlipPage(); }
 }
 function renderSlipPage(){
