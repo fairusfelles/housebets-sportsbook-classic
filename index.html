@@ -696,6 +696,7 @@ var driftFlash = {};
 var cashConfirm = {};
 var cashConfirmTimers = {};
 var marketFilterQuery = "";
+var matchMenuOpen=false, closedMarkets={}, activeGTab="";
 var betMessage = "";
 var betMessageType = "";
 
@@ -1419,14 +1420,14 @@ function renderMatch(){
   var tcode=function(t){ return t==="Brighton"?"BHA":t.slice(0,3).toUpperCase(); };
   var folBtn=function(team,gold){ var on=follows["fav-tm-"+team]; return '<button class="pillbtn '+(gold?"gold ":"")+(on?"on":"")+'" onclick="toggleFollow(\'fav-tm-'+team+'\',event)">'+icon("star", on?"fill ic-sm":"ic-sm")+' '+(on?"Following":"Follow")+'</button>'; };
   var menuRows=MATCHES.filter(function(x){return x.home&&x.away;}).map(function(x){ var cur=x.id==="m1"; return '<button class="mselitem" onclick="'+(cur?"toggleMatchMenu(event)":"openDetail(\'"+x.id+"\')")+'"><span class="mselav">'+kitIcon(x.home,"kit-xs")+kitIcon(x.away,"kit-xs")+'</span><span class="mselname">'+esc(x.home)+" v "+esc(x.away)+'</span><span class="mselmeta">'+(x.live?esc(x.score||"Live"):esc(x.time||""))+'</span></button>'; }).join("");
-  var html='<div class="fade"><div class="mselrow"><button class="selback" onclick="location.hash=\'#/football\'" aria-label="Back to Football">'+icon("arrowL")+'</button><button class="msel" onclick="toggleMatchMenu(event)">'+tcode(H)+" - "+tcode(A)+' <span class="mselchev">\u25be</span></button></div><div class="mselmenu" id="matchMenu" style="display:none">'+menuRows+'</div>';
+  var html='<div class="fade"><div class="mselrow"><button class="selback" onclick="location.hash=\'#/football\'" aria-label="Back to Football">'+icon("arrowL")+'</button><button class="msel" onclick="toggleMatchMenu(event)">'+tcode(H)+" - "+tcode(A)+' <span class="mselchev">\u25be</span></button></div><div class="mselmenu" id="matchMenu" style="display:'+(matchMenuOpen?"":"none")+'">'+menuRows+'</div>';
   html+='<div class="sbcard"><div class="sb-top"><button class="sb-back" onclick="location.hash=\'#/football\'" aria-label="Back">'+icon("arrowL","ic-sm")+'</button><span class="sb-league">'+esc(leagueName(m1?m1.league:"PL"))+'</span><button class="sb-star '+(follows["fav-m1"]?"on":"")+'" onclick="toggleFollow(\'fav-m1\',event)" aria-label="Follow this match">'+icon("star", follows["fav-m1"]?"fill":"")+'</button></div>';
   html+='<div class="sb-main"><div class="sb-side">'+kitIcon(H,"kit-lg")+'<span class="sb-name">'+esc(H)+'</span></div><div class="sb-mid"><div class="sb-nums"><span class="sb-num">'+esc(hs)+'</span><span class="sb-dash">\u2013</span><span class="sb-num">'+esc(as)+'</span></div><div class="sb-live"><span class="livepill"><span class="livedot"></span>Live</span><span class="sb-min">'+minTxt+'&#39;</span></div></div><div class="sb-side">'+kitIcon(A,"kit-lg")+'<span class="sb-name">'+esc(A)+'</span></div></div>';
   html+='<div class="sb-follow">'+folBtn(H,true)+'<span class="sb-state">'+suspPill+'</span>'+folBtn(A,false)+'</div></div>';
 
 
   html+='<input class="mfilter" id="marketFilter" type="text" placeholder="Search markets or players" oninput="filterMarkets(this.value)" value="'+esc(marketFilterQuery)+'">';
-  html+='<div class="gtabs"><button class="gtab on" onclick="jumpGroup(this,\'\')">All '+MATCH_MARKETS.length+'</button>'+MARKET_GROUPS.map(function(g){ var c=MATCH_MARKETS.filter(function(x){return x.group===g;}).length; return '<button class="gtab" onclick="jumpGroup(this,\''+g+'\')">'+esc(g)+" "+c+'</button>'; }).join("")+'</div>';
+  html+='<div class="gtabs"><button class="gtab'+(activeGTab===""?" on":"")+'" onclick="jumpGroup(this,\'\')">All '+MATCH_MARKETS.length+'</button>'+MARKET_GROUPS.map(function(g){ var c=MATCH_MARKETS.filter(function(x){return x.group===g;}).length; return '<button class="gtab'+(activeGTab===g?" on":"")+'" onclick="jumpGroup(this,\''+g+'\')">'+esc(g)+" "+c+'</button>'; }).join("")+'</div>';
   MARKET_GROUPS.forEach(function(g){
     var gMarkets=MATCH_MARKETS.filter(function(x){return x.group===g;});
     var searchTxt=gMarkets.map(function(x){ return x.name+' '+x.picks.map(function(p){return p.label;}).join(' '); }).join(' ');
@@ -1434,7 +1435,7 @@ function renderMatch(){
     html+='<div class="grouphead">'+g+' <span class="gcount">\u00b7 '+gMarkets.length+' markets</span></div>';
     gMarkets.forEach(function(mk){
     var isSusp = mk.suspended || (mk.id==="ou" && ouSuspended) || goalSuspended;
-    html+='<div class="market"><h3 onclick="toggleMarket(this)">'+esc(mk.name)+'<span class="mright"><span>'+(isSusp?("SUSPENDED \u00b7 "+esc(suspendReason)+" "+icon("lock","ic-sm")):"OPEN")+'</span><span class="mchev">\u25be</span></span></h3>';
+    html+='<div class="market'+(closedMarkets[mk.id]?" closed":"")+'" data-mid="'+mk.id+'"><h3 onclick="toggleMarket(this)">'+esc(mk.name)+'<span class="mright"><span>'+(isSusp?("SUSPENDED \u00b7 "+esc(suspendReason)+" "+icon("lock","ic-sm")):"OPEN")+'</span><span class="mchev">\u25be</span></span></h3>';
     if(isSusp){
       if(mk.id==="ng" && !goalSuspended){ html+='<div class="suspendedbox">'+icon("lock")+' Market suspended \u2014 the Goalscorers market is closed for betting in this prototype. Prices are shown for reference only and cannot be added to the slip.</div><div class="marketbody">'; mk.picks.forEach(function(p){ html+='<button class="oddsbtn suspended" disabled><small>'+esc(p.k)+'</small>'+'<span class="oprice">'+p.odds.toFixed(2)+'</span>'+'<span class="imp">'+Math.round(100/p.odds)+'%</span></button>'; }); html+='</div>'; }
       else if(goalSuspended){ html+='<div class="marketbody"><div class="suspendedbox">'+icon("pause")+' Suspended \u00b7 '+esc(suspendReason)+' \u2014 Brighton have just scored and the desk is repricing every market. Reopens shortly; any selection in your slip is flagged meanwhile.</div></div>'; }
@@ -1460,9 +1461,9 @@ function renderMatch(){
   document.getElementById("page-match").innerHTML=html;
   if(marketFilterQuery) filterMarkets(marketFilterQuery);
 }
-function toggleMatchMenu(e){ if(e) e.stopPropagation(); var m=document.getElementById("matchMenu"); if(m) m.style.display=(m.style.display==="none"||!m.style.display)?"":"none"; }
-function jumpGroup(btn, g){ var tabs=btn.parentNode.querySelectorAll(".gtab"); tabs.forEach(function(t){ t.classList.remove("on"); }); btn.classList.add("on"); if(marketFilterQuery){ var inp=document.getElementById("marketFilter"); if(inp) inp.value=""; filterMarkets(""); } var target=g?document.querySelector('#page-match .mgroup[data-group="'+g+'"]'):document.querySelector("#page-match .mgroup"); if(target && target.scrollIntoView){ try{ target.scrollIntoView({behavior:"smooth", block:"start"}); }catch(_){ target.scrollIntoView(); } } }
-function toggleMarket(h){ h.parentNode.classList.toggle("closed"); }
+function toggleMatchMenu(e){ if(e) e.stopPropagation(); matchMenuOpen=!matchMenuOpen; var m=document.getElementById("matchMenu"); if(m) m.style.display=matchMenuOpen?"":"none"; }
+function jumpGroup(btn, g){ activeGTab=g; var tabs=btn.parentNode.querySelectorAll(".gtab"); tabs.forEach(function(t){ t.classList.remove("on"); }); btn.classList.add("on"); if(marketFilterQuery){ var inp=document.getElementById("marketFilter"); if(inp) inp.value=""; filterMarkets(""); } var target=g?document.querySelector('#page-match .mgroup[data-group="'+g+'"]'):document.querySelector("#page-match .mgroup"); if(target && target.scrollIntoView){ try{ target.scrollIntoView({behavior:"smooth", block:"start"}); }catch(_){ target.scrollIntoView(); } } }
+function toggleMarket(h){ var p=h.parentNode; p.classList.toggle("closed"); var mid=p.getAttribute("data-mid"); if(mid){ if(p.classList.contains("closed")) closedMarkets[mid]=true; else delete closedMarkets[mid]; } }
 function filterMarkets(q){
   marketFilterQuery=(q||"").toLowerCase().trim();
   var groups=document.querySelectorAll("#page-match .mgroup");
