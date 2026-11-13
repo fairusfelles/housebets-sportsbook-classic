@@ -274,6 +274,7 @@ body.nav .fade{animation:fade .3s ease}
 .trow{display:flex;align-items:center;gap:12px;padding:9px 0}
 .tbadge{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:800;color:#EDF1F5;border:1px solid rgba(255,255,255,.22);flex:none}
 .kit{width:38px;height:38px;flex:none;display:block}
+.pdisc{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:800;flex:none;letter-spacing:.5px}
 .kit-lg{width:46px;height:46px;flex:none;display:block}
 .scoreboard{display:flex;align-items:center;gap:14px;margin:14px 0 6px;flex-wrap:wrap}
 .scoreboard .sb-team{font-size:17px;font-weight:800;color:var(--head)}
@@ -531,7 +532,7 @@ var marketFilterQuery = "";
 var betMessage = "";
 var betMessageType = "";
 
-var LCOLORS = {PL:"#A55EEA", UCL:"#3B82F6", LALIGA:"#FF7A45", SERIEA:"#00C2A8", BUNDES:"#E2001A", NBA:"#F97316"};
+var LCOLORS = {PL:"#A55EEA", UCL:"#3B82F6", LALIGA:"#FF7A45", SERIEA:"#00C2A8", BUNDES:"#E2001A", NBA:"#F97316", ATP:"#B7E332", WTA:"#8B5CF6", ESL:"#FFCC00"};
 var LEAGUES = [
   {id:"PL", name:"Premier League", country:"England", icon:"trophy"},
   {id:"UCL", name:"UEFA Champions League", country:"Europe", icon:"trophy"},
@@ -540,6 +541,12 @@ var LEAGUES = [
   {id:"BUNDES", name:"Bundesliga", country:"Germany", icon:"trophy"},
   {id:"NBA", name:"NBA", country:"USA Basketball", icon:"basketball"}
 ];
+var LIVE_COMPS = LEAGUES.concat([
+  {id:"ATP", name:"ATP Tour", country:"World Tennis", icon:"tennis"},
+  {id:"WTA", name:"WTA Tour", country:"World Tennis", icon:"tennis"},
+  {id:"ESL", name:"ESL Pro League", country:"Esports · CS2", icon:"gamepad"}
+]);
+function sportOf(m){ return m.sport || (m.league==="NBA" ? "Basketball" : "Football"); }
 
 var MATCHES = [
   {id:"m1", league:"PL", home:"Arsenal", away:"Brighton", time:"Live · 67'", minute:67, live:true, score:"2 – 1", odds:{"1":1.62,"X":3.90,"2":5.25}, sx:"saka havertz welbeck goalscorers anytime scorer goals halves handicaps corners cards btts over under ht/ft"},
@@ -553,7 +560,10 @@ var MATCHES = [
   {id:"m9", league:"SERIEA", home:"Juventus", away:"Roma", time:"Live · 78'", minute:78, live:true, score:"1 – 1", odds:{"1":2.90,"X":2.85,"2":3.05}},
   {id:"m10", league:"BUNDES", home:"Dortmund", away:"Leverkusen", time:"Today 21:30", minute:null, live:false, score:"", odds:{"1":2.35,"X":3.55,"2":2.75}, koMin:183},
   {id:"m11", league:"BUNDES", home:"RB Leipzig", away:"Wolfsburg", time:"Tomorrow 01:30", minute:null, live:false, score:"", odds:{"1":1.78,"X":3.70,"2":4.20}, koMin:423},
-  {id:"m12", league:"NBA", home:"LA Lakers", away:"Boston Celtics", time:"Live · Q3 05:12", minute:57, live:true, score:"78 – 81", odds:{"1":2.10,"X":11.00,"2":1.78}}
+  {id:"m12", league:"NBA", home:"LA Lakers", away:"Boston Celtics", time:"Live · Q3 05:12", minute:57, live:true, score:"78 – 81", odds:{"1":2.10,"X":11.00,"2":1.78}},
+  {id:"t1", league:"ATP", sport:"Tennis", home:"Carlos Alcaraz", away:"Jannik Sinner", time:"Live · Set 3", minute:null, live:true, score:"1 – 1", halfTxt:"Set 3 · 4–3", twoWay:true, odds:{"1":1.95,"2":1.85}},
+  {id:"t2", league:"WTA", sport:"Tennis", home:"Iga Swiatek", away:"Coco Gauff", time:"Live · Set 2", minute:null, live:true, score:"1 – 0", halfTxt:"Set 2 · 3–2", twoWay:true, odds:{"1":1.60,"2":2.30}},
+  {id:"e1", league:"ESL", sport:"Esports", home:"Team Spirit", away:"Team Falcons", time:"Live · Map 3", minute:null, live:true, score:"1 – 1", halfTxt:"Map 3 · Round 18", twoWay:true, odds:{"1":1.80,"2":1.95}}
 ];
 
 var MATCH_MARKETS = [
@@ -616,6 +626,12 @@ function starPts(cx,cy,r){
 function leagueBadge(id){
   var c=LCOLORS[id]||"#5B6B82";
   var seam="rgba(10,10,14,.5)";
+  if(id==="ATP"||id==="WTA"){
+    return '<svg class="badge" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="'+c+'"/><g fill="none" stroke="#fff" stroke-width="1.7"><path d="M5.5 4.2c3.6 4.4 3.6 11.2 0 15.6"/><path d="M18.5 4.2c-3.6 4.4-3.6 11.2 0 15.6"/></g></svg>';
+  }
+  if(id==="ESL"){
+    return '<svg class="badge" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="'+c+'"/><polygon points="13.2,3.4 5.8,13.6 10.6,13.6 9.6,20.6 18.2,10.2 13.4,10.2" fill="#14161C"/></svg>';
+  }
   if(id==="NBA"){
     return '<svg class="badge" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="'+c+'"/><g fill="none" stroke="'+seam+'" stroke-width="1.6"><path d="M2.5 12h19"/><path d="M12 2.5c3.4 3.1 3.4 15.9 0 19"/><path d="M12 2.5c-3.4 3.1-3.4 15.9 0 19"/></g></svg>';
   }
@@ -701,13 +717,19 @@ function basketballGo(){
   renderLive();
   closeDrawer();
 }
+function liveSportGo(sp){
+  liveSport=sp; liveLeague="All";
+  if(location.hash!=="#/live"){ location.hash="#/live"; }
+  renderLive();
+  closeDrawer();
+}
 function sportTilesHTML(mode){
   var fbOn=(mode==="home")||liveSport!=="Basketball";
   var bbOn=(mode==="live"&&liveSport==="Basketball");
   var t='<div class="stile '+(fbOn?"on":"")+'" onclick="location.hash=\'#/football\'">'+icon("ball","ic-xl")+'<span>Football</span></div>';
   t+='<div class="stile '+(bbOn?"on":"")+'" onclick="basketballGo()">'+icon("basketball","ic-xl")+'<span>Basketball</span></div>';
-  t+='<div class="stile" onclick="scopeGo(\'Tennis\')">'+icon("tennis","ic-xl")+'<span>Tennis</span></div>';
-  t+='<div class="stile" onclick="scopeGo(\'Esports\')">'+icon("gamepad","ic-xl")+'<span>Esports</span></div>';
+  t+='<div class="stile" onclick="liveSportGo(\'Tennis\')">'+icon("tennis","ic-xl")+'<span>Tennis</span></div>';
+  t+='<div class="stile" onclick="liveSportGo(\'Esports\')">'+icon("gamepad","ic-xl")+'<span>Esports</span></div>';
   t+='<div class="stile" onclick="scopeGo(\'Ice Hockey\')">'+icon("hockey","ic-xl")+'<span>Ice Hockey</span></div>';
   return '<div class="sporttiles">'+t+'</div>';
 }
@@ -720,7 +742,7 @@ function utilTilesHTML(){
 }
 
 function fmt(n){ return Number(n).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
-function leagueName(id){ for(var i=0;i<LEAGUES.length;i++){ if(LEAGUES[i].id===id) return LEAGUES[i].name; } return id; }
+function leagueName(id){ for(var i=0;i<LIVE_COMPS.length;i++){ if(LIVE_COMPS[i].id===id) return LIVE_COMPS[i].name; } return id; }
 function findMatch(id){ for(var i=0;i<MATCHES.length;i++){ if(MATCHES[i].id===id) return MATCHES[i]; } return null; }
 function isSelected(key){ for(var i=0;i<slip.length;i++){ if(slip[i].key===key) return true; } return false; }
 function driftSpan(key){
@@ -853,12 +875,13 @@ function matchCard(m, showLeague){
   var q=searchQuery;
   if(q && (m.home+" "+m.away+" "+leagueName(m.league)+" "+(m.sx||"")).toLowerCase().indexOf(q)===-1) return "";
   var starKey="fav-"+m.id;
-  var lg=null; for(var i=0;i<LEAGUES.length;i++){ if(LEAGUES[i].id===m.league) lg=LEAGUES[i]; }
+  var lg=null; for(var i=0;i<LIVE_COMPS.length;i++){ if(LIVE_COMPS[i].id===m.league) lg=LIVE_COMPS[i]; }
+  var spIcon={Football:"ball",Basketball:"basketball",Tennis:"tennis",Esports:"gamepad"}[sportOf(m)]||"ball";
   var html='<div class="mcard">';
-  html+='<div class="mcard-head"><span>'+icon("ball","ic-sm")+' '+esc(leagueName(m.league))+(lg?(" \u00b7 "+esc(lg.country)):"")+'</span><button class="star '+(follows[starKey]?"on":"")+'" onclick="toggleFollow(\''+starKey+'\',event)" aria-label="Follow">'+icon("star", follows[starKey]?"fill ic-lg":"ic-lg")+'</button></div>';
+  html+='<div class="mcard-head"><span>'+icon(spIcon,"ic-sm")+' '+esc(leagueName(m.league))+(lg?(" \u00b7 "+esc(lg.country)):"")+'</span><button class="star '+(follows[starKey]?"on":"")+'" onclick="toggleFollow(\''+starKey+'\',event)" aria-label="Follow">'+icon("star", follows[starKey]?"fill ic-lg":"ic-lg")+'</button></div>';
   var scores=null;
   if(m.live){
-    var half=(m.league==="NBA") ? esc(String(m.time).replace("Live \u00b7 ","")) : ((m.minute!==null && m.minute<=45)?"1st half":"2nd half");
+    var half=m.halfTxt ? esc(m.halfTxt) : ((m.league==="NBA") ? esc(String(m.time).replace("Live \u00b7 ","")) : ((m.minute!==null && m.minute<=45)?"1st half":"2nd half"));
     var minTxt=(m.league==="NBA"||m.minute===null) ? "" : (m.minute+"' \u00b7 ");
     html+='<div class="mcard-live"><span class="livedot"></span><b>'+minTxt+half+'</b></div>';
     if(m.score){ var parts=String(m.score).split("\u2013"); if(parts.length===2) scores=[parts[0].replace(/\s/g,""), parts[1].replace(/\s/g,"")]; }
@@ -866,15 +889,23 @@ function matchCard(m, showLeague){
     html+='<div class="mcard-soon">'+icon("clock","ic-sm")+' Kick-off \u00b7 '+esc(m.time)+(m.koMin!==undefined?' \u00b7 <span class="ko-count" data-mid="'+m.id+'">'+koText(m.koMin)+'</span>':'')+'</div>';
   }
   function trow(team, sc){
-    return '<div class="trow">'+kitIcon(team)+'<span class="tname">'+esc(team)+'</span>'+(sc!==null&&sc!==undefined?'<span class="scorebox">'+sc+'</span>':"")+'</div>';
+    var av;
+    if(sportOf(m)==="Football"||sportOf(m)==="Basketball"){ av=kitIcon(team); }
+    else {
+      var ini=team.split(" ").map(function(w){return w.charAt(0)}).slice(0,2).join("").toUpperCase();
+      var bgc=sportOf(m)==="Tennis" ? "#B7E332" : "#8B5CF6";
+      var fgc=sportOf(m)==="Tennis" ? "#1A2405" : "#fff";
+      av='<span class="pdisc" style="background:'+bgc+';color:'+fgc+'">'+ini+'</span>';
+    }
+    return '<div class="trow">'+av+'<span class="tname">'+esc(team)+'</span>'+(sc!==null&&sc!==undefined?'<span class="scorebox">'+sc+'</span>':"")+'</div>';
   }
   html+=trow(m.home, scores?scores[0]:null)+trow(m.away, scores?scores[1]:null);
   var labels={"1":m.home,"X":"Draw","2":m.away};
-  var btns=["1","X","2"].map(function(k){
+  var btns=(m.twoWay?["1","2"]:["1","X","2"]).map(function(k){
     var key=m.id+"-1X2-"+k;
-    return '<button class="oddsbtn wide '+(isSelected(key)?"selected":"")+flashCls(key)+'" onclick="addToSlip(\''+key+'\',\''+m.id+'\',\''+esc(m.home+" v "+m.away)+'\',\'Match Result 1X2\',\''+k+'\','+m.odds[k]+')"><span class="picklbl">'+esc(labels[k])+'</span><span class="oddsnum">'+Number(m.odds[k]).toFixed(2)+driftSpan(key)+'</span></button>';
+    return '<button class="oddsbtn wide '+(isSelected(key)?"selected":"")+flashCls(key)+'" onclick="addToSlip(\''+key+'\',\''+m.id+'\',\''+esc(m.home+" v "+m.away)+'\',\''+(m.twoWay?"Match Winner":"Match Result 1X2")+'\',\''+k+'\','+m.odds[k]+')"><span class="picklbl">'+esc(labels[k])+'</span><span class="oddsnum">'+Number(m.odds[k]).toFixed(2)+driftSpan(key)+'</span></button>';
   }).join("");
-  html+='<div class="mcard-market"><span class="mlabel">1X2 \u00b7 Match Result</span><div class="oddsrow">'+btns+'</div></div>';
+  html+='<div class="mcard-market"><span class="mlabel">'+(m.twoWay?"Match Winner":"1X2 \u00b7 Match Result")+'</span><div class="oddsrow">'+btns+'</div></div>';
   html+='</div>';
   return html;
 }
@@ -909,16 +940,15 @@ function renderHome(){
 function renderLive(){
   var live=MATCHES.filter(function(m){return m.live});
   var filtered=live.filter(function(m){
-    var sport=(m.league==="NBA")?"Basketball":"Football";
-    if(liveSport!=="All" && sport!==liveSport) return false;
+    if(liveSport!=="All" && sportOf(m)!==liveSport) return false;
     if(liveLeague!=="All" && m.league!==liveLeague) return false;
     return true;
   });
   var chips='<div class="texttabs" role="group" aria-label="Filter live matches by sport">';
-  ["All","Football","Basketball"].forEach(function(sp){ chips+='<button class="ttab '+(liveSport===sp?"on":"")+'" onclick="setLiveSport(\''+sp+'\')">'+sp+'</button>'; });
+  ["All","Football","Basketball","Tennis","Esports"].forEach(function(sp){ chips+='<button class="ttab '+(liveSport===sp?"on":"")+'" onclick="setLiveSport(\''+sp+'\')">'+sp+'</button>'; });
   chips+='</div><div class="filterchips" role="group" aria-label="Filter live matches by competition">';
   chips+='<button class="fchip '+(liveLeague==="All"?"on":"")+'" onclick="setLiveLeague(\'All\')"><span class="disc" style="background:var(--cyan)">'+icon("grid","ic-sm")+'</span> All</button>';
-  LEAGUES.forEach(function(l){ chips+='<button class="fchip '+(liveLeague===l.id?"on":"")+'" onclick="setLiveLeague(\''+l.id+'\')">'+leagueBadge(l.id)+' '+esc(l.name)+'</button>'; });
+  LIVE_COMPS.forEach(function(l){ chips+='<button class="fchip '+(liveLeague===l.id?"on":"")+'" onclick="setLiveLeague(\''+l.id+'\')">'+leagueBadge(l.id)+' '+esc(l.name)+'</button>'; });
   chips+='</div>';
   var html='<div class="fade"><div class="eyebrow" style="color:var(--live)"><span class="livedot"></span> In Play</div><h1 class="serif" style="margin:6px 0 4px;color:var(--head);font-size:34px">Live Betting</h1><p style="color:var(--muted);margin:0 0 14px">Live score, clock and drifting odds on every match in play.</p>'+chips;
   var showEmpty = forceNoLive || !filtered.length;
@@ -1207,6 +1237,7 @@ function driftOdds(){
   MATCHES.forEach(function(m){
     if(!m.live && Math.random()>0.4) return;
     ["1","X","2"].forEach(function(k){
+      if(m.odds[k]===undefined) return;
       var old=m.odds[k];
       var delta=(Math.random()>0.5?1:-1)*(0.03+Math.random()*0.10);
       var nv=Math.round((old+delta)*100)/100;
