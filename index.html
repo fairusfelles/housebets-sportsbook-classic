@@ -1105,7 +1105,7 @@ function renderHome(){
   if(fc){ html+='<div class="sectionhead"><h2>Favourites</h2><p>Tap \u2715 to remove</p></div>'+fc; }
   var fm=followedMatches();
   if(fm.length){
-    html+='<div class="sectionhead"><h2>Your matches</h2><p>'+fm.length+' matches</p></div>'+carouselHTML(fm,"car-your",1);
+    html+='<div class="sectionhead"><h2>Your matches</h2><p>'+fm.length+' matches</p></div>'+carouselHTML(fm,"car-your");
   }
   html+='<div class="sectionhead"><h2><span class="livedot"></span> Featured matches</h2><span class="carbtns"><button class="carbtn" onclick="scrollCarousel(\'car-feat\',-1)" aria-label="Previous matches">'+icon("arrowL","ic-sm")+'</button><button class="carbtn" onclick="scrollCarousel(\'car-feat\',1)" aria-label="Next matches">'+icon("arrowR","ic-sm")+'</button></span></div>'+carouselHTML(live,"car-feat",1);
   html+='<div class="sectionhead"><h2>Starting soon</h2><p>Upcoming fixtures \u00b7 kick-off times shown \u00b7 1X2</p></div>'+matchesTable(soon,true);
