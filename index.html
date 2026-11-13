@@ -597,6 +597,10 @@ var myBetsTab = "Open";
 var liveSport = "All";
 var liveLeague = "All";
 var follows = {"fav-m1":true, "fav-lg-PL":true, "fav-tm-Arsenal":true};
+var LSKEY = "hb2-state-v1";
+function saveState(){ try{ localStorage.setItem(LSKEY, JSON.stringify({follows:follows, balance:balance, slip:slip, myBets:myBets})); }catch(e){} }
+function loadState(){ try{ var s=JSON.parse(localStorage.getItem(LSKEY)||"null"); if(!s) return; if(s.follows) follows=s.follows; if(typeof s.balance==="number") balance=s.balance; if(Array.isArray(s.slip)) slip=s.slip; if(Array.isArray(s.myBets)) myBets=s.myBets; }catch(e){} }
+loadState();
 var pendingLeague = null;
 var searchQuery = "";
 var ouSuspended = false;
@@ -1423,6 +1427,7 @@ function renderSlipAll(rerenderPage){
   var mobBar=document.getElementById("mobileSlipBar"); if(mobBar){ mobBar.style.display=slip.length? "" : "none"; if(slip.length && slip.length!==lastSlipCount){ mobBar.classList.remove("pop"); void mobBar.offsetWidth; mobBar.classList.add("pop"); } }
   lastSlipCount=slip.length;
   if(rerenderPage!==false && location.hash.indexOf("slip")!==-1){ renderSlipPage(); }
+  saveState();
 }
 function renderSlipPage(){
   var html='<div class="fade"><div class="eyebrow" style="color:var(--cyan)">Bet Slip + My Bets</div><h1 class="serif" style="margin:6px 0 4px;color:var(--head);font-size:34px">Bet Slip & My Bets</h1><p style="color:var(--muted);margin:0 0 16px">One page, as briefed. Singles only · Decimal odds · Stakes in USDT · Balance <b>'+fmt(balance)+' USDT</b></p><div style="display:grid;grid-template-columns:1fr;gap:16px"><div>'+slipHTML("page")+'</div></div></div>';
@@ -1672,6 +1677,7 @@ function route(rerender){
   if(h==="detail") renderDetail();
   if(!keepScroll) closeDrawer();
   if(keepScroll){ window.scrollTo(0,sy); Object.keys(carPos).forEach(function(id){ var el=document.getElementById(id); if(el) el.scrollLeft=carPos[id]; }); } else { window.scrollTo({top:0,behavior:"smooth"}); }
+  saveState();
 }
 
 function buildNav(){
