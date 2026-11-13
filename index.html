@@ -12,6 +12,7 @@
   --ink:#EDF1F5; --head:#FFFFFF; --muted:#8A94A6;
   --live:#FF5C5C; --red:#FF6B6B; --good:#2BD98A;
   --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --gap-block:24px; --gap-grid:16px; --pad-card:20px; --gap-section:32px;
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:var(--sans)}
@@ -73,7 +74,7 @@ h1,h2,h3{letter-spacing:-.02em}
 .btn-green{background:linear-gradient(135deg,#3FF7F7,#0FB5B5);color:#032630;border:1px solid transparent;padding:12px 18px;border-radius:10px;font-weight:800;width:100%}
 .btn-green:disabled{opacity:.45;cursor:not-allowed}
 /* REWARDS SLIDER */
-.rewcard{margin-top:16px;padding:18px}
+.rewcard{margin-top:var(--gap-block);padding:var(--pad-card)}
 .rewhead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 .rewhead h3{margin:0;color:#fff;font-size:18px;display:flex;align-items:center;gap:8px}
 .rewhead h3 .ic{color:var(--cyan)}
@@ -89,13 +90,13 @@ h1,h2,h3{letter-spacing:-.02em}
 .rewrange::-moz-range-track{background:transparent}
 .rewnote{color:var(--muted);font-size:13px;margin:12px 0 12px}
 /* TRUST STRIP */
-.truststrip{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
-.trustitem{display:flex;gap:11px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:13px 15px;color:var(--cyan)}
+.truststrip{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap-grid);margin-top:var(--gap-block)}
+.trustitem{display:flex;gap:11px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:var(--pad-card);color:var(--cyan)}
 .trustitem b{display:block;color:#fff;font-size:13.5px}
 .trustitem span{color:var(--muted);font-size:12px}
 /* GATEWAY CARDS */
-.gategrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
-.gate{position:relative;overflow:hidden;background:linear-gradient(135deg,#151A26,#0C0E14 72%);border:1px solid var(--line2);border-radius:16px;padding:20px;cursor:pointer;min-height:118px}
+.gategrid{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap-grid);margin-top:var(--gap-block)}
+.gate{position:relative;overflow:hidden;background:linear-gradient(135deg,#151A26,#0C0E14 72%);border:1px solid var(--line2);border-radius:16px;padding:var(--pad-card);cursor:pointer;min-height:118px}
 .gate:hover{border-color:var(--cyan)}
 .gate h3{margin:0;font-size:22px;color:#fff;position:relative;z-index:1}
 .gate p{color:#9AA5B3;margin:6px 0 10px;font-size:13.5px;position:relative;z-index:1}
@@ -104,7 +105,7 @@ h1,h2,h3{letter-spacing:-.02em}
 .gate.violet .gate-ic{color:rgba(232,162,224,.09)}
 .gate.violet .gatecta{color:var(--violet)}
 /* CARDS / TABLES */
-.sectionhead{display:flex;justify-content:space-between;align-items:end;margin:28px 0 12px;border-bottom:1px solid var(--line2);padding-bottom:8px}
+.sectionhead{display:flex;justify-content:space-between;align-items:end;margin:var(--gap-section) 0 12px;border-bottom:1px solid var(--line2);padding-bottom:8px}
 .sectionhead h2{margin:0;font-size:23px;color:#fff}
 .sectionhead p{margin:0;color:var(--muted);font-size:13px}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,.28)}
@@ -125,21 +126,21 @@ tr:last-child td{border-bottom:none}
 .oddsbtn.suspended,.oddsbtn:disabled{background:#0E1118;color:#59637A;border-color:var(--line);cursor:not-allowed;text-decoration:line-through}
 .oddsbtn.moved{animation:pulse 1s ease}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(23,230,230,.65)}100%{box-shadow:0 0 0 10px rgba(23,230,230,0)}}
-.compgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.comp{background:var(--panel);border:1px solid var(--line);padding:16px;cursor:pointer;border-radius:12px}
+.compgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap-grid)}
+.comp{background:var(--panel);border:1px solid var(--line);padding:var(--pad-card);cursor:pointer;border-radius:12px}
 .comp:hover{border-color:var(--cyan);background:var(--panel2)}
 .comp b{font-size:16px;color:#fff;display:block;font-weight:800}
 .comp span{font-size:13px;color:var(--muted)}
 .star{background:none;border:none;font-size:20px;color:#525C6E;padding:4px}
 .star.on{color:var(--cyan)}
 .pill{font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;background:#141926;border:1px solid var(--line);color:#C3CEDA;padding:5px 8px;border-radius:999px}
-.market{margin-bottom:16px}
-.market h3{margin:0;padding:12px 14px;background:var(--panel2);color:#fff;font-family:var(--sans);font-size:13px;letter-spacing:1px;text-transform:uppercase;display:flex;justify-content:space-between;border-radius:12px 12px 0 0}
+.market{margin-bottom:var(--gap-grid)}
+.market h3{margin:0;padding:12px var(--pad-card);background:var(--panel2);color:#fff;font-family:var(--sans);font-size:13px;letter-spacing:1px;text-transform:uppercase;display:flex;justify-content:space-between;border-radius:12px 12px 0 0}
 .market h3 span{color:var(--cyan)}
-.marketbody{padding:12px;display:flex;flex-wrap:wrap;gap:8px;background:var(--panel);border:1px solid var(--line);border-top:none;border-radius:0 0 12px 12px}
-.suspendedbox{padding:16px;background:rgba(255,92,92,.07);color:#D8B4B4;border:1px dashed rgba(255,120,120,.35);border-radius:10px;text-align:center;width:100%;font-weight:700}
+.marketbody{padding:var(--pad-card);display:flex;flex-wrap:wrap;gap:8px;background:var(--panel);border:1px solid var(--line);border-top:none;border-radius:0 0 12px 12px}
+.suspendedbox{padding:var(--pad-card);background:rgba(255,92,92,.07);color:#D8B4B4;border:1px dashed rgba(255,120,120,.35);border-radius:10px;text-align:center;width:100%;font-weight:700}
 /* SLIP */
-.slipitem{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--cyan);padding:12px;margin-bottom:10px;border-radius:12px}
+.slipitem{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--cyan);padding:var(--pad-card);margin-bottom:var(--gap-grid);border-radius:12px}
 .slipitem.warn{border-left-color:var(--red);background:rgba(255,92,92,.05)}
 .slipitem.susp{opacity:.8;border-left-color:#525C6E;background:#0B0D13}
 .slipitem b{font-size:14px;color:#fff}
@@ -150,10 +151,10 @@ tr:last-child td{border-bottom:none}
 .stakeRow input{flex:1;padding:10px;border:1px solid var(--line2);border-radius:8px;font-size:15px;background:#0D1017;color:#fff;outline:none}
 .stakeRow input:focus{border-color:var(--cyan)}
 .remove{background:none;border:none;color:#FF9090;font-weight:700;float:right}
-.empty{border:1px dashed var(--line2);padding:20px;text-align:center;color:var(--muted);background:var(--panel);border-radius:12px}
+.empty{border:1px dashed var(--line2);padding:var(--pad-card);text-align:center;color:var(--muted);background:var(--panel);border-radius:12px}
 .success{background:rgba(43,217,138,.12);border:1px solid rgba(43,217,138,.4);color:#A9F0CD;padding:12px;border-radius:10px;margin:10px 0;font-weight:700}
 .fail{background:rgba(255,92,92,.10);border:1px solid rgba(255,120,120,.4);color:#FFB4B4;padding:12px;border-radius:10px;margin:10px 0;font-weight:700}
-.betitem{background:var(--panel);border:1px solid var(--line);padding:14px;margin-bottom:10px;border-radius:12px}
+.betitem{background:var(--panel);border:1px solid var(--line);padding:var(--pad-card);margin-bottom:var(--gap-grid);border-radius:12px}
 .betitem header{display:flex;justify-content:space-between}
 .cashout{background:transparent;border:1px solid var(--cyan);color:var(--cyan);padding:9px 12px;border-radius:999px;font-weight:800}
 .cashout:hover{background:rgba(23,230,230,.10)}
@@ -165,13 +166,14 @@ tr:last-child td{border-bottom:none}
 .microcopy{font-size:12px;color:var(--muted);text-align:center;margin:9px 0 0}
 /* FILTER CHIPS / MARKET GROUP HEADS / MY BETS TABS */
 .filterchips{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px}
+.sporttiles+.filterchips{margin-top:var(--gap-grid)}
 .fchip,.mbtab{background:#12151F;border:1px solid var(--line2);color:#C3CEDA;padding:7px 13px;border-radius:999px;font-weight:700;font-size:12.5px}
 .fchip.on,.mbtab.on{background:var(--cyan);color:#032630;border-color:var(--cyan)}
-.mbtabs{display:flex;gap:6px;margin:0 0 10px}
-.grouphead{font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--cyan);margin:24px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line2)}
+.mbtabs{display:flex;gap:6px;margin:0 0 12px}
+.grouphead{font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--cyan);margin:calc(var(--gap-section) - var(--gap-grid)) 0 12px;padding-bottom:6px;border-bottom:1px solid var(--line2)}
 /* WALLET SHEET COINS */
-.coinlist{display:flex;flex-direction:column;gap:10px;margin:8px 0 6px}
-.coinrow{display:flex;align-items:center;gap:12px;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.coinlist{display:flex;flex-direction:column;gap:var(--gap-grid);margin:12px 0 0}
+.coinrow{display:flex;align-items:center;gap:12px;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:var(--pad-card)}
 .coinrow .coin{width:38px;height:38px}
 .coinrow.main{border-color:rgba(23,230,230,.55);background:rgba(23,230,230,.06)}
 .coinmeta b{display:block;color:#fff;font-size:14.5px}
@@ -186,34 +188,34 @@ tr:last-child td{border-bottom:none}
 .wtab{flex:1;background:transparent;border:none;color:var(--muted);padding:9px 6px;border-radius:9px;font-weight:800;font-size:13.5px}
 .wtab.on{background:var(--cyan);color:#032630}
 .wdbanner{display:flex;gap:9px;align-items:center;background:rgba(23,230,230,.08);border:1px solid rgba(23,230,230,.35);color:#CFFBFB;border-radius:12px;padding:11px 13px;font-size:13.5px;font-weight:700;margin:0 0 12px}
-.coingrid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 14px}
-.coincard{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:2px}
+.coingrid2{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap-grid);margin:0 0 var(--gap-grid)}
+.coincard{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:var(--pad-card);display:flex;flex-direction:column;gap:2px}
 .coincard.main{border-color:rgba(23,230,230,.55)}
 .coincard b{color:#fff;font-size:15px;margin-top:8px}
 .coincard span{color:var(--muted);font-size:12.5px}
 .coincard small{color:var(--cyan);font-size:12px;font-weight:700;margin-top:4px}
-.histrow{display:flex;align-items:center;gap:12px;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px}
+.histrow{display:flex;align-items:center;gap:12px;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:var(--pad-card);margin-bottom:var(--gap-grid)}
 .histmeta b{display:block;color:#fff;font-size:14px}
 .histmeta span{color:var(--muted);font-size:12px}
 .histval{margin-left:auto;text-align:right}
 .histval b{display:block;color:#fff;font-variant-numeric:tabular-nums;font-size:14px}
 .statuspill{font-size:10.5px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;background:rgba(43,217,138,.14);color:#7DE8B2;border:1px solid rgba(43,217,138,.4);padding:3px 8px;border-radius:999px;display:inline-block;margin-top:4px}
-.sporttiles{display:flex;gap:10px;overflow-x:auto;padding:4px 2px 12px;margin-top:14px;scrollbar-width:none}
+.sporttiles{display:flex;gap:var(--gap-grid);overflow-x:auto;padding:2px;margin-top:var(--gap-block);scrollbar-width:none}
 .sporttiles::-webkit-scrollbar{display:none}
-.stile{min-width:86px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px 8px 10px;display:flex;flex-direction:column;align-items:center;gap:7px;cursor:pointer;color:#C3CEDA}
+.stile{min-width:86px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:var(--pad-card) 8px;display:flex;flex-direction:column;align-items:center;gap:7px;cursor:pointer;color:#C3CEDA}
 .stile span{font-size:12.5px;font-weight:700}
 .stile:hover{border-color:var(--cyan)}
 .stile.on{background:linear-gradient(160deg,#17E6E6,#0BA8A8);color:#032630;border-color:transparent;box-shadow:0 8px 20px rgba(23,230,230,.18)}
-.utilrow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
-.utile{position:relative;border-radius:14px;padding:14px;cursor:pointer;display:flex;align-items:center;gap:9px;font-weight:800;color:#fff;border:1px solid var(--line2)}
+.utilrow{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap-grid);margin-top:var(--gap-block)}
+.utile{position:relative;border-radius:14px;padding:var(--pad-card);cursor:pointer;display:flex;align-items:center;gap:9px;font-weight:800;color:#fff;border:1px solid var(--line2)}
 .utile.u1{background:linear-gradient(120deg,#131E2E,#0C0E14)}
 .utile.u2{background:linear-gradient(120deg,#1C1729,#0C0E14)}
 .utile.u3{background:linear-gradient(120deg,#122019,#0C0E14)}
 .utile:hover{border-color:var(--cyan)}
 .countbadge{position:absolute;top:-7px;right:-5px;background:#FF5C5C;color:#fff;font-size:11px;font-weight:800;min-width:20px;height:20px;border-radius:999px;display:grid;place-items:center;padding:0 5px;border:2px solid var(--bg)}
 .countbadge.navcb{position:static;border:none}
-.mcardlist{display:flex;flex-direction:column;gap:12px}
-.mcard{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px 16px;box-shadow:0 6px 16px rgba(0,0,0,.25)}
+.mcardlist{display:flex;flex-direction:column;gap:var(--gap-grid)}
+.mcard{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:var(--pad-card);box-shadow:0 6px 16px rgba(0,0,0,.25)}
 .mcard-head{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:12.5px;font-weight:700;letter-spacing:.3px}
 .mcard-head .star{padding:0}
 .mcard-live{display:flex;align-items:center;gap:7px;color:var(--cyan);font-size:13px;margin:6px 0 8px}
@@ -224,7 +226,7 @@ tr:last-child td{border-bottom:none}
 .tbadge{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:800;color:#EDF1F5;border:1px solid rgba(255,255,255,.22);flex:none}
 .tname{font-weight:700;color:#fff;font-size:15px}
 .scorebox{margin-left:auto;background:#0B0D13;border:1px solid var(--line2);color:#fff;font-weight:800;min-width:34px;text-align:center;padding:5px 0;border-radius:8px;font-variant-numeric:tabular-nums}
-.mcard-market{margin-top:10px;border-top:1px solid var(--line);padding-top:10px}
+.mcard-market{margin-top:12px;border-top:1px solid var(--line);padding-top:12px}
 .mlabel{font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:8px}
 .oddsrow{display:flex;gap:8px}
 .oddsbtn.wide{flex:1;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:11px 12px;text-align:left;min-width:0}
@@ -234,7 +236,7 @@ tr:last-child td{border-bottom:none}
 .supportfab{position:fixed;right:24px;bottom:24px;width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,#3FF7F7,#0FB5B5);color:#032630;border:none;display:grid;place-items:center;box-shadow:0 10px 26px rgba(0,0,0,.5),0 0 18px rgba(23,230,230,.18);z-index:65}
 .supportfab:hover{background:#3FF7F7}
 @media(max-width:1100px){.supportfab{bottom:140px;right:16px}}
-@media(max-width:560px){.depbtn{padding:8px 11px;font-size:13px}.utile{padding:11px;font-size:13px}.utilrow{gap:8px}}
+@media(max-width:560px){.depbtn{padding:8px 11px;font-size:13px}.utile{padding:var(--pad-card);font-size:13px}.utilrow{gap:var(--gap-grid)}}
 /* BOTTOM / MOBILE */
 .bottomnav{display:none}
 .mobileslipbar{display:none}
@@ -254,6 +256,7 @@ tr:last-child td{border-bottom:none}
 .hidden{display:none!important}
 @media(max-width:1100px){.layout{grid-template-columns:220px 1fr}.rightpanel{display:none}.mobileslipbar{display:flex;position:fixed;left:12px;right:12px;bottom:72px;background:linear-gradient(135deg,#151B28,#0B0D13);color:#fff;z-index:70;padding:12px 16px;border-radius:999px;justify-content:space-between;align-items:center;border:1px solid var(--cyan);box-shadow:0 8px 24px rgba(0,0,0,.45);font-weight:800}}
 @media(max-width:760px){
+  :root{--gap-block:20px;--pad-card:16px;--gap-section:28px}
   .layout{grid-template-columns:1fr}
   .leftnav{position:fixed;left:0;top:62px;bottom:0;width:280px;z-index:85;transform:translateX(-105%);transition:.25s;box-shadow:10px 0 30px rgba(0,0,0,.4)}
   body.drawer .leftnav{transform:none}
@@ -668,7 +671,7 @@ function renderHome(){
   html+='<div class="sectionhead"><h2>Top competitions</h2><p>Tap a competition to go straight to its section</p></div><div class="compgrid">';
   LEAGUES.forEach(function(l){ html+='<div class="comp" onclick="compGo(\''+l.id+'\')"><b>'+icon(l.icon)+' '+esc(l.name)+'</b><span>'+esc(l.country)+' · View fixtures & odds '+icon("arrowR","ic-sm")+'</span></div>'; });
   html+='</div>';
-  html+='<div class="card" style="margin-top:20px;padding:18px"><h3 style="margin:0 0 6px;color:var(--head)">House Rules — Prime Edition</h3><p style="margin:0;color:var(--muted);line-height:1.7;font-size:14px">Singles only, stakes in USDT. If odds change while a selection sits in your slip, you must accept the new price before placing. Suspended selections are flagged and cannot be placed until the market reopens. Cash out is offered at 0.88× the current potential return. Winnings settle on-chain — no wagering requirements, ever.</p></div>';
+  html+='<div class="card" style="margin-top:var(--gap-block);padding:var(--pad-card)"><h3 style="margin:0 0 6px;color:var(--head)">House Rules — Prime Edition</h3><p style="margin:0;color:var(--muted);line-height:1.7;font-size:14px">Singles only, stakes in USDT. If odds change while a selection sits in your slip, you must accept the new price before placing. Suspended selections are flagged and cannot be placed until the market reopens. Cash out is offered at 0.88× the current potential return. Winnings settle on-chain — no wagering requirements, ever.</p></div>';
   document.getElementById("page-home").innerHTML=html;
 }
 function renderLive(){
@@ -685,12 +688,12 @@ function renderLive(){
   chips+='<button class="fchip '+(liveLeague==="All"?"on":"")+'" onclick="setLiveLeague(\'All\')">All competitions</button>';
   LEAGUES.forEach(function(l){ chips+='<button class="fchip '+(liveLeague===l.id?"on":"")+'" onclick="setLiveLeague(\''+l.id+'\')">'+esc(l.name)+'</button>'; });
   chips+='</div>';
-  var html='<div class="fade"><div class="eyebrow" style="color:var(--live)">'+icon("live","ic-sm")+' In Play</div><h1 class="serif" style="margin:6px 0 4px;color:var(--head);font-size:34px">Live Betting</h1><p style="color:var(--muted);margin:0 0 16px">Clocks advance every 45 seconds. Odds drift as the desk trades \u2014 watch your slip if a price moves. Filter by sport or competition:</p>'+sportTilesHTML('live')+chips;
+  var html='<div class="fade"><div class="eyebrow" style="color:var(--live)">'+icon("live","ic-sm")+' In Play</div><h1 class="serif" style="margin:6px 0 4px;color:var(--head);font-size:34px">Live Betting</h1><p style="color:var(--muted);margin:0">Clocks advance every 45 seconds. Odds drift as the desk trades \u2014 watch your slip if a price moves. Filter by sport or competition:</p>'+sportTilesHTML('live')+chips;
   if(filtered.length){
     html+=matchesTable(filtered,true);
   } else {
     var soon=MATCHES.filter(function(m){return !m.live});
-    html+='<div class="empty" style="margin-bottom:6px"><b style="color:var(--head)">Nothing is live for this filter right now.</b><br>No blank screens here \u2014 this is what starts next instead:</div>';
+    html+='<div class="empty" style="margin:0"><b style="color:var(--head)">Nothing is live for this filter right now.</b><br>No blank screens here \u2014 this is what starts next instead:</div>';
     html+='<div class="sectionhead"><h2>Starting soon</h2><p>Upcoming fixtures \u00b7 kick-off times shown \u00b7 1X2</p></div>'+matchesTable(soon,true);
   }
   html+='</div>';
