@@ -544,11 +544,11 @@ body.nav #page-football .mcard{animation-delay:.05s}
 <button class="mobileslipbar" id="mobileSlipBar" style="display:none" onclick="location.hash='#/slip'" aria-label="Open bet slip">H<span id="mobileSlipCount">0</span></button>
 
 <nav class="bottomnav">
-  <button onclick="location.hash='#/home'"><span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17"/><path d="M12 3.5v17"/><path d="M5.6 6.4c2.8 2.3 2.8 8.9 0 11.2"/><path d="M18.4 6.4c-2.8 2.3-2.8 8.9 0 11.2"/></svg></span>Sports</button>
-  <button onclick="location.hash='#/live'"><span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="1.6"/><path d="M8.8 15.2a4.6 4.6 0 0 1 0-6.4"/><path d="M15.2 8.8a4.6 4.6 0 0 1 0 6.4"/><path d="M6.2 17.8a8.6 8.6 0 0 1 0-11.6"/><path d="M17.8 6.2a8.6 8.6 0 0 1 0 11.6"/></svg><i class="livedotbadge"></i></span>Live</button>
-  <button onclick="location.hash='#/football'"><span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 8.2l2.9 2.1-1.1 3.4h-3.6l-1.1-3.4z"/><path d="M12 8.2V3.6M14.9 10.3l4.3-1.3M13.8 13.7l2.5 3.7M10.2 13.7l-2.5 3.7M9.1 10.3L4.8 9"/></svg></span>Football</button>
-  <button onclick="location.hash='#/match'"><span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.8"/><circle cx="12" cy="12" r="1.2"/></svg></span>Match</button>
-  <button onclick="location.hash='#/slip'"><span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5h12V20l-2-1.3-2 1.3-2-1.3L10 20l-2-1.3L6 20z"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="9" y1="11.8" x2="15" y2="11.8"/></svg></span>Slip</button>
+  <button id="bnavMenu" onclick="toggleDrawer()"><span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></span>Menu</button>
+  <button id="bnavSports" onclick="location.hash='#/home'"><span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17"/><path d="M12 3.5v17"/><path d="M5.6 6.4c2.8 2.3 2.8 8.9 0 11.2"/><path d="M18.4 6.4c-2.8 2.3-2.8 8.9 0 11.2"/></svg></span>Sports</button>
+  <button id="bnavCasino" onclick="scopeGo('Casino')"><span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5.5" y="3.5" width="13" height="17" rx="2"/><path d="M12 7.8l2.3 2.8-2.3 2.8-2.3-2.8z"/><path d="M12 13.4v3.2"/></svg></span>Casino</button>
+  <button id="bnavChat" onclick="scopeGo('Chat')"><span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="11.5" rx="2.5"/><path d="M8 16v3.8l4.2-3.8"/></svg></span>Chat</button>
+  <button id="bnavSearch" onclick="focusPageSearch()"><span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><line x1="15.8" y1="15.8" x2="20.5" y2="20.5"/></svg></span>Search</button>
 </nav>
 
 <div class="sheet" id="walletSheet">
@@ -983,7 +983,7 @@ function hubieTap(){ showToast("Hubie is live 24/7 in the full Housebets app —
 function toggleDrawer(){ document.body.classList.toggle("drawer"); document.getElementById("scrim").classList.toggle("show", document.body.classList.contains("drawer")); }
 function closeDrawer(){ document.body.classList.remove("drawer"); if(!document.querySelector(".sheet.open")) document.getElementById("scrim").classList.remove("show"); }
 function currentPageSearchInput(){ var id=(location.hash||"#/home").slice(2).split("/")[0]||"home"; var pg=document.getElementById("page-"+id); return pg ? pg.querySelector(".pagesearch-input") : null; }
-function focusPageSearch(){ var inp=currentPageSearchInput(); if(inp){ inp.scrollIntoView({block:"center",behavior:"smooth"}); setTimeout(function(){ inp.focus(); },80); } else { location.hash="#/home"; setTimeout(function(){ var i2=currentPageSearchInput(); if(i2) i2.focus(); },140); } }
+function focusPageSearch(){ var inp=currentPageSearchInput(); if(inp){ if(inp.scrollIntoView) inp.scrollIntoView({block:"center",behavior:"smooth"}); setTimeout(function(){ inp.focus(); },80); } else { location.hash="#/home"; setTimeout(function(){ var i2=currentPageSearchInput(); if(i2) i2.focus(); },140); } }
 function onSearch(q){
   var ae=document.activeElement;
   var wasInPage=!!(ae && ae.classList && ae.classList.contains("pagesearch-input"));
@@ -1000,6 +1000,8 @@ function scopeGo(name){
   closeDrawer(); location.hash="#/scope";
   setTimeout(function(){ renderScope(name); },30);
   window._scopeName=name;
+  document.querySelectorAll(".bottomnav button").forEach(function(b){ b.classList.remove("active"); });
+  var bn=document.getElementById(name==="Chat"?"bnavChat":"bnavCasino"); if(bn) bn.classList.add("active");
 }
 function sportGo(hash){ closeDrawer(); location.hash=hash; }
 
@@ -1789,6 +1791,8 @@ function route(rerender){
   if(PAGES.indexOf(h)===-1) h="home";
   PAGES.forEach(function(p){ var el=document.getElementById("page-"+p); if(el) el.classList.toggle("hidden", p!==h); });
   document.querySelectorAll(".bottomnav button").forEach(function(b){ b.classList.remove("active"); });
+  if(h==="home"){ var bn1=document.getElementById("bnavSports"); if(bn1) bn1.classList.add("active"); }
+  if(h==="scope"){ var bn2=document.getElementById(window._scopeName==="Chat"?"bnavChat":"bnavCasino"); if(bn2) bn2.classList.add("active"); }
   if(h==="home") renderHome();
   if(h==="live") renderLive();
   if(h==="football") renderFootball();
