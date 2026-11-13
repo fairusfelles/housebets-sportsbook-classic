@@ -542,11 +542,12 @@ var LEAGUES = [
   {id:"NBA", name:"NBA", country:"USA Basketball", icon:"basketball"}
 ];
 var LIVE_COMPS = LEAGUES.concat([
-  {id:"ATP", name:"ATP Tour", country:"World Tennis", icon:"tennis"},
-  {id:"WTA", name:"WTA Tour", country:"World Tennis", icon:"tennis"},
-  {id:"ESL", name:"ESL Pro League", country:"Esports · CS2", icon:"gamepad"}
+  {id:"ATP", name:"ATP Tour", country:"World Tennis", icon:"tennis", sport:"Tennis"},
+  {id:"WTA", name:"WTA Tour", country:"World Tennis", icon:"tennis", sport:"Tennis"},
+  {id:"ESL", name:"ESL Pro League", country:"Esports · CS2", icon:"gamepad", sport:"Esports"}
 ]);
 function sportOf(m){ return m.sport || (m.league==="NBA" ? "Basketball" : "Football"); }
+function compSport(c){ return c.sport || (c.id==="NBA" ? "Basketball" : "Football"); }
 
 var MATCHES = [
   {id:"m1", league:"PL", home:"Arsenal", away:"Brighton", time:"Live · 67'", minute:67, live:true, score:"2 – 1", odds:{"1":1.62,"X":3.90,"2":5.25}, sx:"saka havertz welbeck goalscorers anytime scorer goals halves handicaps corners cards btts over under ht/ft"},
@@ -948,7 +949,7 @@ function renderLive(){
   ["All","Football","Basketball","Tennis","Esports"].forEach(function(sp){ chips+='<button class="ttab '+(liveSport===sp?"on":"")+'" onclick="setLiveSport(\''+sp+'\')">'+sp+'</button>'; });
   chips+='</div><div class="filterchips" role="group" aria-label="Filter live matches by competition">';
   chips+='<button class="fchip '+(liveLeague==="All"?"on":"")+'" onclick="setLiveLeague(\'All\')"><span class="disc" style="background:var(--cyan)">'+icon("grid","ic-sm")+'</span> All</button>';
-  LIVE_COMPS.forEach(function(l){ chips+='<button class="fchip '+(liveLeague===l.id?"on":"")+'" onclick="setLiveLeague(\''+l.id+'\')">'+leagueBadge(l.id)+' '+esc(l.name)+'</button>'; });
+  LIVE_COMPS.filter(function(l){ return liveSport==="All" || compSport(l)===liveSport; }).forEach(function(l){ chips+='<button class="fchip '+(liveLeague===l.id?"on":"")+'" onclick="setLiveLeague(\''+l.id+'\')">'+leagueBadge(l.id)+' '+esc(l.name)+'</button>'; });
   chips+='</div>';
   var html='<div class="fade"><div class="eyebrow" style="color:var(--live)"><span class="livedot"></span> In Play</div><h1 class="serif" style="margin:6px 0 4px;color:var(--head);font-size:34px">Live Betting</h1><p style="color:var(--muted);margin:0 0 14px">Live score, clock and drifting odds on every match in play.</p>'+chips;
   var showEmpty = forceNoLive || !filtered.length;
@@ -962,7 +963,14 @@ function renderLive(){
   html+='</div>';
   document.getElementById("page-live").innerHTML=html;
 }
-function setLiveSport(sp){ liveSport=sp; renderLive(); }
+function setLiveSport(sp){
+  liveSport=sp;
+  if(liveLeague!=="All"){
+    var comp=null; for(var i=0;i<LIVE_COMPS.length;i++){ if(LIVE_COMPS[i].id===liveLeague) comp=LIVE_COMPS[i]; }
+    if(!comp || compSport(comp)!==sp) liveLeague="All";
+  }
+  renderLive();
+}
 function setLiveLeague(l){ liveLeague=l; renderLive(); }
 function renderFootball(){
   var html='<div class="fade"><div class="eyebrow" style="color:var(--cyan)">Football</div><h1 class="serif" style="margin:6px 0 4px;color:var(--head);font-size:34px">Football — All Leagues</h1><p style="color:var(--muted);margin:0">1X2 decimal odds. Tap '+icon("star","ic-sm")+' to follow a match. Tap any price to add it to your slip.</p>';
