@@ -331,7 +331,7 @@ tr:last-child td{border-bottom:none}
   <button class="iconbtn" onclick="toggleDrawer()" aria-label="Menu"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>
   <a href="#/home" class="logo"><span class="hmark">H</span><span class="logotext">HOUSE<b>BETS</b><small>Sportsbook</small></span></a>
   <div class="searchwrap">
-    <input id="searchInput" placeholder="Search teams, leagues, matches…" oninput="onSearch(this.value)">
+    <input id="searchInput" placeholder="Search teams, players, leagues, markets…" oninput="onSearch(this.value)">
   </div>
   <div class="topactions">
     <button class="iconbtn" onclick="toggleMobSearch()" aria-label="Search"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg></button>
@@ -474,7 +474,7 @@ var LEAGUES = [
 ];
 
 var MATCHES = [
-  {id:"m1", league:"PL", home:"Arsenal", away:"Brighton", time:"Live · 67'", minute:67, live:true, score:"2 – 1", odds:{"1":1.62,"X":3.90,"2":5.25}},
+  {id:"m1", league:"PL", home:"Arsenal", away:"Brighton", time:"Live · 67'", minute:67, live:true, score:"2 – 1", odds:{"1":1.62,"X":3.90,"2":5.25}, sx:"saka havertz welbeck goalscorers anytime scorer goals halves handicaps corners cards btts over under ht/ft"},
   {id:"m2", league:"PL", home:"Liverpool", away:"Chelsea", time:"Today 21:00", minute:null, live:false, score:"", odds:{"1":2.05,"X":3.45,"2":3.40}},
   {id:"m3", league:"PL", home:"Man City", away:"Tottenham", time:"Today 23:30", minute:null, live:false, score:"", odds:{"1":1.55,"X":4.10,"2":5.50}},
   {id:"m4", league:"UCL", home:"Real Madrid", away:"Bayern Munich", time:"Live · 34'", minute:34, live:true, score:"1 – 0", odds:{"1":2.20,"X":3.30,"2":3.10}},
@@ -692,7 +692,7 @@ function teamInitials(name){
 function badgeHue(name){ var h=0; for(var i=0;i<name.length;i++){ h=(h*31+name.charCodeAt(i))%360; } return h; }
 function matchCard(m, showLeague){
   var q=searchQuery;
-  if(q && (m.home+" "+m.away+" "+leagueName(m.league)).toLowerCase().indexOf(q)===-1) return "";
+  if(q && (m.home+" "+m.away+" "+leagueName(m.league)+" "+(m.sx||"")).toLowerCase().indexOf(q)===-1) return "";
   var starKey="fav-"+m.id;
   var lg=null; for(var i=0;i<LEAGUES.length;i++){ if(LEAGUES[i].id===m.league) lg=LEAGUES[i]; }
   var html='<div class="mcard">';
