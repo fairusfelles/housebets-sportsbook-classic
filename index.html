@@ -438,6 +438,20 @@ body.nav .fade{animation:fade .3s ease}
 .fbmenu button svg{flex:none}
 .fball{background:none;border:none;color:var(--muted);font:inherit;font-size:12.5px;font-weight:700;cursor:pointer;white-space:nowrap;padding:4px 0 4px 2px;flex:none}
 .fbpill{display:inline-flex;align-items:center;gap:6px;margin:2px 0 12px;padding:8px 12px;border-radius:999px;background:#141927;border:1px solid var(--line);color:#fff;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit}
+/* modern refinement pass */
+.fbhead{background:linear-gradient(90deg, color-mix(in srgb, var(--lgc,#02F7FD) 12%, transparent), rgba(0,0,0,0) 58%), linear-gradient(180deg,#151926,var(--panel))}
+.fbhead .badge{border-radius:50%;box-shadow:0 0 0 3px color-mix(in srgb, var(--lgc,#02F7FD) 25%, transparent), 0 6px 14px rgba(0,0,0,.35)}
+.mcard{border-radius:20px;box-shadow:inset 0 1px 0 rgba(255,255,255,.045), var(--elev)}
+.companel{box-shadow:inset 0 1px 0 rgba(255,255,255,.04), var(--elev)}
+.oddsnum,.scorebox,.oddsbtn,.fbmeta,.ko-count{font-variant-numeric:tabular-nums}
+.oddsbtn{transition:background .15s ease, transform .06s ease}
+.oddsbtn:active,.fbfollow:active,.fbnavpill:active,.segtab:active,.fbsel:active,.fbpill:active,.fball:active,.favchip:active{transform:scale(.97)}
+.segtab.on{box-shadow:0 4px 14px rgba(2,247,253,.13)}
+.fbnavpill{box-shadow:0 4px 12px rgba(0,0,0,.25)}
+body.nav #page-football .fbhead,body.nav #page-football .mcard{animation:rise .38s cubic-bezier(.2,.7,.3,1) both}
+body.nav #page-football .mcard{animation-delay:.05s}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){body.nav #page-football .fbhead,body.nav #page-football .mcard{animation:none}}
 
 .livehead{display:flex;align-items:center;gap:10px}
 .liveback{width:38px;height:38px;flex:none;border-radius:11px;background:var(--panel2);border:1px solid var(--line2);color:var(--head);display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
@@ -1267,7 +1281,7 @@ function setLiveLeague(l){ liveLeague=(liveLeague===l)?"All":l; renderLive(); }
 function fbHeadHTML(l, list, showAll){
   var fk="fav-lg-"+l.id;
   var lc=list.filter(function(m){return m.live}).length;
-  return '<div class="fbhead">'+leagueBadge(l.id)+'<div style="flex:1;min-width:0"><div class="fbname">'+esc(l.name)+'</div><div class="fbmeta">'+esc(l.country)+' \u00b7 '+list.length+' matches</div></div>'+(lc?'<span class="fblive"><span class="pdot"></span>'+lc+' live</span>':'')+'<button class="fbfollow '+(follows[fk]?"on":"")+'" onclick="toggleFollow(\''+fk+'\',event)">'+icon("star", follows[fk]?"fill":"")+' '+(follows[fk]?"Following":"Follow")+'</button>'+(showAll?'<button class="fball" onclick="fbOpenLeague(\''+l.id+'\')">All '+list.length+' \u203a</button>':'')+'</div>';
+  return '<div class="fbhead" style="--lgc:'+(LCOLORS[l.id]||"#02F7FD")+'">'+leagueBadge(l.id)+'<div style="flex:1;min-width:0"><div class="fbname">'+esc(l.name)+'</div><div class="fbmeta">'+esc(l.country)+' \u00b7 '+list.length+' matches</div></div>'+(lc?'<span class="fblive"><span class="pdot"></span>'+lc+' live</span>':'')+'<button class="fbfollow '+(follows[fk]?"on":"")+'" onclick="toggleFollow(\''+fk+'\',event)">'+icon("star", follows[fk]?"fill":"")+' '+(follows[fk]?"Following":"Follow")+'</button>'+(showAll?'<button class="fball" onclick="fbOpenLeague(\''+l.id+'\')">All '+list.length+' \u203a</button>':'')+'</div>';
 }
 function fbSortedList(lid){
   return MATCHES.filter(function(m){return m.league===lid}).slice().sort(function(a,b){ if(a.live!==b.live) return a.live?-1:1; if(a.live&&b.live) return (b.minute||0)-(a.minute||0); return (a.koMin||9999)-(b.koMin||9999); });
