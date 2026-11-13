@@ -251,9 +251,6 @@ tr:last-child td{border-bottom:none}
 .oddsbtn.wide .picklbl{font-size:12.5px;font-weight:700;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .oddsbtn.wide .oddsnum{font-size:15px;font-weight:800}
 .oddsbtn.wide.selected .picklbl{color:#04505C}
-.supportfab{position:fixed;right:24px;bottom:24px;width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,#3FF7F7,#0FB5B5);color:#032630;border:none;display:grid;place-items:center;box-shadow:0 10px 26px rgba(0,0,0,.5),0 0 18px rgba(23,230,230,.18);z-index:65}
-.supportfab:hover{background:#3FF7F7}
-@media(max-width:1100px){.supportfab{bottom:140px;right:16px}}
 @media(max-width:560px){.depbtn{padding:8px 11px;font-size:13px}.utile{padding:var(--pad-card);font-size:13px}.utilrow{gap:var(--gap-grid)}}
 /* BOTTOM / MOBILE */
 .bottomnav{display:none}
@@ -326,7 +323,6 @@ tr:last-child td{border-bottom:none}
   .walletpill .walbtn .ic{width:17px;height:17px}
   .pillunit{display:none}
   .depbtn{display:none}
-  .supportfab{width:48px;height:48px}
 }
 </style>
 </head>
@@ -426,7 +422,7 @@ tr:last-child td{border-bottom:none}
 </div>
 
 <div id="sheetSlip"></div></div>
-<button class="supportfab" onclick="openSupport()" aria-label="Support 24/7"><svg class="ic ic-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 13a8 8 0 0 1 16 0"/><rect x="3" y="13" width="4" height="6.5" rx="2"/><rect x="17" y="13" width="4" height="6.5" rx="2"/><path d="M19.5 19.5a4.5 4.5 0 0 1-4.5 2.7h-2.5"/></svg></button>
+
 <div class="sheet" id="supportSheet">
   <div style="display:flex;justify-content:space-between;align-items:center"><h2 style="margin:0;color:var(--head)">Support — 24/7</h2><button class="iconbtn" onclick="closeAllSheets()"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button></div>
   <p style="color:var(--muted);line-height:1.7">Real humans, around the clock — average reply under 5 minutes. Deposits, withdrawals, bet settlement: ask us anything.</p>
