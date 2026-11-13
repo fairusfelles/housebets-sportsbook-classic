@@ -973,9 +973,7 @@ function renderLive(){
   chips+='<button class="ttab favtab '+(liveSport==="Favs"?"on":"")+'" onclick="setLiveSport(\'Favs\')" aria-label="Favourites">'+icon("star", liveSport==="Favs"?"fill":"")+'</button>';
   ["All","Football","Basketball","Tennis","Esports"].forEach(function(sp){ chips+='<button class="ttab '+(liveSport===sp?"on":"")+'" onclick="setLiveSport(\''+sp+'\')">'+sp+'</button>'; });
   chips+='</div><div class="filterchips" role="group" aria-label="Filter live matches by competition">';
-  var allLbl = liveSport==="Tennis" ? "All tours" : (liveSport==="All" ? "All competitions" : "All leagues");
-  chips+='<button class="fchip '+(liveLeague==="All"?"on":"")+'" onclick="setLiveLeague(\'All\')"><span class="disc" style="background:var(--cyan)">'+icon("grid","ic-sm")+'</span> '+allLbl+'</button>';
-  LIVE_COMPS.filter(function(l){ return liveSport==="All" || liveSport==="Favs" || compSport(l)===liveSport; }).forEach(function(l){ chips+='<button class="fchip '+(liveLeague===l.id?"on":"")+'" onclick="setLiveLeague(\''+l.id+'\')">'+leagueBadge(l.id)+' '+esc(l.name)+'</button>'; });
+  LIVE_COMPS.filter(function(l){ return liveSport==="All" || liveSport==="Favs" || compSport(l)===liveSport; }).forEach(function(l){ var on=liveLeague===l.id; chips+='<button class="fchip '+(on?"on":"")+'" onclick="setLiveLeague(\''+l.id+'\')" title="'+(on?"Tap again to clear":"Filter to "+esc(l.name))+'">'+leagueBadge(l.id)+' '+esc(l.name)+(on?' <span aria-hidden="true" style="opacity:.75;font-weight:800">✕</span>':"")+'</button>'; });
   chips+='</div>';
   var html='<div class="fade"><div class="eyebrow" style="color:var(--live)"><span class="livedot"></span> In Play</div><h1 class="serif" style="margin:6px 0 4px;color:var(--head);font-size:34px">Live Betting</h1><p style="color:var(--muted);margin:0 0 14px">Live score, clock and drifting odds on every match in play.</p>'+chips;
   var showEmpty = forceNoLive || !filtered.length;
@@ -1041,7 +1039,7 @@ function setLiveSport(sp){
   }
   renderLive();
 }
-function setLiveLeague(l){ liveLeague=l; renderLive(); }
+function setLiveLeague(l){ liveLeague=(liveLeague===l)?"All":l; renderLive(); }
 function renderFootball(){
   var html='<div class="fade"><div class="eyebrow" style="color:var(--cyan)">Football</div><h1 class="serif" style="margin:6px 0 4px;color:var(--head);font-size:34px">Football — All Leagues</h1><p style="color:var(--muted);margin:0">1X2 decimal odds. Tap '+icon("star","ic-sm")+' to follow a match. Tap any price to add it to your slip.</p>';
   LEAGUES.filter(function(l){return l.id!=="NBA"}).forEach(function(l){
