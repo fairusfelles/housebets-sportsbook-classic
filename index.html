@@ -1166,6 +1166,7 @@ var TEAM_KITS = {
 };
 var kitUid = 0;
 function kitSlug(name){ return String(name).toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,""); }
+function kitMain(team){ var k=TEAM_KITS[team]; return k? k.main : "#39415A"; }
 function kitIcon(team, sizeClass){
   var kit = TEAM_KITS[team] || {main:"#39415A", second:"#C7CEDA", style:"solid"};
   var base = "kit-" + kitSlug(team) + "-" + (++kitUid);
@@ -1509,7 +1510,7 @@ function renderMatch(){
       meta='<span class="mm-meta"><span class="mm-time'+(soon?" soon":"")+'">'+esc(line1)+'</span>'+((clock||soon)?'<span class="mm-day">'+esc(day)+'</span>':'')+'</span>'; }
     return '<button class="mselitem" onclick="'+(cur?"toggleMatchMenu(event)":((isFootballMatch(x)?"openMatch":"openDetail")+"(\'"+x.id+"\')"))+'"><span class="mselav">'+kitIcon(x.home,"kit-xs")+kitIcon(x.away,"kit-xs")+'</span><span class="mselname"><span class="mselname-t">'+esc(x.home)+' <span class="vs">v</span> '+esc(x.away)+'</span><span class="mselname-l">'+esc(leagueName(x.league))+'</span></span>'+meta+'</button>'; }).join("");
   var html='<div class="fade"><div class="mselrow"><button class="selback" onclick="location.hash=\'#/football\'" aria-label="Back to Football">'+icon("arrowL")+'</button><button class="msel" onclick="toggleMatchMenu(event)">'+tcode(H)+" - "+tcode(A)+' <span class="mselchev">\u25be</span></button></div><div class="mselmenu" id="matchMenu" style="display:'+(matchMenuOpen?"":"none")+'">'+menuRows+'</div>';
-  html+='<div class="sbcard"><div class="sb-top"><button class="sb-back" onclick="location.hash=\'#/football\'" aria-label="Back">'+icon("arrowL","ic-sm")+'</button><span class="sb-league">'+esc(leagueName(m1?m1.league:"PL"))+'</span><button class="sb-star '+(follows["fav-m1"]?"on":"")+'" onclick="toggleFollow(\'fav-m1\',event)" aria-label="Follow this match">'+icon("star", follows["fav-m1"]?"fill":"")+'</button></div>';
+  html+='<div class="sbcard" style="background:linear-gradient(112deg, color-mix(in srgb, '+kitMain(m1.home)+' 24%, var(--panel)) 0%, var(--panel) 45%, var(--panel) 55%, color-mix(in srgb, '+kitMain(m1.away)+' 24%, var(--panel)) 100%)"><div class="sb-top"><button class="sb-back" onclick="location.hash=\'#/football\'" aria-label="Back">'+icon("arrowL","ic-sm")+'</button><span class="sb-league">'+esc(leagueName(m1?m1.league:"PL"))+'</span><button class="sb-star '+(follows["fav-m1"]?"on":"")+'" onclick="toggleFollow(\'fav-m1\',event)" aria-label="Follow this match">'+icon("star", follows["fav-m1"]?"fill":"")+'</button></div>';
   html+='<div class="sb-main"><div class="sb-side">'+kitIcon(H,"kit-lg")+'<span class="sb-name">'+esc(H)+'</span></div>'+(m1.live?'<div class="sb-mid"><div class="sb-nums"><span class="sb-num">'+esc(hs)+'</span><span class="sb-dash">\u2013</span><span class="sb-num">'+esc(as)+'</span></div><div class="sb-live"><span class="livepill"><span class="livedot"></span>Live</span><span class="sb-min">'+minTxt+'&#39;</span></div></div>':'<div class="sb-mid"><div class="sb-vs">VS</div><div class="sb-kick">'+esc(m1.time||"Kick-off TBC")+'</div></div>')+'<div class="sb-side">'+kitIcon(A,"kit-lg")+'<span class="sb-name">'+esc(A)+'</span></div></div>';
   html+='<div class="sb-follow">'+folBtn(H,true)+'<span class="sb-state">'+suspPill+'</span>'+folBtn(A,false)+'</div></div>';
 
