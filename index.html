@@ -201,6 +201,7 @@ tr:last-child td{border-bottom:none}
 .filterchips{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px}
 .sporttiles+.filterchips{margin-top:var(--gap-grid)}
 .fchip,.mbtab{background:#12151F;border:1px solid var(--line2);color:#C3CEDA;padding:7px 13px;border-radius:999px;font-weight:700;font-size:12.5px}
+.fchip{display:inline-flex;align-items:center;gap:6px}
 .fchip.on,.mbtab.on{background:var(--cyan);color:#032630;border-color:var(--cyan)}
 .mbtabs{display:flex;gap:6px;margin:0 0 12px}
 .grouphead{font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--cyan);margin:calc(var(--gap-section) - var(--gap-grid)) 0 12px;padding-bottom:6px;border-bottom:1px solid var(--line2)}
@@ -550,6 +551,7 @@ var MARKET_GROUPS = ["Popular", "Goals", "Halves", "Handicaps", "Goalscorers", "
 
 var ICON_PATHS = {
   menu:'<line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/>',
+  grid:'<rect x="4" y="4" width="7" height="7" rx="1.6"/><rect x="13" y="4" width="7" height="7" rx="1.6"/><rect x="4" y="13" width="7" height="7" rx="1.6"/><rect x="13" y="13" width="7" height="7" rx="1.6"/>',
   search:'<circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/>',
   wallet:'<rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10.5h18"/><circle cx="17" cy="14.8" r="1.1"/>',
   crown:'<path d="M3.5 8l4.7 3.8L12 5.5l3.8 6.3L20.5 8 19.3 17H4.7z"/><line x1="5" y1="20.2" x2="19" y2="20.2"/>',
@@ -873,10 +875,10 @@ function renderLive(){
     return true;
   });
   var chips='<div class="filterchips" role="group" aria-label="Filter live matches by sport">';
-  ["All","Football","Basketball"].forEach(function(sp){ chips+='<button class="fchip '+(liveSport===sp?"on":"")+'" onclick="setLiveSport(\''+sp+'\')">'+sp+'</button>'; });
+  [["All","grid"],["Football","ball"],["Basketball","basketball"]].forEach(function(pair){ var sp=pair[0]; chips+='<button class="fchip '+(liveSport===sp?"on":"")+'" onclick="setLiveSport(\''+sp+'\')">'+icon(pair[1],"ic-sm")+' '+sp+'</button>'; });
   chips+='</div><div class="filterchips" role="group" aria-label="Filter live matches by competition">';
-  chips+='<button class="fchip '+(liveLeague==="All"?"on":"")+'" onclick="setLiveLeague(\'All\')">All competitions</button>';
-  LEAGUES.forEach(function(l){ chips+='<button class="fchip '+(liveLeague===l.id?"on":"")+'" onclick="setLiveLeague(\''+l.id+'\')">'+esc(l.name)+'</button>'; });
+  chips+='<button class="fchip '+(liveLeague==="All"?"on":"")+'" onclick="setLiveLeague(\'All\')">'+icon("trophy","ic-sm")+' All competitions</button>';
+  LEAGUES.forEach(function(l){ chips+='<button class="fchip '+(liveLeague===l.id?"on":"")+'" onclick="setLiveLeague(\''+l.id+'\')">'+icon(l.icon,"ic-sm")+' '+esc(l.name)+'</button>'; });
   chips+='</div>';
   var html='<div class="fade"><div class="eyebrow" style="color:var(--live)">'+icon("live","ic-sm")+' In Play</div><h1 class="serif" style="margin:6px 0 4px;color:var(--head);font-size:34px">Live Betting</h1><p style="color:var(--muted);margin:0">Clocks advance every 45 seconds. Odds drift as the desk trades \u2014 watch your slip if a price moves. Filter by sport or competition:</p>'+sportTilesHTML('live')+chips;
   var showEmpty = forceNoLive || !filtered.length;
