@@ -632,6 +632,7 @@ function compSport(c){ return c.sport || (c.id==="NBA" ? "Basketball" : "Footbal
 
 var MATCHES = [
   {id:"m1", league:"PL", home:"Arsenal", away:"Brighton", time:"Live · 67'", minute:67, live:true, score:"2 – 1", odds:{"1":1.62,"X":3.90,"2":5.25}, sx:"saka havertz welbeck goalscorers anytime scorer goals halves handicaps corners cards btts over under ht/ft"},
+  {id:"m13", league:"PL", home:"Liverpool", away:"Man City", time:"Today", minute:null, live:false, score:"", odds:{"1":2.40,"X":3.30,"2":2.90}, koMin:3, demo:true},
   {id:"m2", league:"PL", home:"Liverpool", away:"Chelsea", time:"Today 21:00", minute:null, live:false, score:"", odds:{"1":2.05,"X":3.45,"2":3.40}, koMin:153},
   {id:"m3", league:"PL", home:"Man City", away:"Tottenham", time:"Today 23:30", minute:null, live:false, score:"", odds:{"1":1.55,"X":4.10,"2":5.50}, koMin:303},
   {id:"m4", league:"UCL", home:"Real Madrid", away:"Bayern Munich", time:"Live · 34'", minute:34, live:true, score:"1 – 0", odds:{"1":2.20,"X":3.30,"2":3.10}},
@@ -886,11 +887,18 @@ function koText(mins){
   if(mins>=60){ var h=Math.floor(mins/60), r=Math.round(mins%60); return "Kicks off in "+h+"h"+(r?" "+r+"m":""); }
   return "Kicks off in "+Math.max(1,Math.round(mins))+" min";
 }
+function flipLive(m){
+  m.live=true; m.minute=1; m.score="0 \u2013 0"; m.time="Live \u00b7 1'"; m.koMin=undefined;
+  showToast("LIVE \u2014 "+m.home+" v "+m.away+" has kicked off");
+  route(false);
+}
 function updateCountdowns(){
   MATCHES.forEach(function(m){ if(!m.live && m.koMin!==undefined && m.koMin>0) m.koMin=Math.max(0,m.koMin-0.5); });
   document.querySelectorAll(".ko-count").forEach(function(el){
     var mm=findMatch(el.getAttribute("data-mid")); if(mm && mm.koMin!==undefined) el.textContent=koText(mm.koMin);
   });
+  var fm=findMatch("m13");
+  if(fm && !fm.live && fm.koMin!==undefined && fm.koMin<=0) flipLive(fm);
 }
 function followedMatches(){
   return MATCHES.filter(function(m){
