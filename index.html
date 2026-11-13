@@ -517,6 +517,15 @@ body.nav #page-football .mcard{animation-delay:.05s}
 .sb-vs{font-size:30px;font-weight:800;color:var(--head);line-height:1.1}
 .sb-kick{color:var(--muted);font-weight:700;font-size:13px}
 body.menuopen .mobileslipbar{display:none}
+.suspbanner{display:flex;align-items:center;gap:12px;background:linear-gradient(180deg,rgba(255,92,92,.07),rgba(255,92,92,.02));border:1px solid rgba(255,92,92,.25);border-left:3px solid #FF5C5C;border-radius:14px;padding:12px 14px;margin-top:14px}
+.suspbanner .sb-ic{width:34px;height:34px;flex:none;display:grid;place-items:center;border-radius:10px;background:rgba(255,92,92,.14);color:#FF9A9A}
+.suspbanner .sb-tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.suspbanner .sb-tx strong{color:#FFD9D9;font-size:14px}
+.suspbanner .sb-tx span{color:var(--muted);font-size:12.5px;line-height:1.45}
+.suspbanner .sb-chip{flex:none;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#FFB3B3;border:1px solid rgba(255,92,92,.35);padding:6px 9px;border-radius:999px}
+.oddsbtn.ref{opacity:.48}
+.oddsbtn.ref .oprice{color:var(--muted)}
+.suspchip{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#C7CEDA;background:#171C29;border:1px solid var(--line2);padding:5px 9px;border-radius:999px}
 </style>
 </head>
 <body>
@@ -1462,6 +1471,7 @@ function renderMatch(){
   html+='<div class="sb-follow">'+folBtn(H,true)+'<span class="sb-state">'+suspPill+'</span>'+folBtn(A,false)+'</div></div>';
 
 
+  if(!isMain && m1.suspended){ html+='<div class="suspbanner"><span class="sb-ic">'+icon("lock")+'</span><div class="sb-tx"><strong>Markets suspended \u00b7 '+esc(m1.suspReason||"Check")+'</strong><span>Every market on this match is paused while play is reviewed. Last prices stay visible, greyed, for reference.</span></div><span class="sb-chip">Reopens shortly</span></div>'; }
   html+='<input class="mfilter" id="marketFilter" type="text" placeholder="Search markets or players" oninput="filterMarkets(this.value)" value="'+esc(marketFilterQuery)+'">';
   html+='<div class="gtabs" id="stripGtabs"><button class="gtab'+(activeGTab===""?" on":"")+'" onclick="jumpGroup(this,\'\')">All '+book.length+'</button>'+MARKET_GROUPS.map(function(g){ var c=book.filter(function(x){return x.group===g;}).length; return '<button class="gtab'+(activeGTab===g?" on":"")+'" onclick="jumpGroup(this,\''+g+'\')">'+esc(g)+" "+c+'</button>'; }).join("")+'</div>';
   MARKET_GROUPS.filter(function(g){ return book.some(function(x){ return x.group===g; }); }).forEach(function(g){
@@ -1471,9 +1481,9 @@ function renderMatch(){
     html+='<div class="grouphead">'+g+' <span class="gcount">\u00b7 '+gMarkets.length+' markets</span></div>';
     gMarkets.forEach(function(mk){
     var isSusp = mk.suspended || !!m1.suspended || (isMain && ((mk.id==="ou" && ouSuspended) || goalSuspended));
-    html+='<div class="market'+(closedMarkets[mk.id]?" closed":"")+'" data-mid="'+mk.id+'"><h3 onclick="toggleMarket(this)">'+esc(mk.name)+'<span class="mright"><span>'+(isSusp?("SUSPENDED \u00b7 "+esc(suspendReason)+" "+icon("lock","ic-sm")):"OPEN")+'</span><span class="mchev">\u25be</span></span></h3>';
+    html+='<div class="market'+(closedMarkets[mk.id]?" closed":"")+'" data-mid="'+mk.id+'"><h3 onclick="toggleMarket(this)">'+esc(mk.name)+'<span class="mright">'+(!isMain && m1.suspended ? '<span class="suspchip">'+icon("lock","ic-sm")+' Suspended</span>' : '<span>'+(isSusp?("SUSPENDED \u00b7 "+esc(suspendReason)+" "+icon("lock","ic-sm")):"OPEN")+'</span>')+'<span class="mchev">\u25be</span></span></h3>';
     if(isSusp){
-      if(!isMain && m1.suspended){ html+='<div class="marketbody"><div class="suspendedbox">'+icon("pause")+' Suspended \u00b7 '+esc(m1.suspReason||"Check")+' \u2014 this match is under review and the desk has closed every market. Betting reopens when play is cleared.</div></div>'; }
+      if(!isMain && m1.suspended){ html+='<div class="marketbody'+(mk.grid?" grid2":"")+'">'+mk.picks.map(function(p){ return '<button class="oddsbtn ref" disabled><span class="olabel">'+esc(p.label)+'</span><span class="oprice">'+Number(p.odds).toFixed(2)+' <span class="imp">'+Math.round(100/p.odds)+'%</span></span></button>'; }).join("")+'</div>'; }
       else if(mk.id==="ng" && !goalSuspended){ html+='<div class="suspendedbox">'+icon("lock")+' Market suspended \u2014 the Goalscorers market is closed for betting in this prototype. Prices are shown for reference only and cannot be added to the slip.</div><div class="marketbody">'; mk.picks.forEach(function(p){ html+='<button class="oddsbtn suspended" disabled><small>'+esc(p.k)+'</small>'+'<span class="oprice">'+p.odds.toFixed(2)+'</span>'+'<span class="imp">'+Math.round(100/p.odds)+'%</span></button>'; }); html+='</div>'; }
       else if(goalSuspended){ html+='<div class="marketbody"><div class="suspendedbox">'+icon("pause")+' Suspended \u00b7 '+esc(suspendReason)+' \u2014 Brighton have just scored and the desk is repricing every market. Reopens shortly; any selection in your slip is flagged meanwhile.</div></div>'; }
       else { html+='<div class="marketbody"><div class="suspendedbox">'+icon("pause")+' Suspended \u00b7 '+esc(suspendReason)+' \u2014 the desk is repricing Over / Under 2.5. Reopens shortly. Any O/U selection in your slip is flagged meanwhile.</div></div>'; }
