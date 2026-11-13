@@ -416,6 +416,16 @@ body.nav .fade{animation:fade .3s ease}
 .comp{position:relative}
 .compstar{position:absolute;top:8px;right:8px}
 .lgstar{vertical-align:middle}
+.fbnav{display:flex;gap:8px;overflow-x:auto;padding:10px 0 2px;scrollbar-width:none}
+.fbnav::-webkit-scrollbar{display:none}
+.fbnavpill{display:flex;align-items:center;gap:8px;padding:7px 12px 7px 8px;border-radius:999px;background:#141927;border:1px solid var(--line);color:#fff;font-weight:700;font-size:13px;white-space:nowrap;cursor:pointer;font-family:inherit}
+.fbhead{display:flex;align-items:center;gap:12px;margin:26px 0 12px;padding:14px 16px;background:linear-gradient(180deg,#151926,var(--panel));border:1px solid var(--line);border-radius:16px;box-shadow:var(--elev)}
+.fbhead .badge{width:34px;height:34px}
+.fbname{font-size:16.5px;font-weight:800;color:#fff}
+.fbmeta{font-size:12px;color:var(--muted);margin-top:2px}
+.fblive{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:800;color:#FF5C7A;flex:none}
+.fbfollow{display:flex;align-items:center;gap:6px;padding:8px 12px;border-radius:999px;border:1px solid var(--line2);background:#10141F;color:#fff;font-weight:700;font-size:12.5px;cursor:pointer;flex:none;font-family:inherit}
+.fbfollow.on{background:var(--cyan);color:#04505C;border-color:transparent}
 
 .livehead{display:flex;align-items:center;gap:10px}
 .liveback{width:38px;height:38px;flex:none;border-radius:11px;background:var(--panel2);border:1px solid var(--line2);color:var(--head);display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
@@ -1237,11 +1247,16 @@ function setLiveSport(sp){
 }
 function setLiveLeague(l){ liveLeague=(liveLeague===l)?"All":l; renderLive(); }
 function renderFootball(){
-  var html='<div class="fade"><div class="eyebrow" style="color:var(--cyan)">Football</div><h1 class="serif" style="margin:6px 0 4px;color:var(--head);font-size:34px">Football — All Leagues</h1><p style="color:var(--muted);margin:0">1X2 decimal odds. Tap '+icon("star","ic-sm")+' to follow a match. Tap any price to add it to your slip.</p>';
-  LEAGUES.filter(function(l){return l.id!=="NBA"}).forEach(function(l){
-    var list=MATCHES.filter(function(m){return m.league===l.id});
+  var fbLeagues=LEAGUES.filter(function(l){return l.id!=="NBA"});
+  var all=MATCHES.filter(function(m){return fbLeagues.some(function(l){return l.id===m.league})});
+  var liveN=all.filter(function(m){return m.live}).length;
+  var html='<div class="fade"><div class="eyebrow" style="color:var(--cyan)">Football</div><h1 style="margin:6px 0 4px;color:var(--head);font-size:30px;font-weight:800;letter-spacing:-.02em">Football</h1><p style="color:var(--muted);margin:0">5 competitions \u00b7 '+all.length+' matches \u00b7 '+liveN+' live now. Match result odds on every row \u2014 tap a price to add it to your slip.</p>';
+  html+='<div class="fbnav">'+fbLeagues.map(function(l){ return '<button class="fbnavpill" onclick="scrollToLeague(\''+l.id+'\')">'+leagueBadge(l.id)+' '+esc(l.name.replace("UEFA ",""))+'</button>'; }).join("")+'</div>';
+  fbLeagues.forEach(function(l){
+    var list=MATCHES.filter(function(m){return m.league===l.id}).slice().sort(function(a,b){ if(a.live!==b.live) return a.live?-1:1; if(a.live&&b.live) return (b.minute||0)-(a.minute||0); return (a.koMin||9999)-(b.koMin||9999); });
     var fk="fav-lg-"+l.id;
-    html+='<div id="lg-'+l.id+'"><div class="sectionhead"><h2>'+icon(l.icon)+' '+esc(l.name)+' <button class="star lgstar '+(follows[fk]?"on":"")+'" onclick="toggleFollow(\''+fk+'\',event)" aria-label="Follow league">'+icon("star", follows[fk]?"fill":"")+'</button></h2><p>'+esc(l.country)+'</p></div>'+matchesTable(list,false)+'</div>';
+    var lc=list.filter(function(m){return m.live}).length;
+    html+='<div id="lg-'+l.id+'"><div class="fbhead">'+leagueBadge(l.id)+'<div style="flex:1;min-width:0"><div class="fbname">'+esc(l.name)+'</div><div class="fbmeta">'+esc(l.country)+' \u00b7 '+list.length+' matches</div></div>'+(lc?'<span class="fblive"><span class="pdot"></span>'+lc+' live</span>':'')+'<button class="fbfollow '+(follows[fk]?"on":"")+'" onclick="toggleFollow(\''+fk+'\',event)">'+icon("star", follows[fk]?"fill":"")+' '+(follows[fk]?"Following":"Follow")+'</button></div>'+matchesTable(list,false)+'</div>';
   });
   html+='</div>';
   document.getElementById("page-football").innerHTML=html;
