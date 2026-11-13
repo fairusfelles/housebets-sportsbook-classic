@@ -544,6 +544,20 @@ body.menuopen .mobileslipbar{display:none}
 .hometabs::-webkit-scrollbar{display:none}
 .htab span{white-space:nowrap}
 .hometabs{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 34px),transparent 100%);mask-image:linear-gradient(90deg,#000 calc(100% - 34px),transparent 100%)}
+.mobileslipbar{background:linear-gradient(180deg,rgba(19,28,39,.94),rgba(9,13,20,.97));backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(2,247,253,.38);color:#fff;height:60px;box-shadow:0 18px 38px rgba(0,0,0,.62),inset 0 1px 0 rgba(255,255,255,.09)}
+#mobileSlipCount{background:var(--cyan);color:#06222B}
+.msb-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.msb-txt{flex:none;color:#fff}
+.msb-sub{font-size:11px;font-weight:700;color:#8FE8F0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.msb-chev{color:var(--cyan)}
+.mobileslipbar.warn{border-color:rgba(255,176,66,.72)}
+.mobileslipbar.warn #mobileSlipCount{background:#FFB042;color:#2B1A00}
+.mobileslipbar.warn .msb-sub{color:#FFCF87}
+.mobileslipbar.warn .msb-chev{color:#FFB042}
+.mobileslipbar.susp{border-color:rgba(255,92,92,.62)}
+.mobileslipbar.susp #mobileSlipCount{background:#FF5C5C;color:#fff}
+.mobileslipbar.susp .msb-sub{color:#FFA3A3}
+.mobileslipbar.susp .msb-chev{color:#FF5C5C}
 </style>
 </head>
 <body>
@@ -614,7 +628,7 @@ body.menuopen .mobileslipbar{display:none}
   </aside>
 </div>
 
-<button class="mobileslipbar" id="mobileSlipBar" style="display:none" onclick="location.hash='#/slip'" aria-label="Open bet slip"><span id="mobileSlipCount">0</span><span class="msb-txt" id="mobileSlipText">Bet slip</span><span class="msb-chev"><svg class="ic ic-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></span></button>
+<button class="mobileslipbar" id="mobileSlipBar" style="display:none" onclick="location.hash='#/slip'" aria-label="Open bet slip"><span id="mobileSlipCount">0</span><span class="msb-main"><span class="msb-txt" id="mobileSlipText">Bet slip</span><span class="msb-sub" id="mobileSlipSub"></span></span><span class="msb-chev"><svg class="ic ic-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></span></button>
 
 <nav class="bottomnav">
   <button id="bnavMenu" onclick="toggleDrawer()"><span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></span>Menu</button>
@@ -1698,7 +1712,17 @@ function renderSlipAll(rerenderPage){
   var side=document.getElementById("sideSlip"); if(side) side.innerHTML=slipHTML("side");
   var sheet=document.getElementById("sheetSlip"); if(sheet) sheet.innerHTML="<h2 class='serif' style='color:var(--head)'>Bet Slip</h2>"+slipHTML("sheet");
   var cnt=document.getElementById("mobileSlipCount"); if(cnt) cnt.textContent=slip.length;
-  var mt=document.getElementById("mobileSlipText"); if(mt && slip.length){ mt.textContent = slip.length===1 ? (slip[0].label+" @ "+(+slip[0].odds).toFixed(2)) : (slip[0].label+" +"+(slip.length-1)+" more"); }
+  var mt=document.getElementById("mobileSlipText"), msb=document.getElementById("mobileSlipSub"), mbar=document.getElementById("mobileSlipBar");
+  if(mt && mbar && slip.length){
+    var warnIt=null, suspIt=null;
+    slip.forEach(function(x){ if(x.needsAccept && !warnIt) warnIt=x; if(x.suspended && !suspIt) suspIt=x; });
+    mbar.classList.toggle("warn", !!warnIt);
+    mbar.classList.toggle("susp", !warnIt && !!suspIt);
+    if(warnIt){ mt.textContent="Odds changed \u2014 tap to accept"; if(msb) msb.textContent=warnIt.label+": "+(+warnIt.odds).toFixed(2)+" \u2192 "+(+warnIt.newOdds).toFixed(2); }
+    else if(suspIt){ mt.textContent="Selection suspended"; if(msb) msb.textContent=suspIt.label; }
+    else { mt.textContent = slip.length===1 ? (slip[0].label+" @ "+(+slip[0].odds).toFixed(2)) : (slip[0].label+" +"+(slip.length-1)+" more");
+      if(msb){ var pot=0; slip.forEach(function(x){ pot+=(x.stake||0)*Number(x.odds); }); msb.textContent="Returns "+fmt(pot)+" USDT \u00b7 settles on "+settleNet; } }
+  }
   var navCnt=document.getElementById("navBetCount"); if(navCnt) navCnt.textContent=String(myBets.filter(function(b){return b.status==="Open"}).length);
   var mobOdds=document.getElementById("mobileSlipOdds"); if(mobOdds) mobOdds.textContent=slip.length? Number(slip[0].odds).toFixed(2)+" · "+fmt(slip[0].stake||0)+" USDT" : "Tap odds to bet";
   var mobBar=document.getElementById("mobileSlipBar"); if(mobBar){ mobBar.style.display=slip.length? "" : "none"; if(slip.length && slip.length!==lastSlipCount){ mobBar.classList.remove("pop"); void mobBar.offsetWidth; mobBar.classList.add("pop"); } }
