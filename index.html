@@ -257,6 +257,11 @@ tr:last-child td{border-bottom:none}
 .mcard-soon{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:13px;font-weight:700;margin:6px 0 8px}
 .trow{display:flex;align-items:center;gap:11px;padding:5px 0}
 .tbadge{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:800;color:#EDF1F5;border:1px solid rgba(255,255,255,.22);flex:none}
+.kit{width:34px;height:34px;flex:none;display:block}
+.kit-lg{width:46px;height:46px;flex:none;display:block}
+.scoreboard{display:flex;align-items:center;gap:14px;margin:14px 0 6px;flex-wrap:wrap}
+.scoreboard .sb-team{font-size:17px;font-weight:800;color:var(--head)}
+.scoreboard .sb-score{font-size:28px;font-weight:800;color:var(--head);font-variant-numeric:tabular-nums;letter-spacing:1px}
 .tname{font-weight:700;color:#fff;font-size:15px}
 .scorebox{margin-left:auto;background:#0B0D13;border:1px solid var(--line2);color:#fff;font-weight:800;min-width:34px;text-align:center;padding:5px 0;border-radius:8px;font-variant-numeric:tabular-nums}
 .mcard-market{margin-top:12px;border-top:1px solid var(--line);padding-top:12px}
@@ -749,6 +754,53 @@ function oddsButtons(m){
   });
   return html;
 }
+var TEAM_KITS = {
+  "Arsenal":{main:"#EF0107", second:"#FFFFFF", style:"solid"},
+  "Brighton":{main:"#0057B8", second:"#FFFFFF", style:"stripes"},
+  "Liverpool":{main:"#C8102E", second:"#C8102E", style:"solid"},
+  "Chelsea":{main:"#034694", second:"#034694", style:"solid"},
+  "Man City":{main:"#6CABDD", second:"#FFFFFF", style:"solid"},
+  "Tottenham":{main:"#FFFFFF", second:"#132257", style:"solid"},
+  "Real Madrid":{main:"#FFFFFF", second:"#FFFFFF", style:"solid"},
+  "Bayern Munich":{main:"#DC052D", second:"#DC052D", style:"solid"},
+  "Inter":{main:"#0068A8", second:"#000000", style:"stripes"},
+  "Barcelona":{main:"#A50044", second:"#004D98", style:"stripes"},
+  "Atlético Madrid":{main:"#CB3524", second:"#FFFFFF", style:"stripes"},
+  "Sevilla":{main:"#FFFFFF", second:"#F43333", style:"solid"},
+  "Valencia":{main:"#FFFFFF", second:"#000000", style:"solid"},
+  "Real Betis":{main:"#00954C", second:"#FFFFFF", style:"stripes"},
+  "AC Milan":{main:"#FB090B", second:"#000000", style:"stripes"},
+  "Napoli":{main:"#0E9FD8", second:"#0E9FD8", style:"solid"},
+  "Juventus":{main:"#000000", second:"#FFFFFF", style:"stripes"},
+  "Roma":{main:"#8E1F2F", second:"#8E1F2F", style:"solid"},
+  "Dortmund":{main:"#FDE100", second:"#000000", style:"solid"},
+  "Borussia Dortmund":{main:"#FDE100", second:"#000000", style:"solid"},
+  "Leverkusen":{main:"#E32221", second:"#000000", style:"solid"},
+  "Bayer Leverkusen":{main:"#E32221", second:"#000000", style:"solid"},
+  "RB Leipzig":{main:"#FFFFFF", second:"#DD0741", style:"solid"},
+  "Wolfsburg":{main:"#65B32E", second:"#65B32E", style:"solid"},
+  "LA Lakers":{main:"#552583", second:"#552583", style:"solid"},
+  "Boston Celtics":{main:"#007A33", second:"#007A33", style:"solid"}
+};
+var kitUid = 0;
+function kitSlug(name){ return String(name).toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,""); }
+function kitIcon(team, sizeClass){
+  var kit = TEAM_KITS[team] || {main:"#39415A", second:"#C7CEDA", style:"solid"};
+  var base = "kit-" + kitSlug(team) + "-" + (++kitUid);
+  var shirt = "M18.5 4.5 L10.5 8 L4.5 19.5 L12 23 L12 43.5 L36 43.5 L36 23 L43.5 19.5 L38 8 L29.5 4.5 C28.2 7.6 26.3 9.2 24 9.2 C21.7 9.2 19.8 7.6 18.5 4.5 Z";
+  var fills = "";
+  if(kit.style === "stripes"){
+    fills = '<defs><pattern id="' + base + '-p" width="12" height="10" patternUnits="userSpaceOnUse"><rect width="12" height="10" fill="' + kit.second + '"/><rect width="6" height="10" fill="' + kit.main + '"/></pattern></defs>'
+      + '<path d="' + shirt + '" fill="url(#' + base + '-p)"/>';
+  } else {
+    fills = '<path d="' + shirt + '" fill="' + kit.main + '"/>';
+    if(kit.second && kit.second !== kit.main){
+      fills += '<defs><clipPath id="' + base + '-c"><path d="' + shirt + '"/></clipPath></defs>'
+        + '<g clip-path="url(#' + base + '-c)"><path d="M2 5 L13.5 8.5 L13.5 24.5 L2 21 Z" fill="' + kit.second + '"/><path d="M46 5 L34.5 8.5 L34.5 24.5 L46 21 Z" fill="' + kit.second + '"/></g>';
+    }
+  }
+  return '<svg class="' + (sizeClass || "kit") + '" viewBox="0 0 48 48" aria-hidden="true">' + fills + '<path d="' + shirt + '" fill="none" stroke="rgba(0,0,0,.35)" stroke-width="1.6"/></svg>';
+}
 function teamInitials(name){
   var w=String(name).replace(/^\s+|\s+$/g,"").split(/\s+/);
   if(w.length>=2) return (w[0].charAt(0)+w[w.length-1].charAt(0)).toUpperCase();
@@ -772,8 +824,7 @@ function matchCard(m, showLeague){
     html+='<div class="mcard-soon">'+icon("clock","ic-sm")+' Kick-off \u00b7 '+esc(m.time)+(m.koMin!==undefined?' \u00b7 <span class="ko-count" data-mid="'+m.id+'">'+koText(m.koMin)+'</span>':'')+'</div>';
   }
   function trow(team, sc){
-    var hue=badgeHue(team);
-    return '<div class="trow"><span class="tbadge" style="background:linear-gradient(135deg,hsl('+hue+',45%,32%),hsl('+((hue+40)%360)+',45%,18%))">'+teamInitials(team)+'</span><span class="tname">'+esc(team)+'</span>'+(sc!==null&&sc!==undefined?'<span class="scorebox">'+sc+'</span>':"")+'</div>';
+    return '<div class="trow">'+kitIcon(team)+'<span class="tname">'+esc(team)+'</span>'+(sc!==null&&sc!==undefined?'<span class="scorebox">'+sc+'</span>':"")+'</div>';
   }
   html+=trow(m.home, scores?scores[0]:null)+trow(m.away, scores?scores[1]:null);
   var labels={"1":m.home,"X":"Draw","2":m.away};
@@ -857,6 +908,7 @@ function renderMatch(){
   var minTxt=m1 && m1.minute!==null ? m1.minute : 67;
   var suspPill = goalSuspended ? '<span class="pill" style="background:rgba(255,92,92,.16);color:#FF9A9A">All markets suspended \u00b7 '+esc(suspendReason)+'</span>' : (ouSuspended ? '<span class="pill" style="background:rgba(255,92,92,.16);color:#FF9A9A">O/U 2.5 suspended \u00b7 '+esc(suspendReason)+'</span>' : '<span class="pill">O/U 2.5 open</span>');
   var html='<div class="fade"><div class="eyebrow" style="color:var(--live)">'+icon("live","ic-sm")+' Live \u00b7 Premier League \u00b7 '+minTxt+'\'</div><h1 class="serif" style="margin:6px 0 2px;color:var(--head);font-size:36px">Arsenal v Brighton</h1><p style="color:var(--muted);margin:0 0 6px">Emirates Stadium \u00b7 Score <b style="color:var(--ink)">Arsenal '+esc(scoreTxt)+' Brighton</b> \u00b7 Clock ticks with the Live page</p><p><span class="pill">Match page \u00b7 20 pts in the brief</span> <span class="pill">Odds move live</span> '+suspPill+'</p>';
+  html+='<div class="scoreboard">'+kitIcon("Arsenal","kit-lg")+'<span class="sb-team">Arsenal</span><span class="sb-score">'+esc(scoreTxt)+'</span><span class="sb-team">Brighton</span>'+kitIcon("Brighton","kit-lg")+'<span class="pill">'+minTxt+'&#39; \u00b7 Live</span></div>';
   html+='<input class="mfilter" id="marketFilter" type="text" placeholder="Filter markets \u2014 try &#39;corners&#39;" oninput="filterMarkets(this.value)" value="'+esc(marketFilterQuery)+'">';
   MARKET_GROUPS.forEach(function(g){
     var gMarkets=MATCH_MARKETS.filter(function(x){return x.group===g;});
