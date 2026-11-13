@@ -171,6 +171,12 @@ tr:last-child td{border-bottom:none}
 .netchip{background:#081E28;border:1px solid var(--line2);color:#B9D2D9;padding:6px 11px;border-radius:999px;font-weight:700;font-size:12px}
 .netchip.on{background:var(--cyan);color:#032630;border-color:var(--cyan)}
 .microcopy{font-size:12px;color:var(--muted);text-align:center;margin:9px 0 0}
+/* FILTER CHIPS / MARKET GROUP HEADS / MY BETS TABS */
+.filterchips{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px}
+.fchip,.mbtab{background:#081E28;border:1px solid var(--line2);color:#B9D2D9;padding:7px 13px;border-radius:999px;font-weight:700;font-size:12.5px}
+.fchip.on,.mbtab.on{background:var(--cyan);color:#032630;border-color:var(--cyan)}
+.mbtabs{display:flex;gap:6px;margin:0 0 10px}
+.grouphead{font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--cyan);margin:24px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line2)}
 /* WALLET SHEET COINS */
 .coinlist{display:flex;flex-direction:column;gap:10px;margin:8px 0 6px}
 .coinrow{display:flex;align-items:center;gap:12px;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
@@ -304,7 +310,12 @@ tr:last-child td{border-bottom:none}
 <script>
 var balance = 1000.00;
 var slip = []; // {key, matchId, label, market, pick, odds, stake, needsAccept, suspended}
-var myBets = []; // {id, label, market, pick, odds, stake, potential, status}
+var myBets = [
+  {id:1001, label:"Newcastle v Aston Villa", market:"Match Result 1X2", pick:"1", pickLabel:"Newcastle (1)", odds:1.55, stake:25, potential:38.75, status:"Won", cashOutValue:0, when:"Yesterday \u00b7 Full time"}
+]; // {id, label, market, pick, odds, stake, potential, status, cashOutValue, when}
+var myBetsTab = "Open";
+var liveSport = "All";
+var liveLeague = "All";
 var follows = {};
 var pendingLeague = null;
 var searchQuery = "";
@@ -337,12 +348,19 @@ var MATCHES = [
 ];
 
 var MATCH_MARKETS = [
-  {id:"mr", name:"Match Result — 1X2", picks:[{k:"1",label:"Arsenal (1)",odds:1.62},{k:"X",label:"Draw (X)",odds:3.90},{k:"2",label:"Brighton (2)",odds:5.25}]},
-  {id:"ou", name:"Over / Under 2.5 Goals", picks:[{k:"Over",label:"Over 2.5",odds:1.88},{k:"Under",label:"Under 2.5",odds:1.95}]},
-  {id:"btts", name:"Both Teams To Score", picks:[{k:"Yes",label:"Yes",odds:1.76},{k:"No",label:"No",odds:2.02}]},
-  {id:"dnb", name:"Draw No Bet", picks:[{k:"Arsenal DNB",label:"Arsenal DNB",odds:1.28},{k:"Brighton DNB",label:"Brighton DNB",odds:3.60}]},
-  {id:"ng", name:"Next Goalscorer", suspended:true, picks:[{k:"Saka",label:"B. Saka",odds:6.50},{k:"Havertz",label:"K. Havertz",odds:7.00},{k:"Welbeck",label:"D. Welbeck",odds:9.00}]}
+  {id:"mr", group:"Popular", name:"Match Result \u2014 1X2", picks:[{k:"1",label:"Arsenal (1)",odds:1.62},{k:"X",label:"Draw (X)",odds:3.90},{k:"2",label:"Brighton (2)",odds:5.25}]},
+  {id:"ou", group:"Popular", name:"Over / Under 2.5 Goals", picks:[{k:"Over",label:"Over 2.5",odds:1.88},{k:"Under",label:"Under 2.5",odds:1.95}]},
+  {id:"btts", group:"Popular", name:"Both Teams To Score", picks:[{k:"Yes",label:"Yes",odds:1.76},{k:"No",label:"No",odds:2.02}]},
+  {id:"ou35", group:"Goals", name:"Over / Under 3.5 Goals", picks:[{k:"Over",label:"Over 3.5",odds:3.10},{k:"Under",label:"Under 3.5",odds:1.36}]},
+  {id:"tg", group:"Goals", name:"Brighton Team Goals \u2014 Over / Under 1.5", picks:[{k:"Over",label:"Over 1.5",odds:2.45},{k:"Under",label:"Under 1.5",odds:1.52}]},
+  {id:"fh", group:"Halves", name:"First Half Result \u2014 1X2", picks:[{k:"1",label:"Arsenal (1)",odds:2.05},{k:"X",label:"Draw (X)",odds:2.20},{k:"2",label:"Brighton (2)",odds:5.75}]},
+  {id:"htft", group:"Halves", name:"Half Time / Full Time", picks:[{k:"AA",label:"Arsenal / Arsenal",odds:2.60},{k:"DA",label:"Draw / Arsenal",odds:4.50},{k:"DB",label:"Draw / Brighton",odds:11.00}]},
+  {id:"ah", group:"Handicaps", name:"Asian Handicap", picks:[{k:"AH1",label:"Arsenal \u22121.0",odds:2.02},{k:"AH2",label:"Brighton +1.0",odds:1.82}]},
+  {id:"ng", group:"Goalscorers", name:"Goalscorers \u2014 Anytime Scorer", suspended:true, picks:[{k:"Saka",label:"B. Saka",odds:3.40},{k:"Havertz",label:"K. Havertz",odds:3.80},{k:"Welbeck",label:"D. Welbeck",odds:4.60}]},
+  {id:"cor", group:"Corners & cards", name:"Total Corners \u2014 Over / Under 9.5", picks:[{k:"Over",label:"Over 9.5",odds:1.91},{k:"Under",label:"Under 9.5",odds:1.89}]},
+  {id:"crd", group:"Corners & cards", name:"Total Cards \u2014 Over / Under 3.5", picks:[{k:"Over",label:"Over 3.5",odds:2.10},{k:"Under",label:"Under 3.5",odds:1.72}]}
 ];
+var MARKET_GROUPS = ["Popular", "Goals", "Halves", "Handicaps", "Goalscorers", "Corners & cards"];
 
 var ICON_PATHS = {
   menu:'<line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/>',
@@ -505,25 +523,47 @@ function matchesTable(list, showLeague){
 }
 
 function renderHome(){
-  var featured=MATCHES.slice(0,4);
+  var soon=MATCHES.filter(function(m){return !m.live});
   var live=MATCHES.filter(function(m){return m.live});
   var html='<div class="hero fade"><div class="eyebrow">Housebets · Sportsbook</div><h1>Bet in USDT.<br><em>Settled on-chain.</em></h1><p>Live odds on the world\'s football, backed by a public on-chain bankroll of $2,850,275. Wins land in seconds — no wagering on winnings, no waiting rooms.</p><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;position:relative;z-index:1"><button class="btn" onclick="location.hash=\'#/live\'">View Live Betting '+icon("arrowR","ic-sm")+'</button><button class="btn-outline" onclick="location.hash=\'#/match\'">Arsenal v Brighton</button></div></div>';
   html+=rewardsCardHTML();
   html+=trustStripHTML();
   html+=gatewayHTML();
-  html+='<div class="sectionhead"><h2>Featured Matches</h2><p>Hand-picked by the trading desk</p></div>'+matchesTable(featured,true);
-  html+='<div class="sectionhead"><h2>Competitions</h2><p>Tap a competition to go straight to its section</p></div><div class="compgrid">';
+  html+='<div class="sectionhead"><h2>Live now</h2><p>'+live.length+' matches in play</p></div>'+matchesTable(live,true);
+  html+='<div class="sectionhead"><h2>Starting soon</h2><p>Upcoming fixtures \u00b7 kick-off times shown \u00b7 1X2</p></div>'+matchesTable(soon,true);
+  html+='<div class="sectionhead"><h2>Top competitions</h2><p>Tap a competition to go straight to its section</p></div><div class="compgrid">';
   LEAGUES.forEach(function(l){ html+='<div class="comp" onclick="compGo(\''+l.id+'\')"><b>'+icon(l.icon)+' '+esc(l.name)+'</b><span>'+esc(l.country)+' · View fixtures & odds '+icon("arrowR","ic-sm")+'</span></div>'; });
   html+='</div>';
-  html+='<div class="sectionhead"><h2>Live Now</h2><p>'+live.length+' matches in play</p></div>'+matchesTable(live,true);
   html+='<div class="card" style="margin-top:20px;padding:18px"><h3 style="margin:0 0 6px;color:var(--head)">House Rules — Prime Edition</h3><p style="margin:0;color:var(--muted);line-height:1.7;font-size:14px">Singles only, stakes in USDT. If odds change while a selection sits in your slip, you must accept the new price before placing. Suspended selections are flagged and cannot be placed until the market reopens. Cash out is offered at 0.88× the current potential return. Winnings settle on-chain — no wagering requirements, ever.</p></div>';
   document.getElementById("page-home").innerHTML=html;
 }
 function renderLive(){
   var live=MATCHES.filter(function(m){return m.live});
-  var html='<div class="fade"><div class="eyebrow" style="color:var(--live)">'+icon("live","ic-sm")+' In Play</div><h1 class="serif" style="margin:6px 0 4px;color:var(--head);font-size:34px">Live Betting</h1><p style="color:var(--muted);margin:0 0 16px">Clocks advance every 45 seconds. Odds drift as the desk trades — watch your slip if a price moves.</p>'+matchesTable(live,true)+'</div>';
+  var filtered=live.filter(function(m){
+    var sport=(m.league==="NBA")?"Basketball":"Football";
+    if(liveSport!=="All" && sport!==liveSport) return false;
+    if(liveLeague!=="All" && m.league!==liveLeague) return false;
+    return true;
+  });
+  var chips='<div class="filterchips" role="group" aria-label="Filter live matches by sport">';
+  ["All","Football","Basketball"].forEach(function(sp){ chips+='<button class="fchip '+(liveSport===sp?"on":"")+'" onclick="setLiveSport(\''+sp+'\')">'+sp+'</button>'; });
+  chips+='</div><div class="filterchips" role="group" aria-label="Filter live matches by competition">';
+  chips+='<button class="fchip '+(liveLeague==="All"?"on":"")+'" onclick="setLiveLeague(\'All\')">All competitions</button>';
+  LEAGUES.forEach(function(l){ chips+='<button class="fchip '+(liveLeague===l.id?"on":"")+'" onclick="setLiveLeague(\''+l.id+'\')">'+esc(l.name)+'</button>'; });
+  chips+='</div>';
+  var html='<div class="fade"><div class="eyebrow" style="color:var(--live)">'+icon("live","ic-sm")+' In Play</div><h1 class="serif" style="margin:6px 0 4px;color:var(--head);font-size:34px">Live Betting</h1><p style="color:var(--muted);margin:0 0 16px">Clocks advance every 45 seconds. Odds drift as the desk trades \u2014 watch your slip if a price moves. Filter by sport or competition:</p>'+chips;
+  if(filtered.length){
+    html+=matchesTable(filtered,true);
+  } else {
+    var soon=MATCHES.filter(function(m){return !m.live});
+    html+='<div class="empty" style="margin-bottom:6px"><b style="color:var(--head)">Nothing is live for this filter right now.</b><br>No blank screens here \u2014 this is what starts next instead:</div>';
+    html+='<div class="sectionhead"><h2>Starting soon</h2><p>Upcoming fixtures \u00b7 kick-off times shown \u00b7 1X2</p></div>'+matchesTable(soon,true);
+  }
+  html+='</div>';
   document.getElementById("page-live").innerHTML=html;
 }
+function setLiveSport(sp){ liveSport=sp; renderLive(); }
+function setLiveLeague(l){ liveLeague=l; renderLive(); }
 function renderFootball(){
   var html='<div class="fade"><div class="eyebrow" style="color:var(--cyan)">Football</div><h1 class="serif" style="margin:6px 0 4px;color:var(--head);font-size:34px">Football — All Leagues</h1><p style="color:var(--muted);margin:0">1X2 decimal odds. Tap '+icon("star","ic-sm")+' to follow a match. Tap any price to add it to your slip.</p>';
   LEAGUES.filter(function(l){return l.id!=="NBA"}).forEach(function(l){
@@ -536,11 +576,13 @@ function renderFootball(){
 }
 function renderMatch(){
   var html='<div class="fade"><div class="eyebrow" style="color:var(--live)">'+icon("live","ic-sm")+' Live · Premier League · 67\'</div><h1 class="serif" style="margin:6px 0 2px;color:var(--head);font-size:36px">Arsenal v Brighton</h1><p style="color:var(--muted);margin:0 0 6px">Emirates Stadium · Score <b style="color:var(--ink)">Arsenal 2 – 1 Brighton</b> · Clock ticks with the Live page</p><p><span class="pill">Match page · 20 pts in the brief</span> <span class="pill">Odds move live</span> '+(ouSuspended?'<span class="pill" style="background:#FDE8E8">O/U 2.5 suspended</span>':'<span class="pill">O/U 2.5 open</span>')+'</p>';
-  MATCH_MARKETS.forEach(function(mk){
+  MARKET_GROUPS.forEach(function(g){
+    html+='<div class="grouphead">'+g+'</div>';
+    MATCH_MARKETS.filter(function(x){return x.group===g;}).forEach(function(mk){
     var isSusp = mk.suspended || (mk.id==="ou" && ouSuspended);
     html+='<div class="market"><h3>'+esc(mk.name)+'<span>'+(isSusp?("SUSPENDED "+icon("lock","ic-sm")):"OPEN")+'</span></h3>';
     if(isSusp){
-      if(mk.id==="ng"){ html+='<div class="suspendedbox">'+icon("lock")+' Market suspended — Next Goalscorer is closed for betting in this prototype. Prices are shown for reference only and cannot be added to the slip.</div><div class="marketbody">'; mk.picks.forEach(function(p){ html+='<button class="oddsbtn suspended" disabled><small>'+esc(p.k)+'</small>'+p.odds.toFixed(2)+'</button>'; }); html+='</div>'; }
+      if(mk.id==="ng"){ html+='<div class="suspendedbox">'+icon("lock")+' Market suspended \u2014 the Goalscorers market is closed for betting in this prototype. Prices are shown for reference only and cannot be added to the slip.</div><div class="marketbody">'; mk.picks.forEach(function(p){ html+='<button class="oddsbtn suspended" disabled><small>'+esc(p.k)+'</small>'+p.odds.toFixed(2)+'</button>'; }); html+='</div>'; }
       else { html+='<div class="marketbody"><div class="suspendedbox">'+icon("pause")+' Temporarily suspended — the desk is repricing Over / Under 2.5. It will reopen automatically in a few seconds. Any O/U selection in your slip is flagged meanwhile.</div></div>'; }
     } else {
       html+='<div class="marketbody">';
@@ -554,6 +596,7 @@ function renderMatch(){
       html+='</div>';
     }
     html+='</div>';
+    });
   });
   html+='<p style="color:var(--muted);font-size:13px;line-height:1.6">Suspended markets are never clickable. If a market suspends after you have added a selection, your slip flags it and Place Bet is blocked for that selection until it reopens or you remove it.</p></div>';
   document.getElementById("page-match").innerHTML=html;
@@ -636,18 +679,28 @@ function slipHTML(containerId){
   return html;
 }
 function myBetsSummaryHTML(){
-  if(!myBets.length) return '<div style="margin-top:16px"><h3 class="serif" style="color:var(--head);margin:0 0 8px">My Bets</h3><div class="empty">No bets placed yet.</div></div>';
+  var open=myBets.filter(function(b){return b.status==="Open"});
+  var settled=myBets.filter(function(b){return b.status!=="Open"});
+  var list=(myBetsTab==="Settled")?settled:open;
   var html='<div style="margin-top:16px"><h3 class="serif" style="color:var(--head);margin:0 0 8px">My Bets ('+myBets.length+')</h3>';
-  myBets.slice().reverse().forEach(function(b){
+  html+='<div class="mbtabs"><button class="mbtab '+(myBetsTab==="Open"?"on":"")+'" onclick="setMyBetsTab(\'Open\')">Open ('+open.length+')</button><button class="mbtab '+(myBetsTab==="Settled"?"on":"")+'" onclick="setMyBetsTab(\'Settled\')">Settled ('+settled.length+')</button></div>';
+  if(!list.length){
+    html+='<div class="empty">'+(myBetsTab==="Settled" ? "No settled bets yet \u2014 cash out an open bet, or wait for a full-time result." : "No open bets right now \u2014 place one and it lands here.")+'</div></div>';
+    return html;
+  }
+  list.slice().reverse().forEach(function(b){
     var cashVal=(b.potential*0.88);
-    html+='<div class="betitem"><header><b>'+esc(b.label)+'</b><span class="pill">'+esc(b.status)+'</span></header><p style="margin:6px 0;color:var(--muted);font-size:13px">'+esc(b.market)+' · '+esc(b.pickLabel||b.pick)+' @ '+Number(b.odds).toFixed(2)+'<br>Stake '+fmt(b.stake)+' USDT · Potential '+fmt(b.potential)+' USDT</p>';
-    if(b.status==="Open"){ html+='<button class="cashout" onclick="cashOutBet('+b.id+')">Cash Out — '+fmt(cashVal)+' USDT (0.88×)</button>'; }
-    if(b.status==="Cashed Out"){ html+='<p style="color:var(--head);font-weight:700;margin:6px 0 0">Cashed out for '+fmt(b.cashOutValue)+' USDT — credited to your balance.</p>'; }
+    html+='<div class="betitem"><header><b>'+esc(b.label)+'</b><span class="pill">'+esc(b.status)+'</span></header><p style="margin:6px 0;color:var(--muted);font-size:13px">'+esc(b.market)+' \u00b7 '+esc(b.pickLabel||b.pick)+' @ '+Number(b.odds).toFixed(2)+'<br>Stake '+fmt(b.stake)+' USDT \u00b7 Potential '+fmt(b.potential)+' USDT'+(b.when?'<br>'+esc(b.when):'')+'</p>';
+    if(b.status==="Open"){ html+='<button class="cashout" onclick="cashOutBet('+b.id+')">Cash Out \u2014 '+fmt(cashVal)+' USDT (0.88\u00d7)</button>'; }
+    if(b.status==="Cashed Out"){ html+='<p style="color:var(--head);font-weight:700;margin:6px 0 0">Cashed out for '+fmt(b.cashOutValue)+' USDT \u2014 credited to your balance.</p>'; }
+    if(b.status==="Won"){ html+='<p style="color:var(--good);font-weight:700;margin:6px 0 0">Won \u2014 returned '+fmt(b.potential)+' USDT to your balance.</p>'; }
+    if(b.status==="Lost"){ html+='<p style="color:var(--red);font-weight:700;margin:6px 0 0">Lost \u2014 stake settled at full time.</p>'; }
     html+='</div>';
   });
   html+='</div>';
   return html;
 }
+function setMyBetsTab(t){ myBetsTab=t; renderSlipAll(); }
 function renderSlipAll(rerenderPage){
   syncBalance();
   var side=document.getElementById("sideSlip"); if(side) side.innerHTML=slipHTML("side");

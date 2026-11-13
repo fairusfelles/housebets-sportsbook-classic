@@ -1,8 +1,8 @@
-ENTRY #2 — CLASSIC EDITION
+ENTRY #2 — PRIME EDITION
 Link: https://fairusfelles.github.io/housebets-sportsbook-classic/
 
 Your big idea:
-A second, deliberately different direction: the classic professional bookmaker. Racing green, ivory and brass, serif display type and dense tabular odds — the look of a bookmaker that has taken bets for a hundred years, rebuilt inside the Housebets shell. Where entry one is a modern app, this one is a trading desk: calm, credible, numbers first. All five pages, singles-only USDT slip, odds-change accept flow, suspended markets, bet placed and failed states, and cash out.
+The sportsbook Housebets has not shipped yet, imagined by its own team: the same dark shell, cyan H and wallet pill players already know, taken one step further. A live crypto ticker runs under the header, the Rewards Slider from the casino home works right inside Sports home, the house bankroll is shown on-chain and verifiable, the wallet holds BTC, ETH, USDT and SOL, and every bet settles in USDT on the network the player picks. All five pages, singles-only slip, odds-change accept flow, suspended markets, bet placed and failed states, and cash out — nothing about it feels foreign, everything about it feels finished.
 
 Tools note:
 Built with Claude assisting on design and code; hand-written HTML/CSS/JS, hosted on GitHub Pages.
