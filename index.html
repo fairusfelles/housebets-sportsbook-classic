@@ -273,7 +273,7 @@ body.nav .fade{animation:fade .3s ease}
 .countbadge{position:absolute;top:-7px;right:-5px;background:#FF5C5C;color:#fff;font-size:11px;font-weight:800;min-width:20px;height:20px;border-radius:999px;display:grid;place-items:center;padding:0 5px;border:2px solid var(--bg)}
 .countbadge.navcb{position:static;border:none}
 .mcardlist{display:flex;flex-direction:column;gap:var(--gap-grid)}
-.mcard{background:linear-gradient(180deg,#151926,var(--panel));border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--elev);transition:transform .18s ease,box-shadow .18s ease}
+.mcard{min-width:0;background:linear-gradient(180deg,#151926,var(--panel));border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--elev);transition:transform .18s ease,box-shadow .18s ease}
 .mcard-head{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:12.5px;font-weight:700;letter-spacing:.3px}
 .mcard-head .star{padding:0}
 .mcard-live{display:flex;align-items:center;gap:7px;color:var(--cyan);font-size:13px;margin:6px 0 8px}
@@ -306,12 +306,12 @@ body.nav .fade{animation:fade .3s ease}
 .scoreboard .sb-team{font-size:17px;font-weight:800;color:var(--head)}
 .scoreboard .sb-score{font-size:28px;font-weight:800;color:var(--head);font-variant-numeric:tabular-nums;letter-spacing:1px}
 .tname{font-weight:700;color:#fff;font-size:14.5px}
-.scorebox{margin-left:auto;background:#0B0D13;border:1px solid var(--line2);color:#fff;font-weight:800;font-size:14px;min-width:30px;text-align:center;padding:5px 0;border-radius:9px;font-variant-numeric:tabular-nums}
+.scorebox{flex:none;margin-left:auto;background:#0B0D13;border:1px solid var(--line2);color:#fff;font-weight:800;font-size:14px;min-width:30px;text-align:center;padding:5px 0;border-radius:9px;font-variant-numeric:tabular-nums}
 .mcard-market{margin-top:12px;border-top:1px solid var(--line);padding-top:12px}
 .mlabel{font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:8px}
-.oddsrow{display:flex;gap:8px}
+.oddsrow{display:flex;gap:8px;min-width:0}
 .oddsbtn.wide{flex:1;display:flex;flex-direction:row;justify-content:space-between;align-items:center;gap:8px;padding:10px 12px;text-align:left;min-width:0}
-.oddsbtn.wide .picklbl{font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.oddsbtn.wide .picklbl{min-width:0;font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 .oddsbtn.wide .oddsnum{font-size:15px;font-weight:800}
 .oddsbtn.wide.selected .picklbl{color:#04505C}
 @media(max-width:560px){.depbtn{padding:8px 11px;font-size:13px}.utile{padding:var(--pad-card);font-size:13px}.utilrow{gap:var(--gap-grid)}}
