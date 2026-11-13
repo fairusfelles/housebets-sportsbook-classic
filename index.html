@@ -1248,18 +1248,17 @@ function homeTabsHTML(n){
   t+='<button class="htab" onclick="location.hash=\'#/football\'">'+icon("ball")+'<span>Football</span></button>';
   t+='<button class="htab" onclick="liveSportGo(\'Tennis\')">'+icon("tennis")+'<span>Tennis</span></button>';
   t+='<button class="htab" onclick="basketballGo()">'+icon("basketball")+'<span>Basketball</span></button>';
-  t+='<button class="htab" onclick="scopeGo(\'American Football\')">'+icon("amfootball")+'<span>American Football</span></button>';
-  t+='<button class="htab" onclick="scopeGo(\'Baseball\')">'+icon("baseball")+'<span>Baseball</span></button>';
-  t+='<button class="htab" onclick="scopeGo(\'MMA\')">'+icon("mma")+'<span>MMA</span></button>';
-  t+='<button class="htab" onclick="scopeGo(\'Ice Hockey\')">'+icon("hockey")+'<span>Ice Hockey</span></button>';
-  t+='<button class="htab" onclick="scopeGo(\'Rugby\')">'+icon("rugby")+'<span>Rugby</span></button>';
   t+='<button class="htab" onclick="liveSportGo(\'Esports\')">'+icon("gamepad")+'<span>Esports</span></button>';
-  t+='<button class="htab" onclick="scopeGo(\'Dota 2\')">'+icon("sword")+'<span>Dota 2</span></button>';
-  t+='<button class="htab" onclick="scopeGo(\'League of Legends\')">'+icon("bolt")+'<span>League of Legends</span></button>';
+  t+='<button class="htab" onclick="scopeGo(\'MMA\')">'+icon("mma")+'<span>MMA</span></button>';
   t+='<button class="htab" onclick="scopeGo(\'CS2\')">'+icon("target")+'<span>CS2</span></button>';
+  t+='<button class="htab" onclick="scopeGo(\'Dota 2\')">'+icon("sword")+'<span>Dota 2</span></button>';
+  t+='<button class="htab" onclick="scopeGo(\'Baseball\')">'+icon("baseball")+'<span>Baseball</span></button>';
+  t+='<button class="htab" onclick="scopeGo(\'Rugby\')">'+icon("rugby")+'<span>Rugby</span></button>';
+  t+='<button class="htab" onclick="scopeGo(\'Ice Hockey\')">'+icon("hockey")+'<span>Ice Hockey</span></button>';
+  t+='<button class="htab" onclick="scopeGo(\'American Football\')">'+icon("amfootball")+'<span>American Football</span></button>';
+  t+='<button class="htab" onclick="scopeGo(\'League of Legends\')">'+icon("bolt")+'<span>League of Legends</span></button>';
   return t+'</div>';
-}
-function favChipsHTML(){
+}function favChipsHTML(){
   var chips='';
   Object.keys(follows).forEach(function(k){
     if(!follows[k]) return;
