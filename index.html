@@ -198,10 +198,20 @@ tr:last-child td{border-bottom:none}
 .netchip.on{background:var(--cyan);color:#032630;border-color:var(--cyan)}
 .microcopy{font-size:12px;color:var(--muted);text-align:center;margin:9px 0 0}
 /* FILTER CHIPS / MARKET GROUP HEADS / MY BETS TABS */
-.filterchips{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px}
+.filterchips{display:flex;gap:6px;flex-wrap:nowrap;overflow-x:auto;margin:0 0 10px;padding-bottom:2px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.filterchips::-webkit-scrollbar{display:none}
+.filterchips .fchip{flex:none}
 .sporttiles+.filterchips{margin-top:var(--gap-grid)}
 .fchip,.mbtab{background:#12151F;border:1px solid var(--line2);color:#C3CEDA;padding:7px 13px;border-radius:999px;font-weight:700;font-size:12.5px}
 .fchip{display:inline-flex;align-items:center;gap:6px}
+.texttabs{display:flex;gap:22px;overflow-x:auto;scrollbar-width:none;margin:2px 0 12px;padding-bottom:4px}
+.texttabs::-webkit-scrollbar{display:none}
+.ttab{background:none;border:none;color:var(--muted);font-size:15px;font-weight:700;padding:4px 0;flex:none;position:relative;cursor:pointer}
+.ttab.on{color:#fff}
+.ttab.on::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:3px;border-radius:99px;background:var(--cyan)}
+.fchip .disc{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;color:#0A0C12;flex:none}
+.fchip .disc .ic{width:12px;height:12px}
+.fchip.on{background:rgba(23,230,230,.13);color:#fff;border-color:rgba(23,230,230,.55)}
 .fchip.on,.mbtab.on{background:var(--cyan);color:#032630;border-color:var(--cyan)}
 .mbtabs{display:flex;gap:6px;margin:0 0 12px}
 .grouphead{font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--cyan);margin:calc(var(--gap-section) - var(--gap-grid)) 0 12px;padding-bottom:6px;border-bottom:1px solid var(--line2)}
@@ -513,6 +523,7 @@ var marketFilterQuery = "";
 var betMessage = "";
 var betMessageType = "";
 
+var LCOLORS = {PL:"#A55EEA", UCL:"#3B82F6", LALIGA:"#FF7A45", SERIEA:"#00C2A8", BUNDES:"#E2001A", NBA:"#F97316"};
 var LEAGUES = [
   {id:"PL", name:"Premier League", country:"England", icon:"trophy"},
   {id:"UCL", name:"UEFA Champions League", country:"Europe", icon:"trophy"},
@@ -877,13 +888,13 @@ function renderLive(){
     if(liveLeague!=="All" && m.league!==liveLeague) return false;
     return true;
   });
-  var chips='<div class="filterchips" role="group" aria-label="Filter live matches by sport">';
-  [["All","grid"],["Football","ball"],["Basketball","basketball"]].forEach(function(pair){ var sp=pair[0]; chips+='<button class="fchip '+(liveSport===sp?"on":"")+'" onclick="setLiveSport(\''+sp+'\')">'+icon(pair[1],"ic-sm")+' '+sp+'</button>'; });
+  var chips='<div class="texttabs" role="group" aria-label="Filter live matches by sport">';
+  ["All","Football","Basketball"].forEach(function(sp){ chips+='<button class="ttab '+(liveSport===sp?"on":"")+'" onclick="setLiveSport(\''+sp+'\')">'+sp+'</button>'; });
   chips+='</div><div class="filterchips" role="group" aria-label="Filter live matches by competition">';
-  chips+='<button class="fchip '+(liveLeague==="All"?"on":"")+'" onclick="setLiveLeague(\'All\')">'+icon("trophy","ic-sm")+' All competitions</button>';
-  LEAGUES.forEach(function(l){ chips+='<button class="fchip '+(liveLeague===l.id?"on":"")+'" onclick="setLiveLeague(\''+l.id+'\')">'+icon(l.icon,"ic-sm")+' '+esc(l.name)+'</button>'; });
+  chips+='<button class="fchip '+(liveLeague==="All"?"on":"")+'" onclick="setLiveLeague(\'All\')"><span class="disc" style="background:var(--cyan)">'+icon("grid","ic-sm")+'</span> All competitions</button>';
+  LEAGUES.forEach(function(l){ chips+='<button class="fchip '+(liveLeague===l.id?"on":"")+'" onclick="setLiveLeague(\''+l.id+'\')"><span class="disc" style="background:'+(LCOLORS[l.id]||"#5B6B82")+'">'+icon(l.icon,"ic-sm")+'</span> '+esc(l.name)+'</button>'; });
   chips+='</div>';
-  var html='<div class="fade"><div class="eyebrow" style="color:var(--live)"><span class="livedot"></span> In Play</div><h1 class="serif" style="margin:6px 0 4px;color:var(--head);font-size:34px">Live Betting</h1><p style="color:var(--muted);margin:0">Clocks advance every 45 seconds. Odds drift as the desk trades \u2014 watch your slip if a price moves. Filter by sport or competition:</p>'+sportTilesHTML('live')+chips;
+  var html='<div class="fade"><div class="eyebrow" style="color:var(--live)"><span class="livedot"></span> In Play</div><h1 class="serif" style="margin:6px 0 4px;color:var(--head);font-size:34px">Live Betting</h1><p style="color:var(--muted);margin:0 0 14px">Live score, clock and drifting odds on every match in play.</p>'+chips;
   var showEmpty = forceNoLive || !filtered.length;
   if(!showEmpty){
     html+=matchesTable(filtered,true);
