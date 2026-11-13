@@ -335,10 +335,13 @@ body.nav .fade{animation:fade .3s ease}
 .fade{animation:none}
 @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 .hidden{display:none!important}
-@media(max-width:1100px){.layout{grid-template-columns:220px 1fr}.rightpanel{display:none}.mobileslipbar{display:grid;place-items:center;position:fixed;left:50%;transform:translateX(-50%);right:auto;bottom:84px;width:58px;height:58px;border-radius:50%;background:var(--cyan);color:#06222B;z-index:70;padding:0;border:none;box-shadow:0 10px 26px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.35);font-weight:900;font-size:25px}
-#mobileSlipCount{position:absolute;top:-4px;right:-4px;background:#FF5C5C;color:#fff;font-size:11px;font-weight:800;min-width:21px;height:21px;border-radius:99px;display:grid;place-items:center;border:2px solid #07090E;padding:0 5px}
+@media(max-width:1100px){.layout{grid-template-columns:220px 1fr}.rightpanel{display:none}.mobileslipbar{display:flex;align-items:center;gap:11px;position:fixed;left:14px;right:14px;bottom:84px;width:auto;height:54px;border-radius:16px;background:linear-gradient(180deg,#EAFBFD,#C6ECF2);color:#06222B;z-index:70;padding:0 14px;border:1px solid rgba(255,255,255,.55);box-shadow:0 16px 34px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.75);font-weight:800;font-size:14.5px;text-align:left}
+#mobileSlipCount{position:static;background:#0B1B21;color:#fff;font-size:13px;font-weight:900;min-width:27px;height:27px;border-radius:8px;display:grid;place-items:center;border:none;padding:0 6px;flex:none}
 @keyframes fabpop{0%{transform:translateX(-50%) scale(1)}35%{transform:translateX(-50%) scale(1.22)}65%{transform:translateX(-50%) scale(.94)}100%{transform:translateX(-50%) scale(1)}}
-.mobileslipbar.pop{animation:fabpop .45s ease}
+.mobileslipbar.pop{animation:barpop .35s ease}
+@keyframes barpop{0%{transform:translateY(10px);opacity:.3}100%{transform:none;opacity:1}}
+.msb-txt{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.msb-chev{display:grid;place-items:center;color:#0B5563;flex:none}
 @keyframes badgepop{0%{transform:scale(.4)}60%{transform:scale(1.4)}100%{transform:scale(1)}}
 .mobileslipbar.pop #mobileSlipCount{animation:badgepop .45s ease}}
 @media(max-width:760px){
@@ -611,7 +614,7 @@ body.menuopen .mobileslipbar{display:none}
   </aside>
 </div>
 
-<button class="mobileslipbar" id="mobileSlipBar" style="display:none" onclick="location.hash='#/slip'" aria-label="Open bet slip">H<span id="mobileSlipCount">0</span></button>
+<button class="mobileslipbar" id="mobileSlipBar" style="display:none" onclick="location.hash='#/slip'" aria-label="Open bet slip"><span id="mobileSlipCount">0</span><span class="msb-txt" id="mobileSlipText">Bet slip</span><span class="msb-chev"><svg class="ic ic-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></span></button>
 
 <nav class="bottomnav">
   <button id="bnavMenu" onclick="toggleDrawer()"><span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></span>Menu</button>
@@ -1695,6 +1698,7 @@ function renderSlipAll(rerenderPage){
   var side=document.getElementById("sideSlip"); if(side) side.innerHTML=slipHTML("side");
   var sheet=document.getElementById("sheetSlip"); if(sheet) sheet.innerHTML="<h2 class='serif' style='color:var(--head)'>Bet Slip</h2>"+slipHTML("sheet");
   var cnt=document.getElementById("mobileSlipCount"); if(cnt) cnt.textContent=slip.length;
+  var mt=document.getElementById("mobileSlipText"); if(mt && slip.length){ mt.textContent = slip.length===1 ? (slip[0].label+" @ "+(+slip[0].odds).toFixed(2)) : (slip[0].label+" +"+(slip.length-1)+" more"); }
   var navCnt=document.getElementById("navBetCount"); if(navCnt) navCnt.textContent=String(myBets.filter(function(b){return b.status==="Open"}).length);
   var mobOdds=document.getElementById("mobileSlipOdds"); if(mobOdds) mobOdds.textContent=slip.length? Number(slip[0].odds).toFixed(2)+" · "+fmt(slip[0].stake||0)+" USDT" : "Tap odds to bet";
   var mobBar=document.getElementById("mobileSlipBar"); if(mobBar){ mobBar.style.display=slip.length? "" : "none"; if(slip.length && slip.length!==lastSlipCount){ mobBar.classList.remove("pop"); void mobBar.offsetWidth; mobBar.classList.add("pop"); } }
