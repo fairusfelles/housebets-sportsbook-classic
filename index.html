@@ -526,6 +526,16 @@ body.menuopen .mobileslipbar{display:none}
 .oddsbtn.ref{opacity:.48}
 .oddsbtn.ref .oprice{color:var(--muted)}
 .suspchip{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#C7CEDA;background:#171C29;border:1px solid var(--line2);padding:5px 9px;border-radius:999px}
+.mselname{display:flex;flex-direction:column;gap:1px;min-width:0}
+.mselname-t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mselname-t .vs{color:var(--muted);font-weight:500}
+.mselname-l{color:var(--muted);font-size:11px;font-weight:600}
+.mm-meta{margin-left:auto;text-align:right;display:flex;flex-direction:column;gap:1px;flex:none;align-items:flex-end}
+.mm-score{font-weight:800;color:var(--head);font-size:15px;font-variant-numeric:tabular-nums}
+.mm-live{display:inline-flex;align-items:center;gap:5px;color:#FF7D9C;font-size:11px;font-weight:800;letter-spacing:.04em}
+.mm-time{font-weight:700;color:#E8EDF4;font-size:14px;font-variant-numeric:tabular-nums}
+.mm-time.soon{color:var(--cyan)}
+.mm-day{color:var(--muted);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
 </style>
 </head>
 <body>
@@ -1466,7 +1476,22 @@ function renderMatch(){
   var H=m1?m1.home:"Arsenal", A=m1?m1.away:"Brighton";
   var tcode=function(t){ return t==="Brighton"?"BHA":t.slice(0,3).toUpperCase(); };
   var folBtn=function(team,gold){ var on=follows["fav-tm-"+team]; return '<button class="pillbtn '+(gold?"gold ":"")+(on?"on":"")+'" onclick="toggleFollow(\'fav-tm-'+team+'\',event)">'+icon("star", on?"fill ic-sm":"ic-sm")+' '+(on?"Following":"Follow")+'</button>'; };
-  var menuRows=MATCHES.filter(function(x){return x.home&&x.away;}).map(function(x){ var cur=x.id===m1.id; return '<button class="mselitem" onclick="'+(cur?"toggleMatchMenu(event)":((isFootballMatch(x)?"openMatch":"openDetail")+"(\'"+x.id+"\')"))+'"><span class="mselav">'+kitIcon(x.home,"kit-xs")+kitIcon(x.away,"kit-xs")+'</span><span class="mselname">'+esc(x.home)+" v "+esc(x.away)+'</span><span class="mselmeta">'+(x.live?esc(x.score||"Live"):esc(x.time||""))+'</span></button>'; }).join("");
+    var menuList=MATCHES.filter(function(x){return x.home&&x.away;}).slice().sort(function(a,b){
+    if(!!a.live!==!!b.live) return a.live?-1:1;
+    if(a.live||b.live) return 0;
+    var da=/^Tomorrow/.test(a.time||"")?1:0, db=/^Tomorrow/.test(b.time||"")?1:0;
+    if(da!==db) return da-db;
+    function kk(x){ if(typeof x.koMin==="number") return x.koMin; var mt=/(\d{1,2}):(\d{2})/.exec(x.time||""); return mt?(+mt[1])*60+(+mt[2]):9999; }
+    return kk(a)-kk(b);
+  });
+  var menuRows=menuList.map(function(x){ var cur=x.id===m1.id;
+    var meta;
+    if(x.live){ meta='<span class="mm-meta"><span class="mm-score">'+esc(x.score||"0 \u2013 0")+'</span><span class="mm-live"><span class="livedot"></span>'+(x.minute?x.minute+"&#39;":"LIVE")+'</span></span>'; }
+    else { var tp=(x.time||"Today").split(" "); var day=tp[0]; var clock=tp.slice(1).join(" ");
+      var soon=(typeof x.koMin==="number" && x.koMin<60);
+      var line1=soon?("In "+x.koMin+" min"):(clock||day);
+      meta='<span class="mm-meta"><span class="mm-time'+(soon?" soon":"")+'">'+esc(line1)+'</span>'+((clock||soon)?'<span class="mm-day">'+esc(day)+'</span>':'')+'</span>'; }
+    return '<button class="mselitem" onclick="'+(cur?"toggleMatchMenu(event)":((isFootballMatch(x)?"openMatch":"openDetail")+"(\'"+x.id+"\')"))+'"><span class="mselav">'+kitIcon(x.home,"kit-xs")+kitIcon(x.away,"kit-xs")+'</span><span class="mselname"><span class="mselname-t">'+esc(x.home)+' <span class="vs">v</span> '+esc(x.away)+'</span><span class="mselname-l">'+esc(leagueName(x.league))+'</span></span>'+meta+'</button>'; }).join("");
   var html='<div class="fade"><div class="mselrow"><button class="selback" onclick="location.hash=\'#/football\'" aria-label="Back to Football">'+icon("arrowL")+'</button><button class="msel" onclick="toggleMatchMenu(event)">'+tcode(H)+" - "+tcode(A)+' <span class="mselchev">\u25be</span></button></div><div class="mselmenu" id="matchMenu" style="display:'+(matchMenuOpen?"":"none")+'">'+menuRows+'</div>';
   html+='<div class="sbcard"><div class="sb-top"><button class="sb-back" onclick="location.hash=\'#/football\'" aria-label="Back">'+icon("arrowL","ic-sm")+'</button><span class="sb-league">'+esc(leagueName(m1?m1.league:"PL"))+'</span><button class="sb-star '+(follows["fav-m1"]?"on":"")+'" onclick="toggleFollow(\'fav-m1\',event)" aria-label="Follow this match">'+icon("star", follows["fav-m1"]?"fill":"")+'</button></div>';
   html+='<div class="sb-main"><div class="sb-side">'+kitIcon(H,"kit-lg")+'<span class="sb-name">'+esc(H)+'</span></div>'+(m1.live?'<div class="sb-mid"><div class="sb-nums"><span class="sb-num">'+esc(hs)+'</span><span class="sb-dash">\u2013</span><span class="sb-num">'+esc(as)+'</span></div><div class="sb-live"><span class="livepill"><span class="livedot"></span>Live</span><span class="sb-min">'+minTxt+'&#39;</span></div></div>':'<div class="sb-mid"><div class="sb-vs">VS</div><div class="sb-kick">'+esc(m1.time||"Kick-off TBC")+'</div></div>')+'<div class="sb-side">'+kitIcon(A,"kit-lg")+'<span class="sb-name">'+esc(A)+'</span></div></div>';
