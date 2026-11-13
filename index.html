@@ -1002,6 +1002,8 @@ function cycleOUSuspension(){
 
 var PAGES=["home","live","football","match","slip","scope"];
 function route(rerender){
+  var keepScroll=(rerender===false);
+  var sy=keepScroll?window.scrollY:0;
   var h=(location.hash||"#/home").replace("#/","");
   if(PAGES.indexOf(h)===-1) h="home";
   PAGES.forEach(function(p){ var el=document.getElementById("page-"+p); if(el) el.classList.toggle("hidden", p!==h); });
@@ -1013,7 +1015,7 @@ function route(rerender){
   if(h==="slip") renderSlipPage();
   if(h==="scope") renderScope(window._scopeName||"Casino");
   closeDrawer();
-  window.scrollTo({top:0,behavior:"smooth"});
+  if(keepScroll){ window.scrollTo(0,sy); } else { window.scrollTo({top:0,behavior:"smooth"}); }
 }
 
 function buildNav(){
