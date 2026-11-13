@@ -606,6 +606,7 @@ var myBets = [
 var myBetsTab = "Open";
 var liveSport = "All";
 var liveLeague = "All";
+var fbView = "all";
 var follows = {"fav-m1":true, "fav-lg-PL":true, "fav-tm-Arsenal":true};
 var LSKEY = "hb2-state-v1";
 function saveState(){ try{ localStorage.setItem(LSKEY, JSON.stringify({follows:follows, balance:balance, slip:slip, myBets:myBets})); }catch(e){} }
@@ -949,6 +950,7 @@ function toggleFollow(id, ev){
   if(ev) ev.stopPropagation();
   follows[id]=!follows[id];
   route(false);
+  if(follows[id] && id.indexOf("fav-lg-")===0 && location.hash.indexOf("football")!==-1){ setTimeout(function(){ scrollToLeague(id.slice(7)); },80); }
 }
 function compGo(leagueId){
   pendingLeague=leagueId;
@@ -1237,6 +1239,8 @@ function renderDetail(){
   html+='</div>';
   el.innerHTML=html;
 }
+function setFbView(v){ fbView=v; route(false); }
+function fbTabsHTML(n){ return '<div class="segtabs"><button class="segtab '+(fbView==="liveup"?"on":"")+'" onclick="setFbView(\'liveup\')">Live &amp; Upcoming <span style="opacity:.75">'+n+'</span></button><button class="segtab '+(fbView==="all"?"on":"")+'" onclick="setFbView(\'all\')">All Football</button></div>'; }
 function setLiveSport(sp){
   liveSport=sp;
   if(liveLeague!=="All"){
@@ -1250,9 +1254,21 @@ function renderFootball(){
   var fbLeagues=LEAGUES.filter(function(l){return l.id!=="NBA"});
   var all=MATCHES.filter(function(m){return fbLeagues.some(function(l){return l.id===m.league})});
   var liveN=all.filter(function(m){return m.live}).length;
-  var html='<div class="fade"><div class="eyebrow" style="color:var(--cyan)">Football</div><h1 style="margin:6px 0 4px;color:var(--head);font-size:30px;font-weight:800;letter-spacing:-.02em">Football</h1><p style="color:var(--muted);margin:0">5 competitions \u00b7 '+all.length+' matches \u00b7 '+liveN+' live now. Match result odds on every row \u2014 tap a price to add it to your slip.</p>';
-  html+='<div class="fbnav">'+fbLeagues.map(function(l){ return '<button class="fbnavpill" onclick="scrollToLeague(\''+l.id+'\')">'+leagueBadge(l.id)+' '+esc(l.name.replace("UEFA ",""))+'</button>'; }).join("")+'</div>';
-  fbLeagues.forEach(function(l){
+  var html='<div class="fade"><div class="eyebrow" style="color:var(--cyan)">Football</div><h1 style="margin:6px 0 4px;color:var(--head);font-size:30px;font-weight:800;letter-spacing:-.02em">Football</h1><p style="color:var(--muted);margin:0">5 competitions \u00b7 '+all.length+' matches \u00b7 '+liveN+' live now. Follow a league and it pins to the top of this page.</p>';
+  html+='<div style="margin-top:12px">'+homeSearchHTML()+'</div>';
+  html+=fbTabsHTML(all.length);
+  if(fbView==="liveup"){
+    var lv=all.filter(function(m){return m.live}).sort(function(a,b){ var la=LEAGUES.findIndex(function(x){return x.id===a.league}), lb=LEAGUES.findIndex(function(x){return x.id===b.league}); if(la!==lb) return la-lb; return (b.minute||0)-(a.minute||0); });
+    var up=all.filter(function(m){return !m.live}).sort(function(a,b){ return (a.koMin||9999)-(b.koMin||9999); });
+    html+='<div class="sectionhead"><h2><span class="pdot"></span> Live now</h2><p>'+lv.length+' in play</p></div>'+matchesTable(lv,false);
+    html+='<div class="sectionhead"><h2>Upcoming</h2><p>'+up.length+' to come \u00b7 soonest first</p></div>'+matchesTable(up,false);
+    html+='</div>';
+    document.getElementById("page-football").innerHTML=html;
+    return;
+  }
+  var ordered=fbLeagues.slice().sort(function(a,b){ var fa=follows["fav-lg-"+a.id]?0:1, fb=follows["fav-lg-"+b.id]?0:1; return fa-fb; });
+  html+='<div class="fbnav">'+ordered.map(function(l){ return '<button class="fbnavpill" onclick="scrollToLeague(\''+l.id+'\')">'+leagueBadge(l.id)+' '+esc(l.name.replace("UEFA ",""))+'</button>'; }).join("")+'</div>';
+  ordered.forEach(function(l){
     var list=MATCHES.filter(function(m){return m.league===l.id}).slice().sort(function(a,b){ if(a.live!==b.live) return a.live?-1:1; if(a.live&&b.live) return (b.minute||0)-(a.minute||0); return (a.koMin||9999)-(b.koMin||9999); });
     var fk="fav-lg-"+l.id;
     var lc=list.filter(function(m){return m.live}).length;
