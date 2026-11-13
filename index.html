@@ -391,6 +391,28 @@ body.nav .fade{animation:fade .3s ease}
   .pillunit{display:none}
   .depbtn{display:none}
 }
+
+.homesearch{display:flex;align-items:center;gap:10px;width:100%;background:var(--panel2);border:1px solid var(--line2);color:var(--muted);border-radius:12px;padding:12px 14px;font:inherit;font-size:14px;cursor:pointer;text-align:left;margin-top:var(--gap-block)}
+.hometabs{display:flex;gap:4px;background:var(--panel2);border:1px solid var(--line2);border-radius:14px;padding:5px;margin-top:12px}
+.htab{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;color:var(--muted);font:inherit;font-size:11.5px;font-weight:700;padding:8px 2px;border-radius:10px;cursor:pointer}
+.htab .ic{width:20px;height:20px}
+.htab.on{background:var(--panel3);color:var(--head)}
+.htab .livecount{color:#FF5C7A;font-weight:800}
+.favchips{display:flex;gap:8px;flex-wrap:wrap}
+.favchip{display:inline-flex;align-items:center;gap:7px;background:var(--panel2);border:1px solid var(--line2);color:var(--head);border-radius:999px;padding:6px 8px 6px 12px;font-size:13px;font-weight:700;cursor:pointer}
+.favx{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:var(--panel3);color:var(--muted);font-size:10px;cursor:pointer}
+.hscroll{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:2px 2px 10px;scrollbar-width:none}
+.hscroll::-webkit-scrollbar{display:none}
+.hscroll .mcard{flex:0 0 84%;scroll-snap-align:start;margin:0}
+@media(min-width:761px){.hscroll .mcard{flex-basis:350px}}
+.carbtns{display:inline-flex;gap:6px}
+.carbtn{width:30px;height:30px;border-radius:9px;background:var(--panel2);border:1px solid var(--line2);color:var(--head);display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+.livebadge{background:#FF3B5C;color:#fff;font-size:10px;font-weight:800;letter-spacing:.6px;border-radius:6px;padding:2.5px 7px}
+.moremkts{color:var(--muted);font-size:12px;font-weight:700;letter-spacing:0}
+.kit-xs{width:20px;height:20px}
+.comp{position:relative}
+.compstar{position:absolute;top:8px;right:8px}
+.lgstar{vertical-align:middle}
 </style>
 </head>
 <body>
@@ -553,7 +575,7 @@ var myBets = [
 var myBetsTab = "Open";
 var liveSport = "All";
 var liveLeague = "All";
-var follows = {"fav-m1":true};
+var follows = {"fav-m1":true, "fav-lg-PL":true, "fav-tm-Arsenal":true};
 var pendingLeague = null;
 var searchQuery = "";
 var ouSuspended = false;
@@ -836,7 +858,7 @@ function updateCountdowns(){
 }
 function followedMatches(){
   return MATCHES.filter(function(m){
-    return !!(follows["fav-"+m.id] || follows["fav-lg-"+m.league]);
+    return !!(follows["fav-"+m.id] || follows["fav-lg-"+m.league] || follows["fav-tm-"+m.home] || follows["fav-tm-"+m.away]);
   });
 }
 function betCashValue(b){
@@ -950,12 +972,12 @@ function matchCard(m, showLeague){
   var lg=null; for(var i=0;i<LIVE_COMPS.length;i++){ if(LIVE_COMPS[i].id===m.league) lg=LIVE_COMPS[i]; }
   var spIcon={Football:"ball",Basketball:"basketball",Tennis:"tennis",Esports:"gamepad"}[sportOf(m)]||"ball";
   var html='<div class="mcard" data-detail onclick="openDetail(\''+m.id+'\')">';
-  html+='<div class="mcard-head"><span>'+icon(spIcon,"ic-sm")+' '+esc(leagueName(m.league))+(lg?(" \u00b7 "+esc(lg.country)):"")+'</span><button class="star '+(follows[starKey]?"on":"")+'" onclick="toggleFollow(\''+starKey+'\',event)" aria-label="Follow">'+icon("star", follows[starKey]?"fill ic-lg":"ic-lg")+'</button></div>';
+  html+='<div class="mcard-head"><span>'+icon(spIcon,"ic-sm")+' '+esc(leagueName(m.league))+(lg?(" \u00b7 "+esc(lg.country)):"")+'</span>'+(m.live?'<span class="moremkts" style="margin-left:auto">+'+(m.id==="m1"?115:(24+(((m.id.charCodeAt(1)||7)*7)%60)))+' \u203a</span>':"")+'<button class="star '+(follows[starKey]?"on":"")+'" onclick="toggleFollow(\''+starKey+'\',event)" aria-label="Follow">'+icon("star", follows[starKey]?"fill ic-lg":"ic-lg")+'</button></div>';
   var scores=null;
   if(m.live){
     var half=m.halfTxt ? esc(m.halfTxt) : ((m.league==="NBA") ? esc(String(m.time).replace("Live \u00b7 ","")) : ((m.minute!==null && m.minute<=45)?"1st half":"2nd half"));
     var minTxt=(m.league==="NBA"||m.minute===null) ? "" : (m.minute+"' \u00b7 ");
-    html+='<div class="mcard-live"><span class="livedot"></span><b>'+minTxt+half+'</b></div>';
+    html+='<div class="mcard-live"><span class="livebadge">LIVE</span><b>'+minTxt+half+'</b></div>';
     if(m.score){ var parts=String(m.score).split("\u2013"); if(parts.length===2) scores=[parts[0].replace(/\s/g,""), parts[1].replace(/\s/g,"")]; }
   } else {
     html+='<div class="mcard-soon">'+icon("clock","ic-sm")+' Kick-off \u00b7 '+esc(m.time)+(m.koMin!==undefined?' \u00b7 <span class="ko-count" data-mid="'+m.id+'">'+koText(m.koMin)+'</span>':'')+'</div>';
@@ -988,24 +1010,64 @@ function matchesTable(list, showLeague){
   return '<div class="mcardlist">'+cards+'</div>';
 }
 
+function homeSearchHTML(){
+  return '<button class="homesearch" onclick="homeSearchTap()">'+icon("search","ic-sm")+'<span>Search teams, players, leagues</span></button>';
+}
+function homeSearchTap(){
+  if(window.innerWidth<=760){ var mob=document.getElementById("mobSearch"); if(mob && !mob.classList.contains("show")) toggleMobSearch(); var i=document.getElementById("searchInputMobile"); if(i) setTimeout(function(){ i.focus(); },60); }
+  else { var d=document.getElementById("searchInput"); if(d){ window.scrollTo({top:0,behavior:"smooth"}); d.focus(); } }
+}
+function homeTabsHTML(n){
+  var t='<div class="hometabs" role="navigation" aria-label="Sports">';
+  t+='<button class="htab on">'+icon("home")+'<span>Home</span></button>';
+  t+='<button class="htab" onclick="location.hash=\'#/live\'">'+icon("live")+'<span>Live <b class="livecount">'+n+'</b></span></button>';
+  t+='<button class="htab" onclick="location.hash=\'#/football\'">'+icon("ball")+'<span>Football</span></button>';
+  t+='<button class="htab" onclick="liveSportGo(\'Tennis\')">'+icon("tennis")+'<span>Tennis</span></button>';
+  t+='<button class="htab" onclick="basketballGo()">'+icon("basketball")+'<span>Basketball</span></button>';
+  return t+'</div>';
+}
+function favChipsHTML(){
+  var chips='';
+  Object.keys(follows).forEach(function(k){
+    if(!follows[k]) return;
+    if(k.indexOf("fav-lg-")===0){
+      var id=k.slice(7), lg=null;
+      for(var i=0;i<LIVE_COMPS.length;i++){ if(LIVE_COMPS[i].id===id) lg=LIVE_COMPS[i]; }
+      if(!lg) return;
+      chips+='<span class="favchip" onclick="compGo(\''+id+'\')">'+leagueBadge(id)+' '+esc(lg.name)+' <span class="favx" onclick="toggleFollow(\''+k+'\',event)" aria-label="Remove favourite">\u2715</span></span>';
+    } else if(k.indexOf("fav-tm-")===0){
+      var tm=k.slice(7);
+      chips+='<span class="favchip" onclick="location.hash=\'#/football\'">'+kitIcon(tm,"kit-xs")+' '+esc(tm)+' <span class="favx" onclick="toggleFollow(\''+k+'\',event)" aria-label="Remove favourite">\u2715</span></span>';
+    }
+  });
+  return chips ? '<div class="favchips">'+chips+'</div>' : '';
+}
+function carouselHTML(list,id){
+  var cards=list.map(function(m){ return matchCard(m,true); }).join("");
+  if(!cards) return '<div class="empty">No matches.</div>';
+  return '<div class="hscroll" id="'+id+'">'+cards+'</div>';
+}
+function scrollCarousel(id,dir){ var el=document.getElementById(id); if(el) el.scrollBy({left:dir*330,behavior:"smooth"}); }
 function renderHome(){
   var soon=MATCHES.filter(function(m){return !m.live});
   var live=MATCHES.filter(function(m){return m.live});
   var html='<div class="hero fade"><div class="eyebrow">Housebets · Sportsbook</div><h1>Bet in USDT.<br><em>Settled on-chain.</em></h1><p>Live odds on the world\'s football, backed by a public on-chain bankroll of $2,850,275. Wins land in seconds — no wagering on winnings, no waiting rooms.</p><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;position:relative;z-index:1"><button class="btn" onclick="location.hash=\'#/live\'">View Live Betting '+icon("arrowR","ic-sm")+'</button><button class="btn-outline" onclick="location.hash=\'#/match\'">Arsenal v Brighton</button></div></div>';
-  html+=sportTilesHTML('home');
+  html+=homeSearchHTML()+homeTabsHTML(live.length);
+  var fc=favChipsHTML();
+  if(fc){ html+='<div class="sectionhead"><h2>Favourites</h2><p>Tap \u2715 to remove</p></div>'+fc; }
+  var fm=followedMatches();
+  if(fm.length){
+    html+='<div class="sectionhead"><h2>Your matches</h2><p>'+fm.length+' matches</p></div>'+carouselHTML(fm,"car-your");
+  }
+  html+='<div class="sectionhead"><h2><span class="livedot"></span> Featured matches</h2><span class="carbtns"><button class="carbtn" onclick="scrollCarousel(\'car-feat\',-1)" aria-label="Previous matches">'+icon("arrowL","ic-sm")+'</button><button class="carbtn" onclick="scrollCarousel(\'car-feat\',1)" aria-label="Next matches">'+icon("arrowR","ic-sm")+'</button></span></div>'+carouselHTML(live,"car-feat");
+  html+='<div class="sectionhead"><h2>Starting soon</h2><p>Upcoming fixtures \u00b7 kick-off times shown \u00b7 1X2</p></div>'+matchesTable(soon,true);
+  html+='<div class="sectionhead"><h2>Top competitions</h2><p>Tap a competition to go straight to its section</p></div><div class="compgrid">';
+  LEAGUES.forEach(function(l){ html+='<div class="comp" onclick="compGo(\''+l.id+'\')"><button class="star compstar '+(follows["fav-lg-"+l.id]?"on":"")+'" onclick="toggleFollow(\'fav-lg-'+l.id+'\',event)" aria-label="Follow competition">'+icon("star", follows["fav-lg-"+l.id]?"fill ic-sm":"ic-sm")+'</button><b>'+icon(l.icon)+' '+esc(l.name)+'</b><span>'+esc(l.country)+' · View fixtures & odds '+icon("arrowR","ic-sm")+'</span></div>'; });
+  html+='</div>';
   html+=rewardsCardHTML();
   html+=trustStripHTML();
   html+=gatewayHTML();
   html+=utilTilesHTML();
-  var fm=followedMatches();
-  if(fm.length){
-    html+='<div class="sectionhead"><h2>Your matches</h2><p>'+fm.length+' from your follows</p></div><p style="color:var(--muted);font-size:13px;margin:-6px 0 12px">From your follows \u2014 tap a star to add or remove.</p>'+matchesTable(fm,true);
-  }
-  html+='<div class="sectionhead"><h2><span class="livedot"></span> Live now</h2><p>'+live.length+' matches in play</p></div>'+matchesTable(live,true);
-  html+='<div class="sectionhead"><h2>Starting soon</h2><p>Upcoming fixtures \u00b7 kick-off times shown \u00b7 1X2</p></div>'+matchesTable(soon,true);
-  html+='<div class="sectionhead"><h2>Top competitions</h2><p>Tap a competition to go straight to its section</p></div><div class="compgrid">';
-  LEAGUES.forEach(function(l){ html+='<div class="comp" onclick="compGo(\''+l.id+'\')"><b>'+icon(l.icon)+' '+esc(l.name)+'</b><span>'+esc(l.country)+' · View fixtures & odds '+icon("arrowR","ic-sm")+'</span></div>'; });
-  html+='</div>';
   html+='<div class="card" style="margin-top:var(--gap-block);padding:var(--pad-card)"><h3 style="margin:0 0 6px;color:var(--head)">House Rules — Prime Edition</h3><p style="margin:0;color:var(--muted);line-height:1.7;font-size:14px">Singles only, stakes in USDT. If odds change while a selection sits in your slip, you must accept the new price before placing. Suspended selections are flagged and cannot be placed until the market reopens. Cash out is offered at a live price that moves with the match, starting at 0.88× the current potential return. Winnings settle on-chain — no wagering requirements, ever.</p></div>';
   document.getElementById("page-home").innerHTML=html;
 }
@@ -1068,6 +1130,7 @@ function renderDetail(){
   }
   html+='<div class="dteam">'+teamAvatar(m,m.away,true)+'<span>'+esc(m.away)+'</span></div></div>';
   html+='<p style="margin:4px 0 0"><button class="pillbtn '+(follows[starKey]?"on":"")+'" onclick="toggleFollow(\''+starKey+'\',event)">'+icon("star", follows[starKey]?"fill ic-sm":"ic-sm")+' '+(follows[starKey]?"Following":"Follow")+'</button></p>';
+  html+='<p style="margin:8px 0 0;display:flex;gap:8px;flex-wrap:wrap"><button class="pillbtn '+(follows["fav-tm-"+m.home]?"on":"")+'" onclick="toggleFollow(\'fav-tm-'+m.home+'\',event)">'+icon("star","ic-sm")+' Follow '+esc(m.home)+'</button><button class="pillbtn '+(follows["fav-tm-"+m.away]?"on":"")+'" onclick="toggleFollow(\'fav-tm-'+m.away+'\',event)">'+icon("star","ic-sm")+' Follow '+esc(m.away)+'</button></p>';
   html+=priceChartHTMLFor(m);
   var labels={"1":m.home,"X":"Draw","2":m.away};
   var ks=m.twoWay?["1","2"]:["1","X","2"];
@@ -1092,7 +1155,8 @@ function renderFootball(){
   var html='<div class="fade"><div class="eyebrow" style="color:var(--cyan)">Football</div><h1 class="serif" style="margin:6px 0 4px;color:var(--head);font-size:34px">Football — All Leagues</h1><p style="color:var(--muted);margin:0">1X2 decimal odds. Tap '+icon("star","ic-sm")+' to follow a match. Tap any price to add it to your slip.</p>';
   LEAGUES.filter(function(l){return l.id!=="NBA"}).forEach(function(l){
     var list=MATCHES.filter(function(m){return m.league===l.id});
-    html+='<div id="lg-'+l.id+'"><div class="sectionhead"><h2>'+icon(l.icon)+' '+esc(l.name)+'</h2><p>'+esc(l.country)+'</p></div>'+matchesTable(list,false)+'</div>';
+    var fk="fav-lg-"+l.id;
+    html+='<div id="lg-'+l.id+'"><div class="sectionhead"><h2>'+icon(l.icon)+' '+esc(l.name)+' <button class="star lgstar '+(follows[fk]?"on":"")+'" onclick="toggleFollow(\''+fk+'\',event)" aria-label="Follow league">'+icon("star", follows[fk]?"fill":"")+'</button></h2><p>'+esc(l.country)+'</p></div>'+matchesTable(list,false)+'</div>';
   });
   html+='</div>';
   document.getElementById("page-football").innerHTML=html;
@@ -1103,7 +1167,7 @@ function renderMatch(){
   var scoreTxt=m1?m1.score:"2 \u2013 1";
   var minTxt=m1 && m1.minute!==null ? m1.minute : 67;
   var suspPill = goalSuspended ? '<span class="pill" style="background:rgba(255,92,92,.16);color:#FF9A9A">All markets suspended \u00b7 '+esc(suspendReason)+'</span>' : (ouSuspended ? '<span class="pill" style="background:rgba(255,92,92,.16);color:#FF9A9A">O/U 2.5 suspended \u00b7 '+esc(suspendReason)+'</span>' : '<span class="pill">O/U 2.5 open</span>');
-  var html='<div class="fade"><div class="eyebrow" style="color:var(--live)">'+icon("live","ic-sm")+' Live \u00b7 Premier League \u00b7 '+minTxt+'\'</div><h1 class="serif" style="margin:6px 0 2px;color:var(--head);font-size:36px">Arsenal v Brighton</h1><p style="color:var(--muted);margin:0 0 6px">Emirates Stadium \u00b7 Score <b style="color:var(--ink)">Arsenal '+esc(scoreTxt)+' Brighton</b> \u00b7 Clock ticks with the Live page</p><p><span class="pill">Match page \u00b7 20 pts in the brief</span> <span class="pill">Odds move live</span> '+suspPill+' <button class="pillbtn '+(follows["fav-m1"]?"on":"")+'" onclick="toggleFollow(\'fav-m1\',event)">'+icon("star", follows["fav-m1"]?"fill ic-sm":"ic-sm")+' '+(follows["fav-m1"]?"Following":"Follow")+'</button></p>';
+  var html='<div class="fade"><div class="eyebrow" style="color:var(--live)">'+icon("live","ic-sm")+' Live \u00b7 Premier League \u00b7 '+minTxt+'\'</div><h1 class="serif" style="margin:6px 0 2px;color:var(--head);font-size:36px">Arsenal v Brighton</h1><p style="color:var(--muted);margin:0 0 6px">Emirates Stadium \u00b7 Score <b style="color:var(--ink)">Arsenal '+esc(scoreTxt)+' Brighton</b> \u00b7 Clock ticks with the Live page</p><p><span class="pill">Match page \u00b7 20 pts in the brief</span> <span class="pill">Odds move live</span> '+suspPill+' <button class="pillbtn '+(follows["fav-m1"]?"on":"")+'" onclick="toggleFollow(\'fav-m1\',event)">'+icon("star", follows["fav-m1"]?"fill ic-sm":"ic-sm")+' '+(follows["fav-m1"]?"Following":"Follow")+'</button></p><p style="margin:8px 0 0;display:flex;gap:8px;flex-wrap:wrap"><button class="pillbtn '+(follows["fav-tm-Arsenal"]?"on":"")+'" onclick="toggleFollow(\'fav-tm-Arsenal\',event)">'+icon("star","ic-sm")+' Follow Arsenal</button><button class="pillbtn '+(follows["fav-tm-Brighton"]?"on":"")+'" onclick="toggleFollow(\'fav-tm-Brighton\',event)">'+icon("star","ic-sm")+' Follow Brighton</button></p>';
   html+='<div class="scoreboard">'+kitIcon("Arsenal","kit-lg")+'<span class="sb-team">Arsenal</span><span class="sb-score">'+esc(scoreTxt)+'</span><span class="sb-team">Brighton</span>'+kitIcon("Brighton","kit-lg")+'<span class="pill">'+minTxt+'&#39; \u00b7 Live</span></div>';
   html+=priceChartHTML();
   html+='<input class="mfilter" id="marketFilter" type="text" placeholder="Filter markets \u2014 try &#39;corners&#39;" oninput="filterMarkets(this.value)" value="'+esc(marketFilterQuery)+'">';
