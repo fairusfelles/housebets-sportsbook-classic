@@ -191,6 +191,8 @@ body.nav .fade{animation:fade .3s ease}
 .flag{background:rgba(255,92,92,.10);color:#FFB4B4;border:1px solid rgba(255,120,120,.4);padding:8px;border-radius:8px;font-size:13px;margin:8px 0}
 .flag.gold{background:rgba(2,247,253,.10);color:#CFFBFB;border-color:rgba(2,247,253,.4)}
 .stakeRow{display:flex;gap:8px;margin-top:8px}
+.qchips{display:flex;gap:6px;margin-top:8px}
+.qchips button{flex:1;background:var(--panel3);border:1px solid var(--line2);color:var(--head);border-radius:8px;padding:7px 0;font:inherit;font-size:12.5px;font-weight:700;cursor:pointer}
 .stakeRow input{flex:1;padding:10px;border:1px solid var(--line2);border-radius:8px;font-size:15px;background:#0D1017;color:#fff;outline:none}
 .stakeRow input:focus{border-color:var(--cyan)}
 .remove{background:none;border:none;color:#FF9090;font-weight:700;float:right}
@@ -735,7 +737,28 @@ var MATCH_MARKETS = [
   {id:"g75", group:"Minutes", name:"Goal After 75:00", picks:[{k:"Yes",label:"Yes",odds:2.20},{k:"No",label:"No",odds:1.62}]},
   {id:"glast", group:"Minutes", name:"Goal in the Last 10 Minutes (81\u2032 \u2013 Full Time)", picks:[{k:"Yes",label:"Yes",odds:2.45},{k:"No",label:"No",odds:1.50}]},
   {id:"ngband", group:"Minutes", name:"Next Goal \u2014 Time Band", picks:[{k:"B75",label:"Before 75\u2032",odds:2.10},{k:"A75",label:"75\u2032 or later",odds:2.60},{k:"N",label:"No more goals",odds:4.20}]},
-  {id:"fin15", group:"Minutes", name:"Goals in the Final 15 Minutes \u2014 Over / Under 0.5", picks:[{k:"Over",label:"Over 0.5",odds:2.05},{k:"Under",label:"Under 0.5",odds:1.72}]}
+  {id:"fin15", group:"Minutes", name:"Goals in the Final 15 Minutes \u2014 Over / Under 0.5", picks:[{k:"Over",label:"Over 0.5",odds:2.05},{k:"Under",label:"Under 0.5",odds:1.72}]},
+  {id:"bcor", group:"Corners & cards", name:"Brighton Corners \u2014 Over / Under 4.5", picks:[{k:"Over",label:"Over 4.5",odds:1.95},{k:"Under",label:"Under 4.5",odds:1.85}]},
+  {id:"race5", group:"Corners & cards", name:"Race to 5 Corners", picks:[{k:"1",label:"Arsenal",odds:1.80},{k:"2",label:"Brighton",odds:2.90},{k:"N",label:"Neither",odds:3.10}]},
+  {id:"fhcrd", group:"Corners & cards", name:"First Half Cards \u2014 Over / Under 1.5", picks:[{k:"Over",label:"Over 1.5",odds:2.05},{k:"Under",label:"Under 1.5",odds:1.75}]},
+  {id:"bkpts", group:"Corners & cards", name:"Booking Points \u2014 Over / Under 35.5", picks:[{k:"Over",label:"Over 35.5",odds:1.90},{k:"Under",label:"Under 35.5",odds:1.90}]},
+  {id:"ftbook", group:"Corners & cards", name:"First Team Booked", picks:[{k:"1",label:"Arsenal",odds:1.95},{k:"2",label:"Brighton",odds:1.80}]},
+  {id:"sentoff", group:"Corners & cards", name:"A Player to be Sent Off", picks:[{k:"Yes",label:"Yes",odds:4.60},{k:"No",label:"No",odds:1.16}]},
+  {id:"price", group:"Players", name:"D. Rice \u2014 Shots Over / Under 1.5", picks:[{k:"Over",label:"Over 1.5",odds:2.20},{k:"Under",label:"Under 1.5",odds:1.62}]},
+  {id:"pmito", group:"Players", name:"K. Mitoma \u2014 Shots on Target Over / Under 0.5", picks:[{k:"Over",label:"Over 0.5",odds:1.75},{k:"Under",label:"Under 0.5",odds:2.00}]},
+  {id:"ptros", group:"Players", name:"L. Trossard \u2014 To Score or Assist", picks:[{k:"Yes",label:"Yes",odds:2.60},{k:"No",label:"No",odds:1.45}]},
+  {id:"praya", group:"Players", name:"D. Raya \u2014 Saves Over / Under 2.5", picks:[{k:"Over",label:"Over 2.5",odds:1.85},{k:"Under",label:"Under 2.5",odds:1.95}]},
+  {id:"pverb", group:"Players", name:"B. Verbruggen \u2014 Saves Over / Under 3.5", picks:[{k:"Over",label:"Over 3.5",odds:2.00},{k:"Under",label:"Under 3.5",odds:1.75}]},
+  {id:"fs", group:"Goalscorers", name:"Goalscorers \u2014 First Scorer", picks:[{k:"Saka",label:"B. Saka",odds:4.80},{k:"Havertz",label:"K. Havertz",odds:5.50},{k:"Welbeck",label:"D. Welbeck",odds:7.50},{k:"Odegaard",label:"M. \u00d8degaard",odds:8.00}]},
+  {id:"hdr", group:"Goalscorers", name:"To Score a Header", picks:[{k:"Havertz",label:"K. Havertz",odds:6.00},{k:"Saliba",label:"W. Saliba",odds:8.50},{k:"Dunk",label:"L. Dunk",odds:9.00}]},
+  {id:"outbox", group:"Goalscorers", name:"To Score from Outside the Box", picks:[{k:"Rice",label:"D. Rice",odds:7.00},{k:"Odegaard",label:"M. \u00d8degaard",odds:6.50},{k:"Mitoma",label:"K. Mitoma",odds:8.00}]},
+  {id:"bttsfh", group:"Goals", name:"Both Teams To Score \u2014 First Half", picks:[{k:"Yes",label:"Yes",odds:4.20},{k:"No",label:"No",odds:1.20}]},
+  {id:"oe", group:"Goals", name:"Total Goals \u2014 Odd or Even", picks:[{k:"Odd",label:"Odd",odds:1.90},{k:"Even",label:"Even",odds:1.90}]},
+  {id:"awbh", group:"Goals", name:"Arsenal to Win Both Halves", picks:[{k:"Yes",label:"Yes",odds:4.50},{k:"No",label:"No",odds:1.16}]},
+  {id:"race2g", group:"Popular", name:"Race to 2 Goals", picks:[{k:"1",label:"Arsenal",odds:1.95},{k:"2",label:"Brighton",odds:4.60},{k:"N",label:"Neither",odds:3.40}]},
+  {id:"ah20", group:"Handicaps", name:"Asian Handicap \u2014 Line 2.0", picks:[{k:"AH1",label:"Arsenal \u22122.0",odds:3.60},{k:"AH2",label:"Brighton +2.0",odds:1.28}]},
+  {id:"gb15", group:"Minutes", name:"Goal Before 15:00", picks:[{k:"Yes",label:"Yes",odds:2.85},{k:"No",label:"No",odds:1.38}]},
+  {id:"lg85", group:"Minutes", name:"Last Goal After 85:00", picks:[{k:"Yes",label:"Yes",odds:3.30},{k:"No",label:"No",odds:1.28}]}
 ];
 var MARKET_GROUPS = ["Popular", "Goals", "Halves", "Handicaps", "Goalscorers", "Corners & cards", "Players", "Minutes"];
 
@@ -1066,7 +1089,7 @@ function matchCard(m, showLeague){
   var lg=null; for(var i=0;i<LIVE_COMPS.length;i++){ if(LIVE_COMPS[i].id===m.league) lg=LIVE_COMPS[i]; }
   var spIcon={Football:"ball",Basketball:"basketball",Tennis:"tennis",Esports:"gamepad"}[sportOf(m)]||"ball";
   var html='<div class="mcard" data-detail onclick="openDetail(\''+m.id+'\')">';
-  html+='<div class="mcard-head"><span>'+icon(spIcon,"ic-sm")+' '+esc(leagueName(m.league))+(lg?(" \u00b7 "+esc(lg.country)):"")+'</span>'+(m.live?'<span class="moremkts" style="margin-left:auto">+'+(m.id==="m1"?115:(24+(((m.id.charCodeAt(1)||7)*7)%60)))+' \u203a</span>':"")+'<button class="star '+(follows[starKey]?"on":"")+'" onclick="toggleFollow(\''+starKey+'\',event)" aria-label="Follow">'+icon("star", follows[starKey]?"fill ic-lg":"ic-lg")+'</button></div>';
+  html+='<div class="mcard-head"><span>'+icon(spIcon,"ic-sm")+' '+esc(leagueName(m.league))+(lg?(" \u00b7 "+esc(lg.country)):"")+'</span>'+(m.live?'<span class="moremkts" style="margin-left:auto">+'+(m.id==="m1"?163:(24+(((m.id.charCodeAt(1)||7)*7)%60)))+' \u203a</span>':"")+'<button class="star '+(follows[starKey]?"on":"")+'" onclick="toggleFollow(\''+starKey+'\',event)" aria-label="Follow">'+icon("star", follows[starKey]?"fill ic-lg":"ic-lg")+'</button></div>';
   var scores=null;
   if(m.live){
     var half=m.halfTxt ? esc(m.halfTxt) : ((m.league==="NBA") ? esc(String(m.time).replace("Live \u00b7 ","")) : ((m.minute!==null && m.minute<=45)?"1st half":"2nd half"));
@@ -1443,6 +1466,7 @@ function addMatchToSlip(key, marketId, pickLabel, odds){
 }
 function removeFromSlip(key){ slip=slip.filter(function(s){return s.key!==key}); renderSlipAll(); route(false); }
 function updateStake(key, val){ slip.forEach(function(s){ if(s.key===key) s.stake=parseFloat(val)||0; }); renderSlipAll(false); }
+function quickStake(key, v){ var val = v<0 ? Math.min(balance, 5000) : v; slip.forEach(function(s){ if(s.key===key) s.stake=val; }); betMessage=""; renderSlipAll(); route(false); }
 function acceptOdds(key){
   slip.forEach(function(s){ if(s.key===key && s.newOdds){ s.odds=s.newOdds; s.newOdds=null; s.needsAccept=false; showToast("New odds accepted: "+Number(s.odds).toFixed(2)); } });
   betMessage=""; renderSlipAll(); route(false);
@@ -1463,10 +1487,11 @@ function slipHTML(containerId){
     if(s.suspended){ html+='<div class="flag">'+icon("lock","ic-sm")+' Suspended \u00b7 '+esc(suspendReason)+' \u2014 this market is currently suspended. It reopens shortly; you cannot place this bet until then \u2014 or remove the selection.</div>'; }
     html+='<div class="netrow"><span>USDT settlement network</span><div class="netchips"><button class="netchip '+(settleNet==="TRON"?"on":"")+'" onclick="setNet(\'TRON\')">TRON</button><button class="netchip '+(settleNet==="Ethereum"?"on":"")+'" onclick="setNet(\'Ethereum\')">Ethereum</button><button class="netchip '+(settleNet==="Solana"?"on":"")+'" onclick="setNet(\'Solana\')">Solana</button></div></div>';
     html+='<div class="stakeRow"><span style="align-self:center;font-weight:700">Stake USDT</span><input type="number" min="0" step="1" value="'+(s.stake||"")+'" oninput="updateStake(\''+s.key+'\',this.value)" onchange="renderSlipAll();route(false)"></div>';
-    html+='<p style="margin-top:8px">Potential return: <b>'+fmt(potential)+' USDT</b> &nbsp;·&nbsp; Balance after: '+fmt(balance-(s.stake||0))+' USDT</p>';
+    html+='<div class="qchips"><button onclick="quickStake(\''+s.key+'\',10)">10</button><button onclick="quickStake(\''+s.key+'\',25)">25</button><button onclick="quickStake(\''+s.key+'\',50)">50</button><button onclick="quickStake(\''+s.key+'\',100)">100</button><button onclick="quickStake(\''+s.key+'\',-1)">Max</button></div>';
+    html+='<p style="margin-top:8px">Potential return: <b>'+fmt(potential)+' USDT</b> &nbsp;·&nbsp; If it loses: <b style="color:var(--red)">−'+fmt(s.stake||0)+' USDT</b> &nbsp;·&nbsp; Balance after: '+fmt(balance-(s.stake||0))+' USDT</p>';
     var disabled = s.needsAccept || s.suspended;
     html+='<button class="btn-green" '+(disabled?"disabled":"")+' onclick="placeBet(\''+s.key+'\')">'+(s.needsAccept?"Accept odds to place bet":(s.suspended?"Market suspended":"Place Bet — "+fmt(s.stake||0)+" USDT"))+'</button>';
-    html+='<p class="microcopy">Settles on-chain in seconds · no wagering on winnings</p>';
+    html+='<p class="microcopy">Min 1 · Max 5,000 USDT per single · settles on-chain in seconds · no wagering on winnings</p>';
     if((s.stake||0) > balance){ html+='<div class="flag">Insufficient balance: you tried to stake '+fmt(s.stake)+' USDT but your balance is '+fmt(balance)+' USDT. Press Place Bet to see the failure state, or lower the stake.</div>'; }
     html+='</div>';
   });
@@ -1536,6 +1561,8 @@ function placeBet(key){
   if(s.needsAccept){ betMessage="Odds changed — accept the new odds first."; betMessageType="fail"; renderSlipAll(); return; }
   if(s.suspended){ betMessage="Bet failed \u2014 Suspended \u00b7 "+suspendReason+". This market is currently suspended."; betMessageType="fail"; renderSlipAll(); return; }
   if(!s.stake || s.stake<=0){ betMessage="Bet failed — enter a stake greater than 0 USDT."; betMessageType="fail"; renderSlipAll(); return; }
+  if(s.stake < 1){ betMessage="Bet failed \u2014 minimum stake is 1 USDT per single."; betMessageType="fail"; renderSlipAll(); return; }
+  if(s.stake > 5000){ betMessage="Bet failed \u2014 maximum stake is 5,000 USDT per single."; betMessageType="fail"; renderSlipAll(); return; }
   if(s.stake > balance){
     betMessage="Bet failed — insufficient balance. Stake "+fmt(s.stake)+" USDT exceeds your balance of "+fmt(balance)+" USDT. No money was taken.";
     betMessageType="fail"; renderSlipAll(); if(location.hash.indexOf("slip")===-1) location.hash="#/slip"; else renderSlipPage();
