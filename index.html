@@ -1474,7 +1474,7 @@ function route(rerender){
   if(h==="slip") renderSlipPage();
   if(h==="scope") renderScope(window._scopeName||"Casino");
   if(h==="detail") renderDetail();
-  closeDrawer();
+  if(!keepScroll) closeDrawer();
   if(keepScroll){ window.scrollTo(0,sy); } else { window.scrollTo({top:0,behavior:"smooth"}); }
 }
 
