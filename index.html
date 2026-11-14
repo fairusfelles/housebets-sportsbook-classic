@@ -381,7 +381,7 @@ body.nav .fade{animation:fade .3s ease}
 /* MOBILE HEADER FIT (≤760px): menu, H mark, search, wallet unit and profile stay visible.
    The top search icon is kept because it is the only trigger for the mobile search bar
    (the search button); the space comes from hiding the crown button, the wordmark text,
-   the pill's "USDT" suffix (the full balance remains) and the separate Deposit button —
+   the pill's "USDC" suffix (the full balance remains) and the separate Deposit button —
    the pill's pale wallet segment opens the wallet sheet on its Deposit tab instead.
    Desktop rules above are untouched. */
 @media(max-width:760px){
@@ -640,7 +640,7 @@ body.menuopen .mobileslipbar{display:none}
   </div>
   <div class="topactions">
     <button class="iconbtn" onclick="focusPageSearch()" aria-label="Search"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg></button>
-    <button class="walletpill" onclick="openWallet()" aria-label="Wallet"><span id="walletBalanceTop">1,000.00</span><span class="pillunit">USDT</span><svg class="ic wchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9.5l6 6 6-6"/></svg><span class="walbtn"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10.5h18"/><circle cx="17" cy="14.8" r="1.1"/></svg></span></button>
+    <button class="walletpill" onclick="openWallet()" aria-label="Wallet"><span id="walletBalanceTop">1,000.00</span><span class="pillunit">USDC</span><svg class="ic wchev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9.5l6 6 6-6"/></svg><span class="walbtn"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10.5h18"/><circle cx="17" cy="14.8" r="1.1"/></svg></span></button>
     <button class="depbtn" onclick="openWallet()" aria-label="Deposit"><svg class="ic ic-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Deposit</button>
     
     <button class="iconbtn crownbtn" onclick="scopeGo('Rewards')" title="Rewards"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8l4.7 3.8L12 5.5l3.8 6.3L20.5 8 19.3 17H4.7z"/><line x1="5" y1="20.2" x2="19" y2="20.2"/></svg></button>
@@ -660,7 +660,7 @@ body.menuopen .mobileslipbar{display:none}
     <div class="navitem" onclick="scopeGo('Chat')"><span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5c-1.5 0-3-.4-4.2-1.1L3 20l1.1-5.3A8.5 8.5 0 1 1 21 11.5z"/></svg> Chat</span><small>›</small></div>
     <div class="navitem" onclick="scopeGo('Rewards')"><span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8l4.7 3.8L12 5.5l3.8 6.3L20.5 8 19.3 17H4.7z"/><line x1="5" y1="20.2" x2="19" y2="20.2"/></svg> Rewards</span><span class="countbadge navcb">3</span></div>
     <div class="navitem" onclick="location.hash='#/slip'"><span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5h12V20l-2-1.3-2 1.3-2-1.3L10 20l-2-1.3L6 20z"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="9" y1="11.8" x2="15" y2="11.8"/></svg> My Bets</span><small id="navBetCount">0</small></div>
-    <p style="font-size:12px;color:var(--muted);line-height:1.6;padding:8px 6px">Housebets — Prime Edition.<br>Singles only · Decimal odds · Stakes in USDT, settled on-chain.<br>Sample data — front-end prototype.</p>
+    <p style="font-size:12px;color:var(--muted);line-height:1.6;padding:8px 6px">Housebets — Prime Edition.<br>Singles only · Decimal odds · Stakes in USDC, settled on-chain.<br>Sample data — front-end prototype.</p>
   </aside>
 
   <main class="main" id="mainArea">
@@ -699,28 +699,28 @@ body.menuopen .mobileslipbar{display:none}
 
 <div class="sheet" id="walletSheet">
   <div style="display:flex;justify-content:space-between;align-items:center"><h2 style="margin:0;color:var(--head)">Wallet</h2><button class="iconbtn" onclick="closeAllSheets()"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button></div>
-  <p style="color:var(--muted)">Your Housebets crypto wallet — sample balances for this prototype. Bets play in USDT; everything settles on-chain.</p>
+  <p style="color:var(--muted)">Your Housebets crypto wallet — sample balances for this prototype. Bets play in USDC; everything settles on-chain.</p>
   <div class="wtabs"><button class="wtab on" id="wtab-deposit" onclick="setWalletTab('deposit')">Deposit</button><button class="wtab" id="wtab-withdraw" onclick="setWalletTab('withdraw')">Withdraw</button><button class="wtab" id="wtab-history" onclick="setWalletTab('history')">History</button></div>
   <div id="wpanel-deposit">
     <div class="wdbanner"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2.8L4.8 13.4h5L9.6 21.2l8.4-10.8h-5.2z"/></svg> Deposits are credited in about a minute — verified on-chain.</div>
-    <div class="coingrid2"><div class="coincard"><svg class="coin" viewBox="0 0 24 24" width="46" height="46" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#F7931A"/><text x="12" y="25" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">₿</text></svg><b>Bitcoin</b><span>BTC · Bitcoin network</span><small>Credited ≈1 min</small></div><div class="coincard"><svg class="coin" viewBox="0 0 24 24" width="46" height="46" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#627EEA"/><text x="12" y="25" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">Ξ</text></svg><b>Ethereum</b><span>ETH · Ethereum network</span><small>Credited ≈1 min</small></div><div class="coincard main"><svg class="coin" viewBox="0 0 24 24" width="46" height="46" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#26A17B"/><text x="12" y="25" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">₮</text></svg><b>Tether</b><span>USDT · TRON</span><small>Credited ≈1 min</small></div><div class="coincard"><svg class="coin" viewBox="0 0 24 24" width="46" height="46" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#9945FF"/><text x="12" y="25" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">◎</text></svg><b>Solana</b><span>SOL · Solana network</span><small>Credited ≈1 min</small></div></div>
+    <div class="coingrid2"><div class="coincard"><svg class="coin" viewBox="0 0 24 24" width="46" height="46" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#F7931A"/><text x="12" y="25" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">₿</text></svg><b>Bitcoin</b><span>BTC · Bitcoin network</span><small>Credited ≈1 min</small></div><div class="coincard"><svg class="coin" viewBox="0 0 24 24" width="46" height="46" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#627EEA"/><text x="12" y="25" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">Ξ</text></svg><b>Ethereum</b><span>ETH · Ethereum network</span><small>Credited ≈1 min</small></div><div class="coincard main"><svg class="coin" viewBox="0 0 24 24" width="46" height="46" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#26A17B"/><text x="12" y="25" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">₮</text></svg><b>Tether</b><span>USDC · TRON</span><small>Credited ≈1 min</small></div><div class="coincard"><svg class="coin" viewBox="0 0 24 24" width="46" height="46" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#9945FF"/><text x="12" y="25" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">◎</text></svg><b>Solana</b><span>SOL · Solana network</span><small>Credited ≈1 min</small></div></div>
     <h3 style="margin:0 0 4px;color:var(--head)">Your balances</h3>
     <div class="coinlist">
     <div class="coinrow"><svg class="coin" viewBox="0 0 24 24" width="38" height="38" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#F7931A"/><text x="12" y="25" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">₿</text></svg><div class="coinmeta"><b>Bitcoin</b><span>BTC</span></div><div class="coinval"><b>0.004213 BTC</b><span>$410.32</span></div></div>
     <div class="coinrow"><svg class="coin" viewBox="0 0 24 24" width="38" height="38" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#627EEA"/><text x="12" y="25" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">Ξ</text></svg><div class="coinmeta"><b>Ethereum</b><span>ETH</span></div><div class="coinval"><b>0.1820 ETH</b><span>$621.13</span></div></div>
-    <div class="coinrow main"><svg class="coin" viewBox="0 0 24 24" width="38" height="38" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#26A17B"/><text x="12" y="25" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">₮</text></svg><div class="coinmeta"><b>Tether</b><span>USDT · Betting balance</span></div><div class="coinval"><b id="coinUsdtVal">1,000.00 USDT</b><span>≈ $1,000.00</span></div></div>
+    <div class="coinrow main"><svg class="coin" viewBox="0 0 24 24" width="38" height="38" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#26A17B"/><text x="12" y="25" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">₮</text></svg><div class="coinmeta"><b>Tether</b><span>USDC · Betting balance</span></div><div class="coinval"><b id="coinUsdtVal">1,000.00 USDC</b><span>≈ $1,000.00</span></div></div>
     <div class="coinrow"><svg class="coin" viewBox="0 0 24 24" width="38" height="38" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#9945FF"/><text x="12" y="25" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">◎</text></svg><div class="coinmeta"><b>Solana</b><span>SOL</span></div><div class="coinval"><b>1.845 SOL</b><span>$395.44</span></div></div>
   </div>
-  <p style="line-height:1.6;color:var(--muted);font-size:14px">Bets deduct from your USDT balance when placed. Cash out credits it back instantly at a live price that moves with the match (it starts at 0.88× the potential return). Withdrawals settle on-chain in seconds. No real funds are used.</p>
+  <p style="line-height:1.6;color:var(--muted);font-size:14px">Bets deduct from your USDC balance when placed. Cash out credits it back instantly at a live price that moves with the match (it starts at 0.88× the potential return). Withdrawals settle on-chain in seconds. No real funds are used.</p>
     </div>
   <div id="wpanel-withdraw" class="hidden">
-    <div class="netrow"><span>USDT network</span><div class="netchips"><button class="netchip on" data-wdnet="TRON" onclick="setWdNet('TRON')">TRON</button><button class="netchip" data-wdnet="Ethereum" onclick="setWdNet('Ethereum')">Ethereum</button><button class="netchip" data-wdnet="Solana" onclick="setWdNet('Solana')">Solana</button></div></div>
-    <div class="stakeRow"><span style="align-self:center;font-weight:700">Amount USDT</span><input type="number" id="wdAmount" min="0" step="1" placeholder="0.00" oninput="wdCheck()"></div>
-    <p style="color:var(--muted);font-size:13px;line-height:1.6">Available: <b id="wdAvail" style="color:var(--ink)">1,000.00 USDT</b> · Withdrawals settle on-chain in seconds, 24/7.</p>
+    <div class="netrow"><span>USDC network</span><div class="netchips"><button class="netchip on" data-wdnet="TRON" onclick="setWdNet('TRON')">TRON</button><button class="netchip" data-wdnet="Ethereum" onclick="setWdNet('Ethereum')">Ethereum</button><button class="netchip" data-wdnet="Solana" onclick="setWdNet('Solana')">Solana</button></div></div>
+    <div class="stakeRow"><span style="align-self:center;font-weight:700">Amount USDC</span><input type="number" id="wdAmount" min="0" step="1" placeholder="0.00" oninput="wdCheck()"></div>
+    <p style="color:var(--muted);font-size:13px;line-height:1.6">Available: <b id="wdAvail" style="color:var(--ink)">1,000.00 USDC</b> · Withdrawals settle on-chain in seconds, 24/7.</p>
     <button class="btn-green" id="wdBtn" disabled onclick="doWithdraw()">Withdraw</button>
   </div>
   <div id="wpanel-history" class="hidden">
-    <div class="histrow"><div class="histmeta"><b>Deposit — USDT · TRON</b><span>Today · 09:41</span></div><div class="histval"><b>+500.00 USDT</b><span class="statuspill">Completed</span></div></div><div class="histrow"><div class="histmeta"><b>Withdrawal — USDT · TRON</b><span>Yesterday · 18:02</span></div><div class="histval"><b>-120.00 USDT</b><span class="statuspill">Completed</span></div></div><div class="histrow"><div class="histmeta"><b>Bet settlement — Arsenal v Brighton · Cash out</b><span>Yesterday · 21:37</span></div><div class="histval"><b>+17.60 USDT</b><span class="statuspill">Settled</span></div></div>
+    <div class="histrow"><div class="histmeta"><b>Deposit — USDC · TRON</b><span>Today · 09:41</span></div><div class="histval"><b>+500.00 USDC</b><span class="statuspill">Completed</span></div></div><div class="histrow"><div class="histmeta"><b>Withdrawal — USDC · TRON</b><span>Yesterday · 18:02</span></div><div class="histval"><b>-120.00 USDC</b><span class="statuspill">Completed</span></div></div><div class="histrow"><div class="histmeta"><b>Bet settlement — Arsenal v Brighton · Cash out</b><span>Yesterday · 21:37</span></div><div class="histval"><b>+17.60 USDC</b><span class="statuspill">Settled</span></div></div>
     <p style="color:var(--muted);font-size:13px;line-height:1.6">Every movement is verifiable on-chain. Bet settlements appear here the moment a market closes or you cash out.</p>
   </div>
   <button class="btn-green" onclick="closeAllSheets()" style="margin-top:14px">Done</button>
@@ -1061,7 +1061,7 @@ function trustStripHTML(){
 }
 function gatewayHTML(){
   return '<div class="gategrid">'
-  +'<div class="gate" onclick="location.hash=\'#/football\'"><h3>Sports</h3><p>Live football odds, settled in USDT</p><span class="gatecta">Open the book '+icon("arrowR","ic-sm")+'</span>'+icon("ball","gate-ic")+'</div>'
+  +'<div class="gate" onclick="location.hash=\'#/football\'"><h3>Sports</h3><p>Live football odds, settled in USDC</p><span class="gatecta">Open the book '+icon("arrowR","ic-sm")+'</span>'+icon("ball","gate-ic")+'</div>'
   +'<div class="gate violet" onclick="scopeGo(\'Casino\')"><h3>Casino</h3><p>House games, provably fair</p><span class="gatecta">Take a look '+icon("arrowR","ic-sm")+'</span>'+icon("dice","gate-ic")+'</div>'
   +'</div>';
 }
@@ -1387,12 +1387,12 @@ function renderHome(){
   html+='<div class="sectionhead"><h2>Top competitions</h2><p>Tap a competition to go straight to its section</p></div><div class="compgrid">';
   LEAGUES.forEach(function(l){ html+='<div class="comp" onclick="compGo(\''+l.id+'\')"><button class="star compstar '+(follows["fav-lg-"+l.id]?"on":"")+'" onclick="toggleFollow(\'fav-lg-'+l.id+'\',event)" aria-label="Follow competition">'+icon("star", follows["fav-lg-"+l.id]?"fill ic-sm":"ic-sm")+'</button><b>'+icon(l.icon)+' '+esc(l.name)+'</b><span>'+esc(l.country)+' · View fixtures & odds '+icon("arrowR","ic-sm")+'</span></div>'; });
   html+='</div>';
-  html+='<div class="hero fade"><div class="eyebrow">Housebets · Sportsbook</div><h1>Bet in USDT.<br><em>Settled on-chain.</em></h1><p>Live odds on the world\'s football, backed by a public on-chain bankroll of $2,850,275. Wins land in seconds — no wagering on winnings, no waiting rooms.</p><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;position:relative;z-index:1"><button class="btn" onclick="location.hash=\'#/live\'">View Live Betting '+icon("arrowR","ic-sm")+'</button><button class="btn-outline" onclick="openMatch(\'m1\')">Arsenal v Brighton</button></div></div>';
+  html+='<div class="hero fade"><div class="eyebrow">Housebets · Sportsbook</div><h1>Bet in USDC.<br><em>Settled on-chain.</em></h1><p>Live odds on the world\'s football, backed by a public on-chain bankroll of $2,850,275. Wins land in seconds — no wagering on winnings, no waiting rooms.</p><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;position:relative;z-index:1"><button class="btn" onclick="location.hash=\'#/live\'">View Live Betting '+icon("arrowR","ic-sm")+'</button><button class="btn-outline" onclick="openMatch(\'m1\')">Arsenal v Brighton</button></div></div>';
   html+=rewardsCardHTML();
   html+=trustStripHTML();
   html+=gatewayHTML();
   html+=utilTilesHTML();
-  html+='<div class="card" style="margin-top:var(--gap-block);padding:var(--pad-card)"><h3 style="margin:0 0 6px;color:var(--head)">House Rules — Prime Edition</h3><p style="margin:0;color:var(--muted);line-height:1.7;font-size:14px">Singles only, stakes in USDT. If odds change while a selection sits in your slip, you must accept the new price before placing. Suspended selections are flagged and cannot be placed until the market reopens. Cash out is offered at a live price that moves with the match, starting at 0.88× the current potential return. Winnings settle on-chain — no wagering requirements, ever.</p></div>';
+  html+='<div class="card" style="margin-top:var(--gap-block);padding:var(--pad-card)"><h3 style="margin:0 0 6px;color:var(--head)">House Rules — Prime Edition</h3><p style="margin:0;color:var(--muted);line-height:1.7;font-size:14px">Singles only, stakes in USDC. If odds change while a selection sits in your slip, you must accept the new price before placing. Suspended selections are flagged and cannot be placed until the market reopens. Cash out is offered at a live price that moves with the match, starting at 0.88× the current potential return. Winnings settle on-chain — no wagering requirements, ever.</p></div>';
   document.getElementById("page-home").innerHTML=html;
 }
 function liveHeadHTML(){
@@ -1494,7 +1494,7 @@ function renderDetail(){
   if(m.suspended){
   html+='<div class="mcard" style="margin-top:12px"><div class="suspbar" style="margin-top:0">'+icon("lock","ic-sm")+' Suspended \u2014 '+esc(m.suspReason||"VAR check")+'</div><p class="microcopy">This market is suspended right now. Prices reopen as soon as play is cleared.</p></div>';
   } else {
-  html+='<div class="mcard" style="margin-top:12px"><span class="mlabel">'+(m.twoWay?"Match Winner":"1X2 \u00b7 Match Result")+'</span><div class="oddsrow">'+btns+'</div><p class="microcopy">Tap a price to add it to your slip as a single \u00b7 settles on-chain in USDT</p></div>';
+  html+='<div class="mcard" style="margin-top:12px"><span class="mlabel">'+(m.twoWay?"Match Winner":"1X2 \u00b7 Match Result")+'</span><div class="oddsrow">'+btns+'</div><p class="microcopy">Tap a price to add it to your slip as a single \u00b7 settles on-chain in USDC</p></div>';
   }
   html+='</div>';
   el.innerHTML=html;
@@ -1732,7 +1732,24 @@ function addMatchToSlip(key, marketId, pickLabel, odds){
   var nit=null; for(var ni=0;ni<slip.length;ni++){ if(slip[ni].key===key) nit=slip[ni]; } nudgeSlipPick(nit);
 }
 function removeFromSlip(key){ slip=slip.filter(function(s){return s.key!==key}); renderSlipAll(); route(false); }
-function updateStake(key, val){ slip.forEach(function(s){ if(s.key===key) s.stake=parseFloat(val)||0; }); renderSlipAll(false); }
+function parseStake(val){ var t=String(val).trim(); if(t.indexOf(",")!==-1){ t=t.replace(/\./g,"").replace(",","."); } var n=parseFloat(t); return isNaN(n)?0:n; }
+var stakeFocusKeep=null;
+function captureStakeFocus(){ stakeFocusKeep=null; var ae=document.activeElement; if(ae && ae.tagName==="INPUT" && ae.getAttribute("data-skey")){ var cont=ae; while(cont && !cont.id) cont=cont.parentElement; stakeFocusKeep={key:ae.getAttribute("data-skey"), val:ae.value, ss:ae.selectionStart, cid:cont?cont.id:""}; } }
+function restoreStakeFocus(){ if(!stakeFocusKeep) return; var scope=stakeFocusKeep.cid? document.getElementById(stakeFocusKeep.cid):document; var ni=scope? scope.querySelector('input[data-skey="'+stakeFocusKeep.key+'"]'):null; if(ni){ ni.focus(); ni.value=stakeFocusKeep.val; try{ ni.setSelectionRange(stakeFocusKeep.ss, stakeFocusKeep.ss); }catch(e){} } }
+function refreshSlipTotals(){ var ts=0, tp=0; slip.forEach(function(x){ ts+=(x.stake||0); tp+=(x.stake||0)*Number(x.odds); });
+  var e1=document.getElementById("ssTotStake"); if(e1) e1.textContent=fmt(ts)+" USDC";
+  var e2=document.getElementById("ssTotPot"); if(e2) e2.textContent=fmt(tp)+" USDC";
+  var e3=document.getElementById("ssPlaceBtn"); if(e3) e3.textContent="PLACE BET \u2014 "+fmt(ts)+" USDC";
+  var e4=document.getElementById("saTotStake"); if(e4) e4.textContent=fmt(ts)+" USDC";
+  var e5=document.getElementById("saTotPot"); if(e5) e5.textContent=fmt(tp)+" USDC";
+  var e6=document.getElementById("saTotLose"); if(e6) e6.textContent="\u2212"+fmt(ts)+" USDC";
+  var e7=document.getElementById("saBalAfter"); if(e7) e7.textContent=fmt(balance-ts)+" USDC";
+  var e8=document.getElementById("saPlaceBtn"); if(e8) e8.textContent=(slip.length>1? "Place all "+slip.length+" singles":"Place Bet")+" \u2014 "+fmt(ts)+" USDC";
+  var mo=document.getElementById("mobileSlipOdds"); if(mo && slip.length) mo.textContent=Number(slip[0].odds).toFixed(2)+" \u00b7 "+fmt(slip[0].stake||0)+" USDC";
+  var msb=document.getElementById("mobileSlipSub"); var mbar=document.getElementById("mobileSlipBar");
+  if(msb && mbar && slip.length && !mbar.classList.contains("warn") && !mbar.classList.contains("susp")){ msb.textContent="Returns "+fmt(tp)+" USDC \u00b7 settles on "+settleNet; }
+  saveState(); }
+function updateStake(key, val){ var n=parseStake(val); slip.forEach(function(s){ if(s.key===key) s.stake=n; }); refreshSlipTotals(); }
 function quickStake(key, v){ var val = v<0 ? Math.min(balance, 5000) : v; slip.forEach(function(s){ if(s.key===key) s.stake=val; }); betMessage=""; renderSlipAll(); route(false); }
 function setAllStakes(v){ var val = v<0 ? Math.min(balance, 5000) : v; slip.forEach(function(s){ s.stake=val; }); betMessage=""; renderSlipAll(); route(false); }
 function acceptOdds(key){
@@ -1754,7 +1771,7 @@ function slipHTML(containerId){
     if(s.needsAccept){ html+='<div class="flag slim">'+icon("warn","ic-sm")+'<span>Odds changed to <b>'+Number(s.newOdds).toFixed(2)+'</b></span><span class="flagbtns"><button class="btn mini" onclick="acceptOdds(\''+s.key+'\')">Accept</button><button class="cashout mini" onclick="rejectOdds(\''+s.key+'\')">Remove</button></span></div>'; }
     if(s.suspended){ html+='<div class="flag slim">'+icon("lock","ic-sm")+'<span>Suspended &middot; '+esc(suspendReason)+' &mdash; market closed for now.</span></div>'; }
 
-    html+='<div class="si-row"><span class="si-odds">'+Number(s.odds).toFixed(2)+'</span><div class="si-stake"><input type="number" min="0" step="1" value="'+(s.stake||"")+'" oninput="updateStake(\''+s.key+'\',this.value)" onchange="renderSlipAll();route(false)"><span class="si-cur">USDT</span><button class="si-max" onclick="quickStake(\''+s.key+'\',-1)">MAX</button></div></div>';
+    html+='<div class="si-row"><span class="si-odds">'+Number(s.odds).toFixed(2)+'</span><div class="si-stake"><input data-skey="'+s.key+'" type="number" min="0" step="1" value="'+(s.stake||"")+'" oninput="updateStake(\''+s.key+'\',this.value)" onchange="renderSlipAll();route(false)"><span class="si-cur">USDC</span><button class="si-max" onclick="quickStake(\''+s.key+'\',-1)">MAX</button></div></div>';
 
 
 
@@ -1767,7 +1784,7 @@ function slipHTML(containerId){
 
     var totStake=slip.reduce(function(a,s){ return a+(s.stake||0); },0);
     var totPot=slip.reduce(function(a,s){ return a+(s.stake||0)*Number(s.odds); },0);
-    html+='<div class="slip-actions"><div class="qchips all"><span class="qall-lbl">All stakes</span><button onclick="setAllStakes(10)">10</button><button onclick="setAllStakes(25)">25</button><button onclick="setAllStakes(50)">50</button><button onclick="setAllStakes(100)">100</button><button onclick="setAllStakes(-1)">Max</button></div><p class="sa-tot">Total stake: <b>'+fmt(totStake)+' USDT</b> &middot; Total potential: <b>'+fmt(totPot)+' USDT</b><br>If all lose: <b style="color:var(--red)">&minus;'+fmt(totStake)+' USDT</b> &middot; Balance after: '+fmt(balance-totStake)+' USDT</p><button class="btn-green" onclick="placeAll()">'+(slip.length>1? 'Place all '+slip.length+' singles' : 'Place Bet')+' &mdash; '+fmt(totStake)+' USDT</button><p class="microcopy">Singles only &mdash; each selection is its own bet, no accumulator.</p></div>';
+    html+='<div class="slip-actions"><div class="qchips all"><span class="qall-lbl">All stakes</span><button onclick="setAllStakes(10)">10</button><button onclick="setAllStakes(25)">25</button><button onclick="setAllStakes(50)">50</button><button onclick="setAllStakes(100)">100</button><button onclick="setAllStakes(-1)">Max</button></div><p class="sa-tot">Total stake: <b id="saTotStake">'+fmt(totStake)+' USDC</b> &middot; Total potential: <b id="saTotPot">'+fmt(totPot)+' USDC</b><br>If all lose: <b id="saTotLose" style="color:var(--red)">&minus;'+fmt(totStake)+' USDC</b> &middot; Balance after: <span id="saBalAfter">'+fmt(balance-totStake)+' USDC</span></p><button class="btn-green" id="saPlaceBtn" onclick="placeAll()">'+(slip.length>1? 'Place all '+slip.length+' singles' : 'Place Bet')+' &mdash; '+fmt(totStake)+' USDC</button><p class="microcopy">Singles only &mdash; each selection is its own bet, no accumulator.</p></div>';
   html+=myBetsSummaryHTML();
   return html;
 }
@@ -1784,20 +1801,20 @@ function myBetsSummaryHTML(){
   list.slice().reverse().forEach(function(b){
     var cashVal=betCashValue(b);
     var pillCls = b.status==="Lost" ? "pill lost" : (b.status==="Void" ? "pill void" : "pill");
-    html+='<div class="betitem"><header><b>'+esc(b.label)+'</b><span class="'+pillCls+'">'+esc(b.status)+'</span></header><p style="margin:6px 0;color:var(--muted);font-size:13px">'+esc(b.market)+' \u00b7 '+esc(b.pickLabel||b.pick)+' @ '+Number(b.odds).toFixed(2)+'<br>Stake '+fmt(b.stake)+' USDT \u00b7 Potential '+fmt(b.potential)+' USDT'+(b.when?'<br>'+esc(b.when):'')+'</p>';
+    html+='<div class="betitem"><header><b>'+esc(b.label)+'</b><span class="'+pillCls+'">'+esc(b.status)+'</span></header><p style="margin:6px 0;color:var(--muted);font-size:13px">'+esc(b.market)+' \u00b7 '+esc(b.pickLabel||b.pick)+' @ '+Number(b.odds).toFixed(2)+'<br>Stake '+fmt(b.stake)+' USDC \u00b7 Potential '+fmt(b.potential)+' USDC'+(b.when?'<br>'+esc(b.when):'')+'</p>';
     if(b.status==="Open"){
       if(ouSuspended || goalSuspended){
-        html+='<button class="cashout" disabled>Cash out \u2014 '+fmt(cashVal)+' USDT</button><p style="color:#FF9A9A;font-weight:700;margin:6px 0 0">Cash out unavailable \u00b7 Suspended \u00b7 '+esc(suspendReason)+'</p>';
+        html+='<button class="cashout" disabled>Cash out \u2014 '+fmt(cashVal)+' USDC</button><p style="color:#FF9A9A;font-weight:700;margin:6px 0 0">Cash out unavailable \u00b7 Suspended \u00b7 '+esc(suspendReason)+'</p>';
       } else if(cashConfirm[b.id]){
-        html+='<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="cashout confirm" onclick="cashOutBet('+b.id+')">Confirm cash out \u2014 '+fmt(cashVal)+' USDT?</button><button class="cashout" onclick="cancelCashOut('+b.id+')">Cancel</button></div>';
+        html+='<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="cashout confirm" onclick="cashOutBet('+b.id+')">Confirm cash out \u2014 '+fmt(cashVal)+' USDC?</button><button class="cashout" onclick="cancelCashOut('+b.id+')">Cancel</button></div>';
       } else {
-        html+='<button class="cashout" onclick="askCashOut('+b.id+')">Cash out \u2014 '+fmt(cashVal)+' USDT</button><p style="color:var(--muted);font-size:12px;margin:6px 0 0">Live price \u00b7 moves with the match (starts at 0.88\u00d7 potential).</p>';
+        html+='<button class="cashout" onclick="askCashOut('+b.id+')">Cash out \u2014 '+fmt(cashVal)+' USDC</button><p style="color:var(--muted);font-size:12px;margin:6px 0 0">Live price \u00b7 moves with the match (starts at 0.88\u00d7 potential).</p>';
       }
     }
-    if(b.status==="Cashed Out"){ html+='<p style="color:var(--head);font-weight:700;margin:6px 0 0">Cashed out for '+fmt(b.cashOutValue)+' USDT \u2014 credited to your balance.</p>'; }
-    if(b.status==="Won"){ html+='<p style="color:var(--good);font-weight:700;margin:6px 0 0">Won \u2014 returned '+fmt(b.potential)+' USDT to your balance.</p>'; }
-    if(b.status==="Lost"){ html+='<p style="color:var(--red);font-weight:700;margin:6px 0 0">Lost \u2014 returned 0.00 USDT.</p>'; }
-    if(b.status==="Void"){ html+='<p style="color:var(--muted);font-weight:700;margin:6px 0 0">Void \u2014 stake refunded '+fmt(b.stake)+' USDT.</p>'; }
+    if(b.status==="Cashed Out"){ html+='<p style="color:var(--head);font-weight:700;margin:6px 0 0">Cashed out for '+fmt(b.cashOutValue)+' USDC \u2014 credited to your balance.</p>'; }
+    if(b.status==="Won"){ html+='<p style="color:var(--good);font-weight:700;margin:6px 0 0">Won \u2014 returned '+fmt(b.potential)+' USDC to your balance.</p>'; }
+    if(b.status==="Lost"){ html+='<p style="color:var(--red);font-weight:700;margin:6px 0 0">Lost \u2014 returned 0.00 USDC.</p>'; }
+    if(b.status==="Void"){ html+='<p style="color:var(--muted);font-weight:700;margin:6px 0 0">Void \u2014 stake refunded '+fmt(b.stake)+' USDC.</p>'; }
     html+='</div>';
   });
   html+='</div>';
@@ -1805,6 +1822,7 @@ function myBetsSummaryHTML(){
 }
 function setMyBetsTab(t){ myBetsTab=t; renderSlipAll(); }
 function renderSlipAll(rerenderPage){
+  captureStakeFocus();
   syncBalance();
   var side=document.getElementById("sideSlip"); if(side) side.innerHTML=slipHTML("side");
   var sheet=document.getElementById("sheetSlip"); if(sheet) sheet.innerHTML="<h2 class='serif' style='color:var(--head)'>Bet Slip</h2>"+slipHTML("sheet");
@@ -1819,14 +1837,15 @@ function renderSlipAll(rerenderPage){
     if(warnIt){ mt.textContent="Odds changed \u2014 tap to accept"; if(msb) msb.textContent=warnIt.label+": "+(+warnIt.odds).toFixed(2)+" \u2192 "+(+warnIt.newOdds).toFixed(2); }
     else if(suspIt){ mt.textContent="Selection suspended"; if(msb) msb.textContent=suspIt.label; }
     else { mt.textContent = slip.length===1 ? (slip[0].label+" @ "+(+slip[0].odds).toFixed(2)) : (slip[0].label+" +"+(slip.length-1)+" more");
-      if(msb){ var pot=0; slip.forEach(function(x){ pot+=(x.stake||0)*Number(x.odds); }); msb.textContent="Returns "+fmt(pot)+" USDT \u00b7 settles on "+settleNet; } }
+      if(msb){ var pot=0; slip.forEach(function(x){ pot+=(x.stake||0)*Number(x.odds); }); msb.textContent="Returns "+fmt(pot)+" USDC \u00b7 settles on "+settleNet; } }
   }
   var navCnt=document.getElementById("navBetCount"); if(navCnt) navCnt.textContent=String(myBets.filter(function(b){return b.status==="Open"}).length);
-  var mobOdds=document.getElementById("mobileSlipOdds"); if(mobOdds) mobOdds.textContent=slip.length? Number(slip[0].odds).toFixed(2)+" · "+fmt(slip[0].stake||0)+" USDT" : "Tap odds to bet";
+  var mobOdds=document.getElementById("mobileSlipOdds"); if(mobOdds) mobOdds.textContent=slip.length? Number(slip[0].odds).toFixed(2)+" · "+fmt(slip[0].stake||0)+" USDC" : "Tap odds to bet";
   var mobBar=document.getElementById("mobileSlipBar"); if(mobBar){ mobBar.style.display=slip.length? "" : "none"; if(slip.length && slip.length!==lastSlipCount){ mobBar.classList.remove("pop"); void mobBar.offsetWidth; mobBar.classList.add("pop"); } }
   lastSlipCount=slip.length;
   if(rerenderPage!==false && location.hash.indexOf("slip")!==-1){ renderSlipPage(); }
   saveState();
+  restoreStakeFocus();
 }
 var slipSheetTab="slip";
 function openSlipSheet(){ closeAllSheets(); slipSheetTab="slip"; renderSlipSheet(); document.getElementById("slipSheet").classList.add("open"); document.getElementById("scrim").classList.add("show"); }
@@ -1843,16 +1862,16 @@ function renderSlipSheet(){
   var q=document.getElementById("ssQuick"); if(q){ q.style.display=(slip.length? "flex":"none"); var tg=document.getElementById("ssQuickToggle"); if(tg) tg.classList.toggle("on", !!quickBetOn); var qc=document.getElementById("ssQuickChips"); if(qc){ qc.innerHTML = quickBetOn? [10,25,50].map(function(v){ return '<button class="ss-qchip'+(quickBetStake===v?" on":"")+'" onclick="setQuickStake('+v+')">'+v+'</button>'; }).join("") : ""; } }
   var foot="";
   if(slip.length){ var ts=0, tp=0; slip.forEach(function(x){ ts+=(x.stake||0); tp+=(x.stake||0)*Number(x.odds); });
-    foot='<div class="ss-foot"><div class="ss-totrow"><span>Total stake</span><b>'+fmt(ts)+' USDT</b></div><div class="ss-totrow big"><span>POTENTIAL RETURN</span><b>'+fmt(tp)+' USDT</b></div><button class="btn-green ss-place" onclick="placeAll()">PLACE BET &mdash; '+fmt(ts)+' USDT</button><button class="ss-share" onclick="shareSlip()">SHARE</button><div class="ss-trust">Settles on-chain &middot; '+settleNet+' &middot; seconds, not days &middot; winnings spendable instantly &mdash; no wagering</div></div>'; }
+    foot='<div class="ss-foot"><div class="ss-totrow"><span>Total stake</span><b id="ssTotStake">'+fmt(ts)+' USDC</b></div><div class="ss-totrow big"><span>POTENTIAL RETURN</span><b id="ssTotPot">'+fmt(tp)+' USDC</b></div><button class="btn-green ss-place" id="ssPlaceBtn" onclick="placeAll()">PLACE BET &mdash; '+fmt(ts)+' USDC</button><button class="ss-share" onclick="shareSlip()">SHARE</button><div class="ss-trust">Settles on-chain &middot; '+settleNet+' &middot; seconds, not days &middot; winnings spendable instantly &mdash; no wagering</div></div>'; }
   body.innerHTML='<div class="ss-sliponly">'+h+'</div>'+foot;
 }
 var quickBetOn=false;
 var quickBetStake=10;
 function setQuickStake(v){ quickBetStake=v; renderSlipSheet(); }
-function toggleQuickBet(){ quickBetOn=!quickBetOn; showToast(quickBetOn? "Quick Bet on - tapping odds places a 10 USDT single instantly." : "Quick Bet off."); renderSlipSheet(); }
+function toggleQuickBet(){ quickBetOn=!quickBetOn; showToast(quickBetOn? "Quick Bet on - tapping odds places a 10 USDC single instantly." : "Quick Bet off."); renderSlipSheet(); }
 function shareSlip(){ if(!slip.length){ showToast("Your slip is empty."); return; } var txt="My Housebets slip: "+slip.map(function(x){ return (x.pickLabel||x.pick)+" @ "+Number(x.odds).toFixed(2)+" ("+x.label+")"; }).join("; "); if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(txt); } showToast("Slip summary copied - paste it anywhere."); }
 function renderSlipPage(){
-  var html='<div class="fade"><div class="eyebrow" style="color:var(--cyan)">Bet Slip + My Bets</div><h1 class="serif" style="margin:6px 0 4px;color:var(--head);font-size:34px">Bet Slip & My Bets</h1><p style="color:var(--muted);margin:0 0 16px">One page, as briefed. Singles only · Decimal odds · Stakes in USDT · Balance <b>'+fmt(balance)+' USDT</b></p><div style="display:grid;grid-template-columns:1fr;gap:16px"><div>'+slipHTML("page")+'</div></div></div>';
+  var html='<div class="fade"><div class="eyebrow" style="color:var(--cyan)">Bet Slip + My Bets</div><h1 class="serif" style="margin:6px 0 4px;color:var(--head);font-size:34px">Bet Slip & My Bets</h1><p style="color:var(--muted);margin:0 0 16px">One page, as briefed. Singles only · Decimal odds · Stakes in USDC · Balance <b>'+fmt(balance)+' USDC</b></p><div style="display:grid;grid-template-columns:1fr;gap:16px"><div>'+slipHTML("page")+'</div></div></div>';
   document.getElementById("page-slip").innerHTML=html;
   // Avoid duplicate My Bets inside slipHTML + page: slipHTML already includes My Bets summary, so page is complete.
 }
@@ -1863,11 +1882,11 @@ function placeBet(key){
   if(key){ for(var i=0;i<slip.length;i++){ if(slip[i].key===key) s=slip[i]; } }
   if(s.needsAccept){ betMessage="Odds changed — accept the new odds first."; betMessageType="fail"; renderSlipAll(); return; }
   if(s.suspended){ betMessage="Bet failed \u2014 Suspended \u00b7 "+suspendReason+". This market is currently suspended."; betMessageType="fail"; renderSlipAll(); return; }
-  if(!s.stake || s.stake<=0){ betMessage="Bet failed — enter a stake greater than 0 USDT."; betMessageType="fail"; renderSlipAll(); return; }
-  if(s.stake < 1){ betMessage="Bet failed \u2014 minimum stake is 1 USDT per single."; betMessageType="fail"; renderSlipAll(); return; }
-  if(s.stake > 5000){ betMessage="Bet failed \u2014 maximum stake is 5,000 USDT per single."; betMessageType="fail"; renderSlipAll(); return; }
+  if(!s.stake || s.stake<=0){ betMessage="Bet failed — enter a stake greater than 0 USDC."; betMessageType="fail"; renderSlipAll(); return; }
+  if(s.stake < 1){ betMessage="Bet failed \u2014 minimum stake is 1 USDC per single."; betMessageType="fail"; renderSlipAll(); return; }
+  if(s.stake > 5000){ betMessage="Bet failed \u2014 maximum stake is 5,000 USDC per single."; betMessageType="fail"; renderSlipAll(); return; }
   if(s.stake > balance){
-    betMessage="Bet failed — insufficient balance. Stake "+fmt(s.stake)+" USDT exceeds your balance of "+fmt(balance)+" USDT. No money was taken.";
+    betMessage="Bet failed — insufficient balance. Stake "+fmt(s.stake)+" USDC exceeds your balance of "+fmt(balance)+" USDC. No money was taken.";
     betMessageType="fail"; renderSlipAll(); if(document.getElementById("slipSheet").classList.contains("open")){ renderSlipSheet(); } else if(location.hash.indexOf("slip")===-1) location.hash="#/slip"; else renderSlipPage();
     showToast("Bet failed — insufficient balance.");
     return;
@@ -1876,12 +1895,12 @@ function placeBet(key){
   var bet={id:Date.now()+Math.floor(Math.random()*1000), label:s.label, market:s.market, pick:s.pick, pickLabel:s.pickLabel, odds:s.odds, stake:s.stake, potential:Math.round(s.stake*s.odds*100)/100, status:"Open", cashOutValue:0, coFactor:0.88};
   myBets.push(bet);
   slip=slip.filter(function(x){ return x.key!==s.key; });
-  betMessage="Bet placed successfully! "+bet.label+" — "+(bet.pickLabel||bet.pick)+" @ "+Number(bet.odds).toFixed(2)+" for "+fmt(bet.stake)+" USDT. Potential return "+fmt(bet.potential)+" USDT. See My Bets below.";
+  betMessage="Bet placed successfully! "+bet.label+" — "+(bet.pickLabel||bet.pick)+" @ "+Number(bet.odds).toFixed(2)+" for "+fmt(bet.stake)+" USDC. Potential return "+fmt(bet.potential)+" USDC. See My Bets below.";
   betMessageType="success";
   syncBalance(); renderSlipAll();
   if(document.getElementById("slipSheet").classList.contains("open")){ renderSlipSheet(); } else if(location.hash.indexOf("slip")===-1) location.hash="#/slip"; else renderSlipPage();
   // Re-inject success into page slip area by keeping betMessage until next render cycle clears? Keep it visible in My Bets area via toast as well
-  showToast("Bet placed — "+fmt(bet.stake)+" USDT staked.");
+  showToast("Bet placed — "+fmt(bet.stake)+" USDC staked.");
   // Preserve message for slip page render: renderSlipPage uses slipHTML which checks betMessage, but slip is empty so it returns empty+mybets without message. Patch: prepend message manually
   var pageEl=document.getElementById("page-slip");
   if(pageEl && betMessageType==="success" && !document.getElementById("slipSheet").classList.contains("open")){ var fadeEl=pageEl.querySelector(".fade"); if(fadeEl) fadeEl.insertAdjacentHTML("beforeend", '<div class="success">'+esc(betMessage)+'</div>'); }
@@ -1906,7 +1925,7 @@ function cashOutBet(id){
       var val=betCashValue(myBets[i]);
       myBets[i].status="Cashed Out"; myBets[i].cashOutValue=val;
       balance=Math.round((balance+val)*100)/100;
-      showToast("Cashed out — "+fmt(val)+" USDT credited. Balance: "+fmt(balance)+" USDT");
+      showToast("Cashed out — "+fmt(val)+" USDC credited. Balance: "+fmt(balance)+" USDC");
       break;
     }
   }
@@ -1926,9 +1945,9 @@ function placeBetSingles(){ return placeBet(); }
 
 function syncBalance(){
   var top=document.getElementById("walletBalanceTop"); if(top) top.textContent=fmt(balance);
-  var sheet=document.getElementById("walletBalanceSheet"); if(sheet) sheet.textContent=fmt(balance)+" USDT";
-  var cu=document.getElementById("coinUsdtVal"); if(cu) cu.textContent=fmt(balance)+" USDT";
-  var wa=document.getElementById("wdAvail"); if(wa) wa.textContent=fmt(balance)+" USDT";
+  var sheet=document.getElementById("walletBalanceSheet"); if(sheet) sheet.textContent=fmt(balance)+" USDC";
+  var cu=document.getElementById("coinUsdtVal"); if(cu) cu.textContent=fmt(balance)+" USDC";
+  var wa=document.getElementById("wdAvail"); if(wa) wa.textContent=fmt(balance)+" USDC";
 }
 
 var histMap={};
@@ -2083,6 +2102,7 @@ function demoGoal(){
 
 var PAGES=["home","live","football","match","slip","scope","detail"];
 function route(rerender){
+  captureStakeFocus();
   var keepScroll=(rerender===false);
   var sy=keepScroll?window.scrollY:0;
   var carPos={};
@@ -2110,6 +2130,7 @@ function route(rerender){
   if(!keepScroll) closeDrawer();
   if(keepScroll){ window.scrollTo(0,sy); Object.keys(carPos).forEach(function(id){ var el=document.getElementById(id); if(el) el.scrollLeft=carPos[id]; }); } else { window.scrollTo({top:0,behavior:"smooth"}); }
   saveState();
+  restoreStakeFocus();
 }
 
 function buildNav(){
