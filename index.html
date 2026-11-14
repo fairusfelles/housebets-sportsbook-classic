@@ -607,6 +607,16 @@ body.menuopen .mobileslipbar{display:none}
 .si-main{padding:10px 12px}
 .si-pick{font-size:15px}
 .slipitem .flag{margin:7px 0}
+.flag.slim{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.flagbtns{margin-left:auto;display:flex;gap:6px}
+.btn.mini,.cashout.mini{padding:6px 12px;font-size:12.5px;width:auto}
+.slip-actions{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:var(--gap-grid)}
+.sa-tot{font-size:13px;color:var(--muted);line-height:1.6;margin:0 0 10px}
+.sa-tot b{color:var(--head)}
+.qchips.all{display:flex;align-items:center;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.qall-lbl{font-size:11px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);margin-right:2px}
+.ss-sliponly .slip-actions{display:none}
+.si-row{margin-top:7px}
 </style>
 </head>
 <body>
@@ -1700,6 +1710,7 @@ function addMatchToSlip(key, marketId, pickLabel, odds){
 function removeFromSlip(key){ slip=slip.filter(function(s){return s.key!==key}); renderSlipAll(); route(false); }
 function updateStake(key, val){ slip.forEach(function(s){ if(s.key===key) s.stake=parseFloat(val)||0; }); renderSlipAll(false); }
 function quickStake(key, v){ var val = v<0 ? Math.min(balance, 5000) : v; slip.forEach(function(s){ if(s.key===key) s.stake=val; }); betMessage=""; renderSlipAll(); route(false); }
+function setAllStakes(v){ var val = v<0 ? Math.min(balance, 5000) : v; slip.forEach(function(s){ s.stake=val; }); betMessage=""; renderSlipAll(); route(false); }
 function acceptOdds(key){
   slip.forEach(function(s){ if(s.key===key && s.newOdds){ s.odds=s.newOdds; s.newOdds=null; s.needsAccept=false; showToast("New odds accepted: "+Number(s.odds).toFixed(2)); } });
   betMessage=""; renderSlipAll(); route(false);
@@ -1716,25 +1727,23 @@ function slipHTML(containerId){
   slip.forEach(function(s){
     var potential=(s.stake||0)*Number(s.odds);
     html+='<div class="slipitem '+(s.suspended?"susp":(s.needsAccept?"warn":""))+'"><div class="si-main"><div class="si-top"><b class="si-pick">'+esc(s.pickLabel||s.pick)+'</b><button class="si-x2" onclick="removeFromSlip(\''+s.key+'\')" aria-label="Remove selection">'+icon("close","ic-sm")+'</button></div><span class="si-fix">'+esc(s.label)+' &middot; '+esc(s.market)+' &middot; Singles only</span>';
-    if(s.needsAccept){ html+='<div class="flag gold">'+icon("warn","ic-sm")+' Odds changed to <b>'+Number(s.newOdds).toFixed(2)+'</b>. Accept the new odds to place this bet.</div><div style="display:flex;gap:8px"><button class="btn" style="flex:1" onclick="acceptOdds(\''+s.key+'\')">Accept '+Number(s.newOdds).toFixed(2)+'</button><button class="cashout" onclick="rejectOdds(\''+s.key+'\')">Remove</button></div>'; }
-    if(s.suspended){ html+='<div class="flag">'+icon("lock","ic-sm")+' Suspended \u00b7 '+esc(suspendReason)+' \u2014 this market is currently suspended. It reopens shortly; you cannot place this bet until then \u2014 or remove the selection.</div>'; }
+    if(s.needsAccept){ html+='<div class="flag slim">'+icon("warn","ic-sm")+'<span>Odds changed to <b>'+Number(s.newOdds).toFixed(2)+'</b></span><span class="flagbtns"><button class="btn mini" onclick="acceptOdds(\''+s.key+'\')">Accept</button><button class="cashout mini" onclick="rejectOdds(\''+s.key+'\')">Remove</button></span></div>'; }
+    if(s.suspended){ html+='<div class="flag slim">'+icon("lock","ic-sm")+'<span>Suspended &middot; '+esc(suspendReason)+' &mdash; market closed for now.</span></div>'; }
 
     html+='<div class="si-row"><span class="si-odds">'+Number(s.odds).toFixed(2)+'</span><div class="si-stake"><input type="number" min="0" step="1" value="'+(s.stake||"")+'" oninput="updateStake(\''+s.key+'\',this.value)" onchange="renderSlipAll();route(false)"><span class="si-cur">USDT</span><button class="si-max" onclick="quickStake(\''+s.key+'\',-1)">MAX</button></div></div>';
-    html+='<input class="si-slider" type="range" min="1" max="'+Math.max(1,Math.min(balance,5000))+'" step="1" value="'+(s.stake||10)+'" oninput="var inp=this.closest(\'.si-main\').querySelector(\'.si-stake input\'); if(inp) inp.value=this.value;" onchange="quickStake(\''+s.key+'\',parseFloat(this.value))" aria-label="Stake slider">';
-    html+='<div class="qchips"><button onclick="quickStake(\''+s.key+'\',10)">10</button><button onclick="quickStake(\''+s.key+'\',25)">25</button><button onclick="quickStake(\''+s.key+'\',50)">50</button><button onclick="quickStake(\''+s.key+'\',100)">100</button><button onclick="quickStake(\''+s.key+'\',-1)">Max</button></div>';
-    html+='<p style="margin-top:8px">Potential return: <b>'+fmt(potential)+' USDT</b> &nbsp;·&nbsp; If it loses: <b style="color:var(--red)">−'+fmt(s.stake||0)+' USDT</b> &nbsp;·&nbsp; Balance after: '+fmt(balance-(s.stake||0))+' USDT</p>';
-    var disabled = s.needsAccept || s.suspended;
-    html+='<button class="btn-green" '+(disabled?"disabled":"")+' onclick="placeBet(\''+s.key+'\')">'+(s.needsAccept?"Accept odds to place bet":(s.suspended?"Market suspended":"Place Bet — "+fmt(s.stake||0)+" USDT"))+'</button>';
 
-    if((s.stake||0) > balance){ html+='<div class="flag">Insufficient balance: you tried to stake '+fmt(s.stake)+' USDT but your balance is '+fmt(balance)+' USDT. Press Place Bet to see the failure state, or lower the stake.</div>'; }
+
+
+
+
+
+
     html+='</div></div>';
   });
-    html+='<p class="microcopy" style="text-align:center;margin:2px 0 10px">Min 1 &middot; Max 5,000 USDT per single &middot; settles on-chain in seconds &middot; no wagering on winnings</p>';
-  if(slip.length>1){
+
     var totStake=slip.reduce(function(a,s){ return a+(s.stake||0); },0);
     var totPot=slip.reduce(function(a,s){ return a+(s.stake||0)*Number(s.odds); },0);
-    html+='<div class="slipitem"><b>'+slip.length+' singles</b><p>Total stake: <b>'+fmt(totStake)+' USDT</b> · Total potential: <b>'+fmt(totPot)+' USDT</b></p><button class="btn-green" onclick="placeAll()">Place all '+slip.length+' singles — '+fmt(totStake)+' USDT</button><p class="microcopy">Singles only — each selection is its own bet, no accumulator.</p></div>';
-  }
+    html+='<div class="slip-actions"><div class="qchips all"><span class="qall-lbl">All stakes</span><button onclick="setAllStakes(10)">10</button><button onclick="setAllStakes(25)">25</button><button onclick="setAllStakes(50)">50</button><button onclick="setAllStakes(100)">100</button><button onclick="setAllStakes(-1)">Max</button></div><p class="sa-tot">Total stake: <b>'+fmt(totStake)+' USDT</b> &middot; Total potential: <b>'+fmt(totPot)+' USDT</b><br>If all lose: <b style="color:var(--red)">&minus;'+fmt(totStake)+' USDT</b> &middot; Balance after: '+fmt(balance-totStake)+' USDT</p><button class="btn-green" onclick="placeAll()">'+(slip.length>1? 'Place all '+slip.length+' singles' : 'Place Bet')+' &mdash; '+fmt(totStake)+' USDT</button><p class="microcopy">Singles only &mdash; each selection is its own bet, no accumulator.</p></div>';
   html+=myBetsSummaryHTML();
   return html;
 }
