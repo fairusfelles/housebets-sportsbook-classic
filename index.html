@@ -589,6 +589,9 @@ body.menuopen .mobileslipbar{display:none}
 .ss-knob{position:absolute;top:2px;left:2px;width:21px;height:21px;border-radius:50%;background:#5B6B7A;transition:.18s}
 .ss-toggle.on{background:rgba(2,247,253,.25);border-color:var(--cyan)}
 .ss-toggle.on .ss-knob{left:23px;background:var(--cyan)}
+.ss-quick-lbl{transition:color .18s}
+#ssQuick.quick-on .ss-quick-lbl{color:var(--cyan)}
+#ssQuick.quick-on .ss-quick-lbl svg{filter:drop-shadow(0 0 5px rgba(2,247,253,.85))}
 .ss-foot{margin-top:14px;border-top:1px solid var(--line2);padding-top:12px}
 .ss-totrow{display:flex;justify-content:space-between;align-items:baseline;color:var(--muted);font-size:13.5px;margin-bottom:5px}
 .ss-totrow b{color:var(--head)}
@@ -1903,7 +1906,7 @@ function renderSlipSheet(){
   if(slipSheetTab==="chat"){ body.innerHTML='<div class="ss-chat"><div class="ss-chat-ic">'+icon("headset","ic-xl")+'</div><b style="color:var(--head);font-size:17px">Live chat</b><p style="color:var(--muted);line-height:1.65;margin:8px auto 14px;max-width:420px">Chat with the Housebets team lives in the full product. In this prototype, support is wired through the profile menu and the Home support tile.</p><button class="btn" style="width:auto;padding:10px 18px" onclick="closeAllSheets();openProfile()">Open support</button></div>'; return; }
   var h=slipHTML();
   if(!slip.length && betMessage){ h='<div class="'+(betMessageType==="success"?"success":"fail")+'">'+esc(betMessage)+'</div>'+h; }
-  var q=document.getElementById("ssQuick"); if(q){ q.style.display=(slip.length? "flex":"none"); var tg=document.getElementById("ssQuickToggle"); if(tg) tg.classList.toggle("on", !!quickBetOn); var qc=document.getElementById("ssQuickChips"); if(qc){ qc.innerHTML = quickBetOn? [10,25,50].map(function(v){ return '<button class="ss-qchip'+(quickBetStake===v?" on":"")+'" onclick="setQuickStake('+v+')">'+v+'</button>'; }).join("") : ""; } }
+  var q=document.getElementById("ssQuick"); if(q){ q.style.display=(slip.length? "flex":"none"); var tg=document.getElementById("ssQuickToggle"); if(tg) tg.classList.toggle("on", !!quickBetOn); q.classList.toggle("quick-on", !!quickBetOn); var qc=document.getElementById("ssQuickChips"); if(qc){ qc.innerHTML = quickBetOn? [10,25,50].map(function(v){ return '<button class="ss-qchip'+(quickBetStake===v?" on":"")+'" onclick="setQuickStake('+v+')">'+v+'</button>'; }).join("") : ""; } }
   var foot="";
   if(slip.length){ var ts=0, tp=0; slip.forEach(function(x){ ts+=(x.stake||0); tp+=(x.stake||0)*Number(x.odds); });
     foot='<div class="ss-foot"><div class="ss-totrow"><span>Total stake</span><b id="ssTotStake">'+fmt(ts)+' USDC</b></div><div class="ss-totrow big"><span>POTENTIAL RETURN</span><b id="ssTotPot">'+fmt(tp)+' USDC</b></div><button class="btn-green ss-place" id="ssPlaceBtn" onclick="placeAll()">PLACE BET &mdash; '+fmt(ts)+' USDC</button><button class="ss-share" onclick="shareSlip()">SHARE</button><div class="ss-trust">Settles on-chain &middot; '+settleNet+' &middot; seconds, not days &middot; winnings spendable instantly &mdash; no wagering</div></div>'; }
