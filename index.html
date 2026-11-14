@@ -605,6 +605,19 @@ body.menuopen .mobileslipbar{display:none}
 .ss-qchip.on{background:var(--cyan);color:#06222B;border-color:var(--cyan)}
 .depbox{margin-top:14px;border:1px solid var(--line);border-radius:12px;padding:12px;background:rgba(255,255,255,.02)}
 .depbox-h{font-weight:800;color:var(--head);margin-bottom:8px}
+.deplabel{font-size:11px;font-weight:900;letter-spacing:1.2px;color:var(--muted);margin:14px 0 8px;text-transform:uppercase}
+.depnets{display:flex;flex-direction:column;gap:8px}
+.depnetrow{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:var(--panel2);border:1px solid var(--line2);border-radius:12px;padding:11px 12px;color:var(--ink);font:inherit;cursor:pointer}
+.depnetrow.on{border-color:var(--cyan);background:rgba(2,247,253,.06)}
+.dn-radio{width:18px;height:18px;border-radius:50%;border:2px solid #43536B;flex:none}
+.depnetrow.on .dn-radio{border-color:var(--cyan);background:radial-gradient(circle,var(--cyan) 0 5px,transparent 6.5px)}
+.dn-name{font-weight:800;color:var(--head);font-size:14px}
+.dn-std{color:var(--muted);font-size:12px;margin-left:5px}
+.dn-meta{margin-left:auto;text-align:right;color:var(--muted);font-size:11.5px;line-height:1.5}
+.dn-meta b{color:var(--cyan);font-size:12px}
+.depaddr{display:flex;align-items:center;gap:10px;background:var(--panel2);border:1px solid var(--line2);border-radius:12px;padding:11px 12px}
+.depaddr-t{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;color:var(--head);word-break:break-all}
+.depcopy{flex:none;background:rgba(2,247,253,.12);border:1px solid rgba(2,247,253,.4);color:var(--cyan);font:inherit;font-size:12px;font-weight:800;border-radius:8px;padding:7px 12px;cursor:pointer}
 .depchips{margin-bottom:10px}
 #sideSlip.flypop{animation:flypop .6s ease}
 @keyframes flypop{0%{filter:brightness(1);box-shadow:0 0 0 0 rgba(2,247,253,0)}35%{filter:brightness(1.55);box-shadow:0 0 0 2px rgba(2,247,253,.75),0 0 26px rgba(2,247,253,.35)}100%{filter:brightness(1);box-shadow:0 0 0 0 rgba(2,247,253,0)}}
@@ -714,13 +727,19 @@ body.menuopen .mobileslipbar{display:none}
   <div class="wtabs"><button class="wtab on" id="wtab-deposit" onclick="setWalletTab('deposit')">Deposit</button><button class="wtab" id="wtab-withdraw" onclick="setWalletTab('withdraw')">Withdraw</button><button class="wtab" id="wtab-history" onclick="setWalletTab('history')">History</button></div>
   <div id="wpanel-deposit">
     <div class="wdbanner"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2.8L4.8 13.4h5L9.6 21.2l8.4-10.8h-5.2z"/></svg> Deposits are credited in about a minute — verified on-chain.</div>
-    <div class="coingrid2"><div class="coincard"><svg class="coin" viewBox="0 0 24 24" width="46" height="46" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#F7931A"/><text x="12" y="25" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">₿</text></svg><b>Bitcoin</b><span>BTC · Bitcoin network</span><small>Credited ≈1 min</small></div><div class="coincard"><svg class="coin" viewBox="0 0 24 24" width="46" height="46" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#627EEA"/><text x="12" y="25" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">Ξ</text></svg><b>Ethereum</b><span>ETH · Ethereum network</span><small>Credited ≈1 min</small></div><div class="coincard main"><svg class="coin" viewBox="0 0 24 24" width="46" height="46" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#26A17B"/><text x="12" y="25" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">₮</text></svg><b>Tether</b><span>USDC · TRON</span><small>Credited ≈1 min</small></div><div class="coincard"><svg class="coin" viewBox="0 0 24 24" width="46" height="46" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#9945FF"/><text x="12" y="25" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">◎</text></svg><b>Solana</b><span>SOL · Solana network</span><small>Credited ≈1 min</small></div></div>
+    <div class="deplabel">Coin</div>
+    <div class="netchips" style="flex-wrap:wrap"><button class="netchip on" data-depcoin="USDC" onclick="setDepCoin('USDC')">USDC</button><button class="netchip" data-depcoin="BTC" onclick="setDepCoin('BTC')">BTC</button><button class="netchip" data-depcoin="ETH" onclick="setDepCoin('ETH')">ETH</button><button class="netchip" data-depcoin="SOL" onclick="setDepCoin('SOL')">SOL</button></div>
+    <div class="deplabel">Network</div>
+    <div class="depnets" id="depNets"></div>
+    <div class="deplabel" id="depAddrLbl">Your USDC address</div>
+    <div class="depaddr"><span class="depaddr-t" id="depAddrText"></span><button class="depcopy" onclick="copyDepAddr()">Copy</button></div>
+    <p class="microcopy" style="margin-top:8px">Sample address for this prototype \u2014 always check the network matches the sending wallet.</p>
     <h3 style="margin:0 0 4px;color:var(--head)">Your balances</h3>
     <div class="coinlist">
-    <div class="coinrow"><svg class="coin" viewBox="0 0 24 24" width="38" height="38" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#F7931A"/><text x="12" y="25" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">₿</text></svg><div class="coinmeta"><b>Bitcoin</b><span>BTC</span></div><div class="coinval"><b>0.004213 BTC</b><span>$410.32</span></div></div>
-    <div class="coinrow"><svg class="coin" viewBox="0 0 24 24" width="38" height="38" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#627EEA"/><text x="12" y="25" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">Ξ</text></svg><div class="coinmeta"><b>Ethereum</b><span>ETH</span></div><div class="coinval"><b>0.1820 ETH</b><span>$621.13</span></div></div>
-    <div class="coinrow main"><svg class="coin" viewBox="0 0 24 24" width="38" height="38" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#26A17B"/><text x="12" y="25" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">₮</text></svg><div class="coinmeta"><b>Tether</b><span>USDC · Betting balance</span></div><div class="coinval"><b id="coinUsdtVal">1,000.00 USDC</b><span>≈ $1,000.00</span></div></div>
-    <div class="coinrow"><svg class="coin" viewBox="0 0 24 24" width="38" height="38" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#9945FF"/><text x="12" y="25" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">◎</text></svg><div class="coinmeta"><b>Solana</b><span>SOL</span></div><div class="coinval"><b>1.845 SOL</b><span>$395.44</span></div></div>
+    <div class="coinrow"><svg class="coin" viewBox="0 0 24 24" width="38" height="38" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#F7931A"/><text x="12" y="17" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">₿</text></svg><div class="coinmeta"><b>Bitcoin</b><span>BTC</span></div><div class="coinval"><b>0.004213 BTC</b><span>$410.32</span></div></div>
+    <div class="coinrow"><svg class="coin" viewBox="0 0 24 24" width="38" height="38" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#627EEA"/><text x="12" y="17" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">Ξ</text></svg><div class="coinmeta"><b>Ethereum</b><span>ETH</span></div><div class="coinval"><b>0.1820 ETH</b><span>$621.13</span></div></div>
+    <div class="coinrow main"><svg class="coin" viewBox="0 0 24 24" width="38" height="38" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#2775CA"/><text x="12" y="17" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">$</text></svg><div class="coinmeta"><b>USD Coin</b><span>USDC · Betting balance</span></div><div class="coinval"><b id="coinUsdtVal">1,000.00 USDC</b><span>≈ $1,000.00</span></div></div>
+    <div class="coinrow"><svg class="coin" viewBox="0 0 24 24" width="38" height="38" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#9945FF"/><text x="12" y="17" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">◎</text></svg><div class="coinmeta"><b>Solana</b><span>SOL</span></div><div class="coinval"><b>1.845 SOL</b><span>$395.44</span></div></div>
   </div>
   <div class="depbox"><div class="depbox-h">Add demo funds</div><div class="qchips depchips"><button data-v="100" onclick="setDepAmt(100)">+100</button><button data-v="500" class="on" onclick="setDepAmt(500)">+500</button><button data-v="1000" onclick="setDepAmt(1000)">+1,000</button></div><button class="btn-green" onclick="doDeposit()">Add <span id="depAmtLbl">500</span> USDC (demo)</button><p class="microcopy" style="margin-top:8px">Prototype only \u2014 sample funds, no real money.</p></div>
     <p style="line-height:1.6;color:var(--muted);font-size:14px">Bets deduct from your USDC balance when placed. Cash out credits it back instantly at a live price that moves with the match (it starts at 0.88× the potential return). Withdrawals settle on-chain in seconds. No real funds are used.</p>
@@ -1200,6 +1219,22 @@ function onSearch(q){
 }
 var depAmt=500;
 function setDepAmt(v){ depAmt=v; var l=document.getElementById("depAmtLbl"); if(l) l.textContent=String(v); document.querySelectorAll(".depchips button").forEach(function(b){ b.classList.toggle("on", Number(b.getAttribute("data-v"))===v); }); }
+var depCoin="USDC", depNet="TRON";
+var DEPNETS={USDC:[["TRON","TRC20","\u22481 min"],["BNB Smart Chain","BEP20","\u22481 min"],["Arbitrum One","ARB","\u22481 min"],["Optimism","OP","\u22481 min"],["Base","BASE","\u22481 min"],["Ethereum","ERC20","\u22482 min"]],BTC:[["Bitcoin","BTC","\u224810 min"]],ETH:[["Ethereum","ERC20","\u22482 min"],["Arbitrum One","ARB","\u22481 min"],["Base","BASE","\u22481 min"],["Optimism","OP","\u22481 min"]],SOL:[["Solana","SPL","\u22481 min"]]};
+var DEPADDR={TRC20:"TLyqzVGLV1srkB7dUrTAHbYP4ewB6kcbE5",BEP20:"0x7f3a9c1e5b2d48f0a6c3e9d1b5f7082a4c6e9d1b",ARB:"0x7f3a9c1e5b2d48f0a6c3e9d1b5f7082a4c6e9d1b",OP:"0x7f3a9c1e5b2d48f0a6c3e9d1b5f7082a4c6e9d1b",BASE:"0x7f3a9c1e5b2d48f0a6c3e9d1b5f7082a4c6e9d1b",ERC20:"0x7f3a9c1e5b2d48f0a6c3e9d1b5f7082a4c6e9d1b",BTC:"bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh",SPL:"7xKzTG2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU"};
+function renderDepNets(){
+  var box=document.getElementById("depNets"); if(!box) return;
+  box.innerHTML=DEPNETS[depCoin].map(function(n){
+    var on=n[0]===depNet;
+    return '<button class="depnetrow'+(on?" on":"")+'" onclick="setDepNet(\''+n[0]+'\')"><span class="dn-radio"></span><span><span class="dn-name">'+n[0]+'</span><span class="dn-std">'+n[1]+'</span></span><span class="dn-meta"><b>'+n[2]+'</b><br>Fee 0 \u00b7 min 1</span></button>';
+  }).join("");
+  var cur=DEPNETS[depCoin].filter(function(n){ return n[0]===depNet; })[0];
+  var lbl=document.getElementById("depAddrLbl"); if(lbl) lbl.textContent="Your "+depCoin+" address \u00b7 "+depNet;
+  var at=document.getElementById("depAddrText"); if(at&&cur) at.textContent=DEPADDR[cur[1]]||"";
+}
+function setDepCoin(c){ depCoin=c; depNet=DEPNETS[c][0][0]; document.querySelectorAll("[data-depcoin]").forEach(function(b){ b.classList.toggle("on", b.getAttribute("data-depcoin")===c); }); renderDepNets(); }
+function setDepNet(n){ depNet=n; renderDepNets(); }
+function copyDepAddr(){ var t=document.getElementById("depAddrText"); var a=t? t.textContent:""; try{ if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(a); }catch(e){} showToast("Deposit address copied \u2014 sample address, prototype only."); }
 function doDeposit(){ balance=Math.round((balance+depAmt)*100)/100; syncBalance(); renderSlipAll(false); showToast("Added "+fmt(depAmt)+" USDC demo funds \u2014 new balance "+fmt(balance)+" USDC."); }
 function openWallet(){ closeAllSheets(); setWalletTab("deposit"); document.getElementById("walletSheet").classList.add("open"); document.getElementById("scrim").classList.add("show"); syncBalance(); }
 function openProfile(){ closeAllSheets(); document.getElementById("profileSheet").classList.add("open"); document.getElementById("scrim").classList.add("show"); }
@@ -2187,6 +2222,7 @@ function buildNav(){
 }
 
 buildNav();
+renderDepNets();
 setWalletTab("deposit");
 syncBalance();
 renderSlipAll(false);
