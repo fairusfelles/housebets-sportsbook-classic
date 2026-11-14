@@ -244,6 +244,10 @@ body.nav .fade{animation:fade .3s ease}
 .fail{background:rgba(255,92,92,.10);border:1px solid rgba(255,120,120,.4);color:#FFB4B4;padding:12px;border-radius:10px;margin:10px 0;font-weight:700}
 .betitem{background:var(--panel);border:1px solid var(--line);padding:var(--pad-card);margin-bottom:var(--gap-grid);border-radius:12px}
 .betitem header{display:flex;justify-content:space-between}
+.copcts{display:flex;gap:6px;margin:0 0 8px}
+.copct{flex:1;padding:7px 0;border-radius:9px;border:1px solid var(--line2);background:var(--panel2);color:var(--muted);font-weight:800;font-size:12.5px;cursor:pointer}
+.copct.on{background:var(--cyan);border-color:var(--cyan);color:#032630}
+.copnote{color:var(--muted);font-size:12px;margin:0 0 8px}
 .cashout{background:transparent;border:1px solid var(--cyan);color:var(--cyan);padding:9px 12px;border-radius:999px;font-weight:800}
 .cashout:hover{background:rgba(2,247,253,.10)}
 .netrow{margin:10px 0 2px}
@@ -884,6 +888,7 @@ var forceNoLive = false;
 var driftDir = {};
 var driftFlash = {};
 var cashConfirm = {};
+var cashPct = {};
 var cashConfirmTimers = {};
 var marketFilterQuery = "";
 var matchMenuOpen=false, closedMarkets={}, activeGTab="";
@@ -1936,7 +1941,10 @@ function myBetsSummaryHTML(){
       if(ouSuspended || goalSuspended){
         html+='<button class="cashout" disabled>Cash out \u2014 '+fmt(cashVal)+' USDC</button><p style="color:#FF9A9A;font-weight:700;margin:6px 0 0">Cash out unavailable \u00b7 Suspended \u00b7 '+esc(suspendReason)+'</p>';
       } else if(cashConfirm[b.id]){
-        html+='<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="cashout confirm" onclick="cashOutBet('+b.id+')">Confirm cash out \u2014 '+fmt(cashVal)+' USDC?</button><button class="cashout" onclick="cancelCashOut('+b.id+')">Cancel</button></div>';
+        var pct=cashPct[b.id]||100; var pval=pct>=100?cashVal:Math.round(cashVal*pct)/100;
+        html+='<div class="copcts">'+[25,50,75,100].map(function(p){ return '<button class="copct'+(p===pct?" on":"")+'" onclick="setCashPct('+b.id+','+p+')">'+(p===100?"Full":p+"%")+'</button>'; }).join("")+'</div>';
+        if(pct<100){ var pSt=Math.round(b.stake*pct)/100; var pPo=Math.round(b.potential*pct)/100; html+='<p class="copnote">Takes '+fmt(pval)+' USDC now \u00b7 '+fmt(Math.round((b.stake-pSt)*100)/100)+' USDC stake stays open \u2192 returns '+fmt(Math.round((b.potential-pPo)*100)/100)+' USDC</p>'; }
+        html+='<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="cashout confirm" onclick="cashOutBet('+b.id+')">Confirm cash out \u2014 '+fmt(pval)+' USDC?</button><button class="cashout" onclick="cancelCashOut('+b.id+')">Cancel</button></div>';
       } else {
         html+='<button class="cashout" onclick="askCashOut('+b.id+')">Cash out \u2014 '+fmt(cashVal)+' USDC</button><p style="color:var(--muted);font-size:12px;margin:6px 0 0">Live price \u00b7 moves with the match (starts at 0.88\u00d7 potential).</p>';
       }
@@ -2042,6 +2050,7 @@ function askCashOut(id){
   if(cashConfirmTimers[id]) clearTimeout(cashConfirmTimers[id]);
   cashConfirmTimers[id]=setTimeout(function(){ delete cashConfirm[id]; renderSlipAll(false); if(location.hash.indexOf("slip")!==-1) renderSlipPage(); },4000);
 }
+function setCashPct(id,p){ cashPct[id]=p; askCashOut(id); }
 function cancelCashOut(id){
   if(cashConfirmTimers[id]) clearTimeout(cashConfirmTimers[id]);
   delete cashConfirm[id];
@@ -2054,9 +2063,22 @@ function cashOutBet(id){
   for(var i=0;i<myBets.length;i++){
     if(myBets[i].id===id && myBets[i].status==="Open"){
       var val=betCashValue(myBets[i]);
-      myBets[i].status="Cashed Out"; myBets[i].cashOutValue=val;
-      balance=Math.round((balance+val)*100)/100;
-      showToast("Cashed out — "+fmt(val)+" USDC credited. Balance: "+fmt(balance)+" USDC");
+      var pct=cashPct[id]||100;
+      if(pct<100){
+        var part=Math.round(val*pct)/100;
+        var pStake=Math.round(myBets[i].stake*pct)/100;
+        var pPot=Math.round(myBets[i].potential*pct)/100;
+        myBets.push({id:Date.now()+myBets.length, label:myBets[i].label, market:myBets[i].market, pick:myBets[i].pick, pickLabel:myBets[i].pickLabel, odds:myBets[i].odds, stake:pStake, potential:pPot, status:"Cashed Out", cashOutValue:part, when:myBets[i].when, matchId:myBets[i].matchId, coFactor:myBets[i].coFactor});
+        myBets[i].stake=Math.round((myBets[i].stake-pStake)*100)/100;
+        myBets[i].potential=Math.round((myBets[i].potential-pPot)*100)/100;
+        balance=Math.round((balance+part)*100)/100;
+        delete cashPct[id];
+        showToast("Cashed out "+pct+"% \u2014 "+fmt(part)+" USDC credited. The rest stays open.");
+      } else {
+        myBets[i].status="Cashed Out"; myBets[i].cashOutValue=val;
+        balance=Math.round((balance+val)*100)/100;
+        showToast("Cashed out — "+fmt(val)+" USDC credited. Balance: "+fmt(balance)+" USDC");
+      }
       break;
     }
   }
