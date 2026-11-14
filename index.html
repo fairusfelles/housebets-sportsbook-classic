@@ -601,8 +601,8 @@ body.menuopen .mobileslipbar{display:none}
 .depbox{margin-top:14px;border:1px solid var(--line);border-radius:12px;padding:12px;background:rgba(255,255,255,.02)}
 .depbox-h{font-weight:800;color:var(--head);margin-bottom:8px}
 .depchips{margin-bottom:10px}
-#sideSlip.flypop{animation:flypop .5s ease}
-@keyframes flypop{0%{filter:brightness(1)}30%{filter:brightness(1.7)}100%{filter:brightness(1)}}
+#sideSlip.flypop{animation:flypop .6s ease}
+@keyframes flypop{0%{filter:brightness(1);box-shadow:0 0 0 0 rgba(2,247,253,0)}35%{filter:brightness(1.55);box-shadow:0 0 0 2px rgba(2,247,253,.75),0 0 26px rgba(2,247,253,.35)}100%{filter:brightness(1);box-shadow:0 0 0 0 rgba(2,247,253,0)}}
 .flychip{position:fixed;z-index:9999;pointer-events:none;background:var(--cyan);color:#032630;font-weight:800;font-size:13px;padding:7px 12px;border-radius:999px;box-shadow:0 8px 24px rgba(0,0,0,.45);will-change:transform,opacity}
 .ss-trust{margin-top:10px;text-align:center;font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.2px}
 .slipitem{border-left:1px solid var(--line)}
