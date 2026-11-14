@@ -801,6 +801,7 @@ var LSKEY = "hb2-state-v1";
 function saveState(){ try{ localStorage.setItem(LSKEY, JSON.stringify({follows:follows, balance:balance, slip:slip, myBets:myBets})); }catch(e){} }
 function loadState(){ try{ var s=JSON.parse(localStorage.getItem(LSKEY)||"null"); if(!s) return; if(s.follows) follows=s.follows; if(typeof s.balance==="number") balance=s.balance; if(Array.isArray(s.slip)) slip=s.slip; if(Array.isArray(s.myBets)) myBets=s.myBets; }catch(e){} }
 loadState();
+function rebaseRestoredSlip(){ slip.forEach(function(it){ try{ var cur=getCurrentOddsForSlip(it); if(cur!=null && Number(cur)>0){ it.odds=cur; } }catch(e){} it.needsAccept=false; it.newOdds=null; }); }
 var pendingLeague = null;
 var searchQuery = "";
 var ouSuspended = false;
@@ -2119,6 +2120,7 @@ function autoCarouselTick(){
   });
 }
 ["pointerdown","touchstart","wheel"].forEach(function(ev){ document.addEventListener(ev,function(e){ var c=(e.target&&e.target.closest)?e.target.closest(".hscroll.autocar"):null; if(c&&c.id) autoCarHold[c.id]=Date.now()+10000; },{passive:true}); });
+rebaseRestoredSlip(); renderSlipAll();
 setInterval(autoCarouselTick, 600);
 setInterval(updateCountdowns, 30000);
 setInterval(driftOdds, 9000);
