@@ -1691,12 +1691,34 @@ function refreshSlipFlags(){
     it.suspended=isItemSuspended(it);
   });
 }
+var acceptNudgeTimer=null;
+function nudgeSlipPick(item){
+  if(!item) return;
+  if(acceptNudgeTimer) clearTimeout(acceptNudgeTimer);
+  acceptNudgeTimer=setTimeout(function(){
+    acceptNudgeTimer=null;
+    var still=false; for(var i=0;i<slip.length;i++){ if(slip[i].key===item.key && !slip[i].needsAccept) still=true; }
+    if(!still) return;
+    var key=item.key||"";
+    var is1x2 = item.market==="Match Result 1X2" || key.indexOf("-mr-")!==-1 || key.indexOf("match-mr-")===0;
+    if(!is1x2) return;
+    var m=findMatch(item.matchId||"m1"); if(!m || !m.odds || m.odds[item.pick]===undefined) return;
+    var old=m.odds[item.pick];
+    var delta=(Math.random()>0.5?1:-1)*(0.04+Math.random()*0.06);
+    var nv=Math.round((old+delta)*100)/100; if(nv<1.05) nv=1.05; if(nv>15) nv=15;
+    if(nv===old) nv=Math.round((old+0.05)*100)/100;
+    m.odds[item.pick]=nv;
+    var dk=m.id+"-1X2-"+item.pick; driftDir[dk]=nv>old?"up":"down"; driftFlash[dk]=true;
+    refreshSlipFlags(); renderSlipAll(); route(false);
+  }, 4000);
+}
 function addToSlip(key, matchId, label, market, pick, odds){
   if(isSelected(key)){ removeFromSlip(key); return; }
   var grp=key.split("-").slice(0,-1).join("-");
   slip=slip.filter(function(x){ return x.key.split("-").slice(0,-1).join("-")!==grp; });
   slip.push({key:key, matchId:matchId, label:label, market:market, pick:pick, odds:odds, stake:10, needsAccept:false, newOdds:null, suspended:false});
   betMessage=""; renderSlipAll(); route(false); if(quickBetOn){ slip.forEach(function(x){ if(x.key===key) x.stake=quickBetStake; }); renderSlipAll(); placeBet(key); }
+  var nit=null; for(var ni=0;ni<slip.length;ni++){ if(slip[ni].key===key) nit=slip[ni]; } nudgeSlipPick(nit);
 }
 function addMatchToSlip(key, marketId, pickLabel, odds){
   var marketName=""; (matchCtx.book||MATCH_MARKETS).forEach(function(m){ if(m.id===marketId) marketName=m.name; }); if(!marketName){ MATCH_MARKETS.forEach(function(m){ if(m.id===marketId) marketName=m.name; }); }
@@ -1707,6 +1729,7 @@ function addMatchToSlip(key, marketId, pickLabel, odds){
   slip=slip.filter(function(x){ return x.key.split("-").slice(0,-1).join("-")!==grp2; });
   slip.push({key:key, matchId:matchCtx.id, label:matchCtx.label, market:marketName, pick:pick, pickLabel:pickLabel, odds:odds, stake:10, needsAccept:false, newOdds:null, suspended:false});
   betMessage=""; renderSlipAll(); route(false); if(quickBetOn){ slip.forEach(function(x){ if(x.key===key) x.stake=quickBetStake; }); renderSlipAll(); placeBet(key); }
+  var nit=null; for(var ni=0;ni<slip.length;ni++){ if(slip[ni].key===key) nit=slip[ni]; } nudgeSlipPick(nit);
 }
 function removeFromSlip(key){ slip=slip.filter(function(s){return s.key!==key}); renderSlipAll(); route(false); }
 function updateStake(key, val){ slip.forEach(function(s){ if(s.key===key) s.stake=parseFloat(val)||0; }); renderSlipAll(false); }
@@ -2123,7 +2146,7 @@ function autoCarouselTick(){
 rebaseRestoredSlip(); renderSlipAll();
 setInterval(autoCarouselTick, 600);
 setInterval(updateCountdowns, 30000);
-setInterval(driftOdds, 9000);
+setInterval(driftOdds, 6000);
 setInterval(tickClocks, 45000);
 setInterval(cycleOUSuspension, 28000);
 // First O/U suspension shortly after load so judges see the state without waiting long
