@@ -975,6 +975,17 @@ var MATCHES = [
   {id:"t2", league:"WTA", sport:"Tennis", home:"Iga Swiatek", away:"Coco Gauff", time:"Live · Set 2", minute:null, live:true, score:"1 – 0", halfTxt:"Set 2 · 3–2", twoWay:true, odds:{"1":1.60,"2":2.30}},
   {id:"e1", league:"ESL", sport:"Esports", home:"Team Spirit", away:"Team Falcons", time:"Live · Map 3", minute:null, live:true, score:"1 – 1", halfTxt:"Map 3 · Round 18", twoWay:true, odds:{"1":1.80,"2":1.95}}
 ];
+function syncKickoffLabels(){
+  var now=new Date();
+  MATCHES.forEach(function(m){
+    if(m.live || typeof m.koMin!=="number") return;
+    var d=new Date(now.getTime()+m.koMin*60000);
+    var sameDay=(d.getDate()===now.getDate() && d.getMonth()===now.getMonth() && d.getFullYear()===now.getFullYear());
+    function p(n){ return (n<10?"0":"")+n; }
+    m.time=(sameDay?"Today":"Tomorrow")+" "+p(d.getHours())+":"+p(d.getMinutes());
+  });
+}
+syncKickoffLabels();
 
 var MATCH_MARKETS = [
   {id:"mr", group:"Popular", name:"Match Result \u2014 1X2", picks:[{k:"1",label:"Arsenal (1)",odds:1.62},{k:"X",label:"Draw (X)",odds:3.90},{k:"2",label:"Brighton (2)",odds:5.25}]},
