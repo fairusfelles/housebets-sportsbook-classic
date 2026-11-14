@@ -598,6 +598,7 @@ body.menuopen .mobileslipbar{display:none}
 .ss-qchips{display:inline-flex;gap:5px}
 .ss-qchip{background:var(--panel2);border:1px solid var(--line2);color:var(--muted);font:inherit;font-size:11.5px;font-weight:800;border-radius:99px;padding:4px 10px;cursor:pointer}
 .ss-qchip.on{background:var(--cyan);color:#06222B;border-color:var(--cyan)}
+.flychip{position:fixed;z-index:9999;pointer-events:none;background:var(--cyan);color:#032630;font-weight:800;font-size:13px;padding:7px 12px;border-radius:999px;box-shadow:0 8px 24px rgba(0,0,0,.45);will-change:transform,opacity}
 .ss-trust{margin-top:10px;text-align:center;font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.2px}
 .slipitem{border-left:1px solid var(--line)}
 .slipitem.warn{border-color:rgba(255,120,120,.45)}
@@ -1712,6 +1713,22 @@ function nudgeSlipPick(item){
     refreshSlipFlags(); renderSlipAll(); route(false);
   }, 4000);
 }
+function flyToSlip(srcEl, txt){
+  try{
+    var bar=document.getElementById("mobileSlipBar");
+    if(!srcEl || !bar || !slip.length) return;
+    var br=bar.getBoundingClientRect(); if(!br.width) return;
+    var sr=srcEl.getBoundingClientRect(); if(!sr.width) return;
+    var chip=document.createElement("div"); chip.className="flychip"; chip.textContent=txt;
+    chip.style.left=(sr.left+sr.width/2)+"px"; chip.style.top=(sr.top+sr.height/2)+"px";
+    chip.style.transform="translate(-50%,-50%) scale(1)";
+    document.body.appendChild(chip);
+    var dx=(br.left+br.width/2)-(sr.left+sr.width/2), dy=(br.top+br.height/2)-(sr.top+sr.height/2);
+    var done=false; var kill=function(){ if(done) return; done=true; chip.remove(); bar.classList.remove("pop"); void bar.offsetWidth; bar.classList.add("pop"); };
+    if(chip.animate){ var an=chip.animate([{transform:"translate(-50%,-50%) scale(1)",opacity:"1"},{transform:"translate(calc(-50% + "+dx+"px), calc(-50% + "+dy+"px)) scale(.25)",opacity:".3"}],{duration:620,easing:"cubic-bezier(.45,.05,.35,1)"}); an.onfinish=kill; setTimeout(kill, 850); }
+    else { setTimeout(function(){ chip.style.transition="transform .6s cubic-bezier(.45,.05,.35,1), opacity .6s"; chip.style.transform="translate(calc(-50% + "+dx+"px), calc(-50% + "+dy+"px)) scale(.25)"; chip.style.opacity=".3"; },20); setTimeout(kill, 800); }
+  }catch(e){}
+}
 function addToSlip(key, matchId, label, market, pick, odds){
   if(isSelected(key)){ removeFromSlip(key); return; }
   var grp=key.split("-").slice(0,-1).join("-");
@@ -1719,6 +1736,7 @@ function addToSlip(key, matchId, label, market, pick, odds){
   slip.push({key:key, matchId:matchId, label:label, market:market, pick:pick, odds:odds, stake:10, needsAccept:false, newOdds:null, suspended:false});
   betMessage=""; renderSlipAll(); route(false); if(quickBetOn){ slip.forEach(function(x){ if(x.key===key) x.stake=quickBetStake; }); renderSlipAll(); placeBet(key); }
   var nit=null; for(var ni=0;ni<slip.length;ni++){ if(slip[ni].key===key) nit=slip[ni]; } nudgeSlipPick(nit);
+  flyToSlip((typeof event!=="undefined" && event)? event.currentTarget : null, Number(odds).toFixed(2));
 }
 function addMatchToSlip(key, marketId, pickLabel, odds){
   var marketName=""; (matchCtx.book||MATCH_MARKETS).forEach(function(m){ if(m.id===marketId) marketName=m.name; }); if(!marketName){ MATCH_MARKETS.forEach(function(m){ if(m.id===marketId) marketName=m.name; }); }
@@ -1730,6 +1748,7 @@ function addMatchToSlip(key, marketId, pickLabel, odds){
   slip.push({key:key, matchId:matchCtx.id, label:matchCtx.label, market:marketName, pick:pick, pickLabel:pickLabel, odds:odds, stake:10, needsAccept:false, newOdds:null, suspended:false});
   betMessage=""; renderSlipAll(); route(false); if(quickBetOn){ slip.forEach(function(x){ if(x.key===key) x.stake=quickBetStake; }); renderSlipAll(); placeBet(key); }
   var nit=null; for(var ni=0;ni<slip.length;ni++){ if(slip[ni].key===key) nit=slip[ni]; } nudgeSlipPick(nit);
+  flyToSlip((typeof event!=="undefined" && event)? event.currentTarget : null, Number(odds).toFixed(2));
 }
 function removeFromSlip(key){ slip=slip.filter(function(s){return s.key!==key}); renderSlipAll(); route(false); }
 function parseStake(val){ var t=String(val).trim(); if(t.indexOf(",")!==-1){ t=t.replace(/\./g,"").replace(",","."); } var n=parseFloat(t); return isNaN(n)?0:n; }
