@@ -599,6 +599,14 @@ body.menuopen .mobileslipbar{display:none}
 .ss-qchip{background:var(--panel2);border:1px solid var(--line2);color:var(--muted);font:inherit;font-size:11.5px;font-weight:800;border-radius:99px;padding:4px 10px;cursor:pointer}
 .ss-qchip.on{background:var(--cyan);color:#06222B;border-color:var(--cyan)}
 .ss-trust{margin-top:10px;text-align:center;font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.2px}
+.slipitem{border-left:1px solid var(--line)}
+.slipitem.warn{border-color:rgba(255,120,120,.45)}
+.slipitem.susp{border-left-color:var(--line)}
+.si-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.si-x2{flex:none;background:none;border:none;color:var(--muted);cursor:pointer;padding:2px;display:grid;place-items:center}
+.si-main{padding:10px 12px}
+.si-pick{font-size:15px}
+.slipitem .flag{margin:7px 0}
 </style>
 </head>
 <body>
@@ -1707,8 +1715,8 @@ function slipHTML(containerId){
   if(betMessage){ html+='<div class="'+(betMessageType==="success"?"success":"fail")+'">'+esc(betMessage)+'</div>'; }
   slip.forEach(function(s){
     var potential=(s.stake||0)*Number(s.odds);
-    html+='<div class="slipitem '+(s.suspended?"susp":(s.needsAccept?"warn":""))+'"><button class="si-x" onclick="removeFromSlip(\''+s.key+'\')" aria-label="Remove selection">'+icon("close","ic")+'</button><div class="si-main"><b class="si-pick">'+esc(s.pickLabel||s.pick)+'</b><span class="si-fix">'+esc(s.label)+'</span><span class="si-mkt">'+esc(s.market)+' &middot; Singles only</span>';
-    if(s.needsAccept){ html+='<div class="flag gold">'+icon("warn","ic-sm")+' Odds have changed to <b>'+Number(s.newOdds).toFixed(2)+'</b>. You must accept the new odds before placing this bet.</div><div style="display:flex;gap:8px"><button class="btn" style="flex:1" onclick="acceptOdds(\''+s.key+'\')">Accept '+Number(s.newOdds).toFixed(2)+'</button><button class="cashout" onclick="rejectOdds(\''+s.key+'\')">Remove</button></div>'; }
+    html+='<div class="slipitem '+(s.suspended?"susp":(s.needsAccept?"warn":""))+'"><div class="si-main"><div class="si-top"><b class="si-pick">'+esc(s.pickLabel||s.pick)+'</b><button class="si-x2" onclick="removeFromSlip(\''+s.key+'\')" aria-label="Remove selection">'+icon("close","ic-sm")+'</button></div><span class="si-fix">'+esc(s.label)+' &middot; '+esc(s.market)+' &middot; Singles only</span>';
+    if(s.needsAccept){ html+='<div class="flag gold">'+icon("warn","ic-sm")+' Odds changed to <b>'+Number(s.newOdds).toFixed(2)+'</b>. Accept the new odds to place this bet.</div><div style="display:flex;gap:8px"><button class="btn" style="flex:1" onclick="acceptOdds(\''+s.key+'\')">Accept '+Number(s.newOdds).toFixed(2)+'</button><button class="cashout" onclick="rejectOdds(\''+s.key+'\')">Remove</button></div>'; }
     if(s.suspended){ html+='<div class="flag">'+icon("lock","ic-sm")+' Suspended \u00b7 '+esc(suspendReason)+' \u2014 this market is currently suspended. It reopens shortly; you cannot place this bet until then \u2014 or remove the selection.</div>'; }
 
     html+='<div class="si-row"><span class="si-odds">'+Number(s.odds).toFixed(2)+'</span><div class="si-stake"><input type="number" min="0" step="1" value="'+(s.stake||"")+'" oninput="updateStake(\''+s.key+'\',this.value)" onchange="renderSlipAll();route(false)"><span class="si-cur">USDT</span><button class="si-max" onclick="quickStake(\''+s.key+'\',-1)">MAX</button></div></div>';
@@ -1717,10 +1725,11 @@ function slipHTML(containerId){
     html+='<p style="margin-top:8px">Potential return: <b>'+fmt(potential)+' USDT</b> &nbsp;·&nbsp; If it loses: <b style="color:var(--red)">−'+fmt(s.stake||0)+' USDT</b> &nbsp;·&nbsp; Balance after: '+fmt(balance-(s.stake||0))+' USDT</p>';
     var disabled = s.needsAccept || s.suspended;
     html+='<button class="btn-green" '+(disabled?"disabled":"")+' onclick="placeBet(\''+s.key+'\')">'+(s.needsAccept?"Accept odds to place bet":(s.suspended?"Market suspended":"Place Bet — "+fmt(s.stake||0)+" USDT"))+'</button>';
-    html+='<p class="microcopy">Min 1 · Max 5,000 USDT per single · settles on-chain in seconds · no wagering on winnings</p>';
+
     if((s.stake||0) > balance){ html+='<div class="flag">Insufficient balance: you tried to stake '+fmt(s.stake)+' USDT but your balance is '+fmt(balance)+' USDT. Press Place Bet to see the failure state, or lower the stake.</div>'; }
     html+='</div></div>';
   });
+    html+='<p class="microcopy" style="text-align:center;margin:2px 0 10px">Min 1 &middot; Max 5,000 USDT per single &middot; settles on-chain in seconds &middot; no wagering on winnings</p>';
   if(slip.length>1){
     var totStake=slip.reduce(function(a,s){ return a+(s.stake||0); },0);
     var totPot=slip.reduce(function(a,s){ return a+(s.stake||0)*Number(s.odds); },0);
