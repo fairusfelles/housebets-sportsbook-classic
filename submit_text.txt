@@ -2,7 +2,7 @@ ENTRY #2 — PRIME EDITION
 Link: https://fairusfelles.github.io/housebets-sportsbook-classic/
 
 Your big idea:
-The sportsbook Housebets has not shipped yet, imagined by its own team: the same near-black shell, cyan H and quiet top bar players already know, wallet as a pale segment inside the balance pill. The Rewards Slider from the casino home works inside Sports home, the house bankroll is shown on-chain and verifiable, and the wallet holds BTC, ETH, USDC and SOL with Deposit, Withdraw and History tabs. Bets settle in USDC on the network the player picks; on phones the slip is a bottom bar that appears only when it holds a pick. Every state is handled: moved odds must be accepted, suspended markets, placed and failed bets, cash out. Nothing feels foreign; everything feels finished.
+The sportsbook Housebets has not shipped yet, imagined by its own team: the same near-black shell, cyan H and quiet top bar players already know, wallet as a pale segment inside the balance pill. The Rewards Slider from the casino home works inside Sports home, the house bankroll is shown on-chain and verifiable, and the wallet holds BTC, ETH, USDC and SOL with Deposit, Withdraw and History tabs. Bets settle in USDT on the network the player picks; on phones the slip is a bottom bar that appears only when it holds a pick. Every state is handled: moved odds must be accepted, suspended markets, placed and failed bets, cash out. Nothing feels foreign; everything feels finished.
 
 Tools note:
 Built with Claude assisting on design and code; hand-written HTML/CSS/JS, hosted on GitHub Pages; Manrope typeface (open licence) via Google Fonts; official Housebets wordmark and brand colour, as provided in the contest brand materials.
