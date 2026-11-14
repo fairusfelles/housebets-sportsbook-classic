@@ -698,6 +698,13 @@ body.menuopen .mobileslipbar{display:none}
 .qall-lbl{font-size:11px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);margin-right:2px}
 .ss-sliponly .slip-actions{display:none}
 .si-row{margin-top:7px}
+
+/* BACK TO TOP (pass 120) */
+#toTop{position:fixed;right:14px;bottom:78px;width:36px;height:36px;border-radius:11px;background:#161B26;border:1px solid var(--line2);color:#EDF1F5;display:grid;place-items:center;z-index:72;opacity:0;pointer-events:none;transform:translateY(6px);transition:opacity .25s,transform .25s,bottom .25s;cursor:pointer;padding:0}
+#toTop.show{opacity:1;pointer-events:auto;transform:none}
+#toTop.lift{bottom:154px}
+#toTop svg{width:18px;height:18px}
+@media(min-width:761px){#toTop{right:22px;bottom:22px}}
 </style>
 </head>
 <body>
@@ -778,6 +785,8 @@ body.menuopen .mobileslipbar{display:none}
   <button id="bnavChat" onclick="scopeGo('Chat')"><span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="11.5" rx="2.5"/><path d="M8 16v3.8l4.2-3.8"/></svg></span>Chat</button>
   <button id="bnavSearch" onclick="focusPageSearch()"><span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><line x1="15.8" y1="15.8" x2="20.5" y2="20.5"/></svg></span>Search</button>
 </nav>
+
+<button id="toTop" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg></button>
 
 <div class="sheet" id="walletSheet">
   <div style="display:flex;justify-content:space-between;align-items:center"><h2 style="margin:0;color:var(--head)">Wallet</h2><button class="iconbtn" onclick="closeAllSheets()"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button></div>
@@ -1259,6 +1268,8 @@ function showToast(msg){
   setTimeout(function(){ t.classList.remove("show"); },2600);
 }
 function hubieTap(){ showToast("Hubie is live 24/7 in the full Housebets app — find him there any time."); }
+function toTopVis(){ var b=document.getElementById("toTop"); if(!b) return; var y=window.scrollY||document.documentElement.scrollTop||document.body.scrollTop||0; b.classList.toggle("show", y>600); var sb=document.getElementById("mobileSlipBar"); var sbOn=false; if(sb){ var d=window.getComputedStyle(sb).display; sbOn=(d!=="none"); } b.classList.toggle("lift", sbOn); }
+window.addEventListener("scroll", toTopVis, {passive:true});
 function toggleDrawer(){ document.body.classList.toggle("drawer"); document.getElementById("scrim").classList.toggle("show", document.body.classList.contains("drawer")); }
 function closeDrawer(){ document.body.classList.remove("drawer"); if(!document.querySelector(".sheet.open")) document.getElementById("scrim").classList.remove("show"); }
 function currentPageSearchInput(){ var id=(location.hash||"#/home").slice(2).split("/")[0]||"home"; var pg=document.getElementById("page-"+id); return pg ? pg.querySelector(".pagesearch-input") : null; }
