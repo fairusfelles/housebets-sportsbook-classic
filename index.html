@@ -187,6 +187,8 @@ tr:last-child td{border-bottom:none}
 @keyframes btnflash{0%{filter:brightness(1.55)}100%{filter:brightness(1)}}
 body.nav .fade{animation:fade .3s ease}
 .odrift{font-size:10px;font-weight:900;margin-left:3px}
+.odrift.grey{color:#637083}
+.oddsbtn.selected .odrift.grey{color:#33505E}
 .odrift.up{color:var(--cyan)}
 .odrift.down{color:#FF7A7A}
 .oddsbtn.selected .odrift.up{color:#04505C}
@@ -1198,7 +1200,10 @@ function findMatch(id){ for(var i=0;i<MATCHES.length;i++){ if(MATCHES[i].id===id
 function isSelected(key){ for(var i=0;i<slip.length;i++){ if(slip[i].key===key) return true; } return false; }
 function driftSpan(key){
   var d=driftDir[key]; if(!d) return "";
-  return '<span class="odrift '+(d==="up"?"up":"down")+'">'+(d==="up"?"\u25b2":"\u25bc")+'</span>';
+  var live=true; var mm=key.match(/^(.+)-1X2-/);
+  if(mm){ var fm=findMatch(mm[1]); if(fm) live=!!fm.live; }
+  else if(key.indexOf("match-")===0 && typeof matchCtx!=="undefined" && matchCtx && matchCtx.id){ var pm=findMatch(matchCtx.id); if(pm) live=!!pm.live; }
+  return '<span class="odrift '+(live? (d==="up"?"up":"down") : "grey")+'">'+(d==="up"?"\u25b2":"\u25bc")+'</span>';
 }
 function flashCls(key){ return driftFlash[key] ? " moved" : ""; }
 function koText(mins){
