@@ -56,6 +56,8 @@ h1,h2{letter-spacing:-.022em}
 .pillunit{font-size:11px;color:#9FB3C8;font-weight:800}
 .pillcoin{display:grid;place-items:center;flex:none}
 .pillbal{gap:5px}
+.pillbal:focus,.pillbal:focus-visible{outline:none}
+.pillbal{-webkit-tap-highlight-color:transparent}
 @media (max-width:430px){ .brand-full svg{height:19px} .topbar .iconbtn{width:38px;height:38px} }
 .pillbal{background:none;border:none;color:inherit;font:inherit;font-weight:800;display:flex;align-items:center;gap:6px;padding:0;cursor:pointer}
 .walletpill .walbtn{cursor:pointer}
@@ -2059,7 +2061,7 @@ function applyCurrency(){
   nodes.forEach(function(n){ n.nodeValue=n.nodeValue.split("USDC").join("USDT"); });
 }
 function renderBalPop(){ document.querySelectorAll("[data-cur]").forEach(function(b){ b.classList.toggle("on", b.getAttribute("data-cur")===dispCur); }); syncBalance(); }
-function toggleBalPop(e){ if(e) e.stopPropagation(); var bp=document.getElementById("balPop"); if(!bp) return; var willOpen=!bp.classList.contains("open"); if(willOpen){ closeAllSheets(); renderBalPop(); bp.classList.add("open"); } else { bp.classList.remove("open"); } }
+function toggleBalPop(e){ if(e){ e.stopPropagation(); if(e.currentTarget && e.currentTarget.blur) e.currentTarget.blur(); } var bp=document.getElementById("balPop"); if(!bp) return; var willOpen=!bp.classList.contains("open"); if(willOpen){ closeAllSheets(); renderBalPop(); bp.classList.add("open"); } else { bp.classList.remove("open"); } }
 function cycleDispCur(){ setDispCur(dispCur==="USDC" ? "USDT" : "USDC"); }
 function setDispCur(c){ dispCur=c; saveState(); renderBalPop(); var bp=document.getElementById("balPop"); if(bp) bp.classList.remove("open"); route(false); renderSlipAll(false); applyCurrency(); if(c) showToast("Balance now shown in "+c+"."); }
 function syncBalance(){
