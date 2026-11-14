@@ -598,6 +598,11 @@ body.menuopen .mobileslipbar{display:none}
 .ss-qchips{display:inline-flex;gap:5px}
 .ss-qchip{background:var(--panel2);border:1px solid var(--line2);color:var(--muted);font:inherit;font-size:11.5px;font-weight:800;border-radius:99px;padding:4px 10px;cursor:pointer}
 .ss-qchip.on{background:var(--cyan);color:#06222B;border-color:var(--cyan)}
+.depbox{margin-top:14px;border:1px solid var(--line);border-radius:12px;padding:12px;background:rgba(255,255,255,.02)}
+.depbox-h{font-weight:800;color:var(--head);margin-bottom:8px}
+.depchips{margin-bottom:10px}
+#sideSlip.flypop{animation:flypop .5s ease}
+@keyframes flypop{0%{filter:brightness(1)}30%{filter:brightness(1.7)}100%{filter:brightness(1)}}
 .flychip{position:fixed;z-index:9999;pointer-events:none;background:var(--cyan);color:#032630;font-weight:800;font-size:13px;padding:7px 12px;border-radius:999px;box-shadow:0 8px 24px rgba(0,0,0,.45);will-change:transform,opacity}
 .ss-trust{margin-top:10px;text-align:center;font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.2px}
 .slipitem{border-left:1px solid var(--line)}
@@ -712,7 +717,8 @@ body.menuopen .mobileslipbar{display:none}
     <div class="coinrow main"><svg class="coin" viewBox="0 0 24 24" width="38" height="38" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#26A17B"/><text x="12" y="25" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">₮</text></svg><div class="coinmeta"><b>Tether</b><span>USDC · Betting balance</span></div><div class="coinval"><b id="coinUsdtVal">1,000.00 USDC</b><span>≈ $1,000.00</span></div></div>
     <div class="coinrow"><svg class="coin" viewBox="0 0 24 24" width="38" height="38" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#9945FF"/><text x="12" y="25" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">◎</text></svg><div class="coinmeta"><b>Solana</b><span>SOL</span></div><div class="coinval"><b>1.845 SOL</b><span>$395.44</span></div></div>
   </div>
-  <p style="line-height:1.6;color:var(--muted);font-size:14px">Bets deduct from your USDC balance when placed. Cash out credits it back instantly at a live price that moves with the match (it starts at 0.88× the potential return). Withdrawals settle on-chain in seconds. No real funds are used.</p>
+  <div class="depbox"><div class="depbox-h">Add demo funds</div><div class="qchips depchips"><button data-v="100" onclick="setDepAmt(100)">+100</button><button data-v="500" class="on" onclick="setDepAmt(500)">+500</button><button data-v="1000" onclick="setDepAmt(1000)">+1,000</button></div><button class="btn-green" onclick="doDeposit()">Add <span id="depAmtLbl">500</span> USDC (demo)</button><p class="microcopy" style="margin-top:8px">Prototype only \u2014 sample funds, no real money.</p></div>
+    <p style="line-height:1.6;color:var(--muted);font-size:14px">Bets deduct from your USDC balance when placed. Cash out credits it back instantly at a live price that moves with the match (it starts at 0.88× the potential return). Withdrawals settle on-chain in seconds. No real funds are used.</p>
     </div>
   <div id="wpanel-withdraw" class="hidden">
     <div class="netrow"><span>USDC network</span><div class="netchips"><button class="netchip on" data-wdnet="TRON" onclick="setWdNet('TRON')">TRON</button><button class="netchip" data-wdnet="Ethereum" onclick="setWdNet('Ethereum')">Ethereum</button><button class="netchip" data-wdnet="Solana" onclick="setWdNet('Solana')">Solana</button></div></div>
@@ -1186,6 +1192,9 @@ function onSearch(q){
   route(false);
   if(wasInPage){ var inp=currentPageSearchInput(); if(inp){ inp.focus(); try{ inp.setSelectionRange(inp.value.length, inp.value.length); }catch(e){} } }
 }
+var depAmt=500;
+function setDepAmt(v){ depAmt=v; var l=document.getElementById("depAmtLbl"); if(l) l.textContent=String(v); document.querySelectorAll(".depchips button").forEach(function(b){ b.classList.toggle("on", Number(b.getAttribute("data-v"))===v); }); }
+function doDeposit(){ balance=Math.round((balance+depAmt)*100)/100; syncBalance(); renderSlipAll(false); showToast("Added "+fmt(depAmt)+" USDC demo funds \u2014 new balance "+fmt(balance)+" USDC."); }
 function openWallet(){ closeAllSheets(); setWalletTab("deposit"); document.getElementById("walletSheet").classList.add("open"); document.getElementById("scrim").classList.add("show"); syncBalance(); }
 function openProfile(){ closeAllSheets(); document.getElementById("profileSheet").classList.add("open"); document.getElementById("scrim").classList.add("show"); }
 function sampleAuth(){ showToast("Sample only \u2014 no real accounts in this prototype"); }
@@ -1715,8 +1724,11 @@ function nudgeSlipPick(item){
 }
 function flyToSlip(srcRect, txt){
   try{
+    if(!slip.length) return;
     var bar=document.getElementById("mobileSlipBar");
-    if(!bar || !slip.length) return;
+    var br0=bar? bar.getBoundingClientRect() : null;
+    if(!br0 || !br0.width){ var side=document.getElementById("sideSlip"); if(side && side.getBoundingClientRect().width){ bar=side; } }
+    if(!bar) return;
     if(!srcRect){ var sel=document.querySelector(".oddsbtn.selected"); if(sel){ var r0=sel.getBoundingClientRect(); if(r0.width) srcRect=r0; } }
     if(!srcRect) return;
     var br=bar.getBoundingClientRect(); if(!br.width) return;
@@ -1727,7 +1739,7 @@ function flyToSlip(srcRect, txt){
     document.body.appendChild(chip);
     var dx=Math.round((br.left+br.width/2)-(sr.left+sr.width/2)), dy=Math.round((br.top+br.height/2)-(sr.top+sr.height/2));
     var endT="translate(-50%,-50%) translate("+dx+"px,"+dy+"px) scale(.3)";
-    var done=false; var kill=function(){ if(done) return; done=true; chip.remove(); bar.classList.remove("pop"); void bar.offsetWidth; bar.classList.add("pop"); };
+    var done=false; var kill=function(){ if(done) return; done=true; chip.remove(); bar.classList.remove("pop"); bar.classList.remove("flypop"); void bar.offsetWidth; bar.classList.add("pop"); bar.classList.add("flypop"); };
     if(chip.animate){ var an=chip.animate([
         {transform:"translate(-50%,-50%) translate(0px,0px) scale(1)", opacity:"1", offset:0},
         {transform:"translate(-50%,-50%) translate("+Math.round(dx*0.5)+"px,"+(Math.round(dy*0.35)-46)+"px) scale(.72)", opacity:"1", offset:.55},
