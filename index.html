@@ -1716,17 +1716,25 @@ function nudgeSlipPick(item){
 function flyToSlip(srcEl, txt){
   try{
     var bar=document.getElementById("mobileSlipBar");
-    if(!srcEl || !bar || !slip.length) return;
+    if(!bar || !slip.length) return;
+    if(!srcEl){ var sel=document.querySelector(".oddsbtn.selected"); if(sel) srcEl=sel; }
+    if(!srcEl) return;
     var br=bar.getBoundingClientRect(); if(!br.width) return;
     var sr=srcEl.getBoundingClientRect(); if(!sr.width) return;
     var chip=document.createElement("div"); chip.className="flychip"; chip.textContent=txt;
     chip.style.left=(sr.left+sr.width/2)+"px"; chip.style.top=(sr.top+sr.height/2)+"px";
     chip.style.transform="translate(-50%,-50%) scale(1)";
     document.body.appendChild(chip);
-    var dx=(br.left+br.width/2)-(sr.left+sr.width/2), dy=(br.top+br.height/2)-(sr.top+sr.height/2);
+    var dx=Math.round((br.left+br.width/2)-(sr.left+sr.width/2)), dy=Math.round((br.top+br.height/2)-(sr.top+sr.height/2));
+    var endT="translate(-50%,-50%) translate("+dx+"px,"+dy+"px) scale(.3)";
     var done=false; var kill=function(){ if(done) return; done=true; chip.remove(); bar.classList.remove("pop"); void bar.offsetWidth; bar.classList.add("pop"); };
-    if(chip.animate){ var an=chip.animate([{transform:"translate(-50%,-50%) scale(1)",opacity:"1"},{transform:"translate(calc(-50% + "+dx+"px), calc(-50% + "+dy+"px)) scale(.25)",opacity:".3"}],{duration:620,easing:"cubic-bezier(.45,.05,.35,1)"}); an.onfinish=kill; setTimeout(kill, 850); }
-    else { setTimeout(function(){ chip.style.transition="transform .6s cubic-bezier(.45,.05,.35,1), opacity .6s"; chip.style.transform="translate(calc(-50% + "+dx+"px), calc(-50% + "+dy+"px)) scale(.25)"; chip.style.opacity=".3"; },20); setTimeout(kill, 800); }
+    if(chip.animate){ var an=chip.animate([
+        {transform:"translate(-50%,-50%) translate(0px,0px) scale(1)", opacity:"1", offset:0},
+        {transform:"translate(-50%,-50%) translate("+Math.round(dx*0.5)+"px,"+(Math.round(dy*0.35)-46)+"px) scale(.72)", opacity:"1", offset:.55},
+        {transform:endT, opacity:".35", offset:1}],
+        {duration:750, easing:"cubic-bezier(.4,.05,.35,1)"});
+      an.onfinish=kill; setTimeout(kill, 1000); }
+    else { setTimeout(function(){ chip.style.transition="transform .7s cubic-bezier(.4,.05,.35,1), opacity .7s"; chip.style.transform=endT; chip.style.opacity=".35"; },20); setTimeout(kill, 900); }
   }catch(e){}
 }
 function addToSlip(key, matchId, label, market, pick, odds){
